@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2000
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BfkPortal.Web", "BfkPortal.Web\BfkPortal.Web.csproj", "{78885D97-B0EE-452A-BDBD-F38DAC4484FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BfkPortal.Web", "BfkPortal.Web\BfkPortal.Web.csproj", "{78885D97-B0EE-452A-BDBD-F38DAC4484FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BfkPortal.Persistence", "BfkPortal.Persistence\BfkPortal.Persistence.csproj", "{518DC391-8AB6-4AA8-8EA5-75DC508C9F3E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BfkPortal.Core", "BfkPortal.Core\BfkPortal.Core.csproj", "{FC3D9EBF-9B80-49BF-B60A-B2989B9FFA9D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{78885D97-B0EE-452A-BDBD-F38DAC4484FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78885D97-B0EE-452A-BDBD-F38DAC4484FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78885D97-B0EE-452A-BDBD-F38DAC4484FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{518DC391-8AB6-4AA8-8EA5-75DC508C9F3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{518DC391-8AB6-4AA8-8EA5-75DC508C9F3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{518DC391-8AB6-4AA8-8EA5-75DC508C9F3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{518DC391-8AB6-4AA8-8EA5-75DC508C9F3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC3D9EBF-9B80-49BF-B60A-B2989B9FFA9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC3D9EBF-9B80-49BF-B60A-B2989B9FFA9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC3D9EBF-9B80-49BF-B60A-B2989B9FFA9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC3D9EBF-9B80-49BF-B60A-B2989B9FFA9D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
