@@ -1,4 +1,5 @@
-﻿using System.Reflection.Metadata;
+﻿using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using BfkPortal.Web.Models;
 using Newtonsoft.Json;
@@ -21,10 +22,7 @@ namespace BfkPortal.Web.Validation
             if (IsStringValid(request.Action))
                 return false;
 
-            if (request.PayLoad == null)
-                return false;
-
-            return true;
+            return request.PayLoad != null;
         }
 
         public static bool ValidatePayload(string json, dynamic definition)
@@ -41,11 +39,7 @@ namespace BfkPortal.Web.Validation
             }
 
             var properties = payload.GetType().GetProperties();
-            foreach (var property in properties)
-                if (property.GetValue(payload) == null)
-                    return false;
-
-            return true;
+            return properties.All(property => property.GetValue(payload) != null);
         }
 
         private static bool IsStringValid(string value) =>

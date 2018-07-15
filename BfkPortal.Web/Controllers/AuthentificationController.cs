@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using BfkPortal.Core.Models;
 using BfkPortal.Persistence;
 using BfkPortal.Web.Models;
+using BfkPortal.Web.Services;
 using BfkPortal.Web.Validation;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -12,8 +14,6 @@ namespace BfkPortal.Web.Controllers
     [Route("api/[controller]")]
     public class AuthentificationController : Controller
     {
-        // TODO Json is null
-        // TODO JsonWebToken
         [HttpPost]
         [Route("login")]
         public string Login([FromBody] Message body, [CallerMemberName] string action = "")
@@ -29,11 +29,17 @@ namespace BfkPortal.Web.Controllers
 
             using (var context = new ApplicationDbContext())
             {
-                context.Database.EnsureCreated();
-                /*context.Database.EnsureCreated();
-                context.Users.Add(new User(0, "christoph.thiel@liwest.at", "test", "test"));*/
+                try
+                {
+                    var result = context.Users.First(user =>
+                        user.Email == payload.Email &&
+                        PasswordValidator.ValidatePassword(payload.Password, user.Salt, user.Password));
+                }
+                catch (Exception)
+                {
+                    return Message.Error(action).ToString();
+                }
             }
-            // Database
 
             return new Message("login", new {Success = true, Token = Guid.NewGuid().ToString()}).ToString();
         }
