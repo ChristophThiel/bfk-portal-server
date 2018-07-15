@@ -14,4 +14,8 @@
     <ProjectReference Include="..\BfkPortal.Persistence\BfkPortal.Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>

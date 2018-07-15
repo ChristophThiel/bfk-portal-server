@@ -26,7 +26,7 @@ namespace BfkPortal.Web
 
             app.Run(async (context) =>
             {
-                await context.Response.WriteAsync("Sorry but there is not such a website!");
+                await context.Response.WriteAsync(new BfkPortal.Web.Models.Message("load", new {Error = "page doesn't exists"}).ToString());
             });
         }
     }

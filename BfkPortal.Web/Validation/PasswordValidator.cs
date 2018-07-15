@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using BfkPortal.Web.Services;
+﻿using BfkPortal.Web.Services;
 
 namespace BfkPortal.Web.Validation
 {
