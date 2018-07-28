@@ -45,5 +45,12 @@ namespace BfkPortal.Database.Repositories
             
             return false;
         }
+
+        //  Only for development
+        public void Reset()
+        {
+            Context.Database.EnsureDeleted();
+            Context.Database.EnsureCreated();
+        }
     }
 }

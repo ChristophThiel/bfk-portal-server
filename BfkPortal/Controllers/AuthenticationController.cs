@@ -20,10 +20,7 @@ namespace BfkPortal.Controllers
         [HttpGet("test")]
         public IActionResult Test()
         {
-            foreach (var user in _repository.All())
-                _repository.Remove(user);
-
-            _repository.Add(new User());
+            _repository.Reset();
             return Ok("Everything worked!");
         }
 
