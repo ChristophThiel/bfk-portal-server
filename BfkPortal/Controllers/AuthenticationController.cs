@@ -37,7 +37,8 @@ namespace BfkPortal.Controllers
             if (isValidCredentials)
                 return Ok(new {Token = "test"});
 
-            return BadRequest(new { Credentials = "Invalid email or password!" });
+            ModelState.AddModelError("Credentials", "Invalid email or password!");
+            return BadRequest(ModelState);
         }
     }
 

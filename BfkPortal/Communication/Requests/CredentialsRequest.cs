@@ -4,8 +4,7 @@ namespace BfkPortal.Communication.Requests
 {
     public class CredentialsRequest
     {
-        [Required]
-        [EmailAddress]
+        [Required, EmailAddress]
         public string Email { get; set; }
 
         [Required]
