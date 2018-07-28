@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace BfkPortal.Core.Models
+namespace BfkPortal.Models
 {
     public class User
     {
@@ -12,25 +15,20 @@ namespace BfkPortal.Core.Models
 
         public string Salt { get; set; }
 
-        public List<Role> Roles { get; set; }
-
         public User()
         {
             this.Id = 0;
             this.Email = "";
             this.Password = "";
             this.Salt = "";
-            this.Roles = new List<Role>();
         }
 
         public User(string email, string password, string salt)
         {
+            this.Id = 0;
             this.Email = email;
             this.Password = password;
             this.Salt = salt;
-            this.Roles = new List<Role>();
         }
-
-        public override string ToString() => Email;
     }
 }
