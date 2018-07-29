@@ -1,12 +1,16 @@
-﻿using BfkPortal.Database;
+﻿using System;
+using System.Text;
+using BfkPortal.Database;
 using BfkPortal.Database.Interfaces;
 using BfkPortal.Database.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BfkPortal
 {
@@ -22,10 +26,25 @@ namespace BfkPortal
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            {
+                // TODO Remove this
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = Configuration["Issuer"],
+                    ValidAudience = Configuration["Issuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Key"])),
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+
             services.AddMvc();
         }
 
@@ -37,6 +56,7 @@ namespace BfkPortal
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseAuthentication();
             app.UseMvc();
 
             app.Run(async (context) => { await context.Response.WriteAsync("Page not found!"); });

@@ -9,7 +9,7 @@ namespace BfkPortal.Database.Repositories
     public class UserRepository : DefaultRepository, IUserRepository
     {
         public UserRepository(ApplicationDbContext context, IConfiguration configuration) : base(context, configuration) { }
-
+        
         public void Add(string email, string password)
         {
             var salt = DefaultHashingService.GenerateSalt();
