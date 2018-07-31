@@ -1,12 +1,10 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using BfkPortal.Communication.Requests;
 using BfkPortal.Database.Interfaces;
-using BfkPortal.Database.Repositories;
-using BfkPortal.Models;
+using BfkPortal.DataTransferObjects;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -25,15 +23,8 @@ namespace BfkPortal.Controllers
             _configuration = configuration;
         }
 
-        [HttpGet("test")]
-        public IActionResult Test()
-        {
-            _repository.Reset();
-            return Ok("Everything worked!");
-        }
-
         [HttpPost("login")]
-        public IActionResult LogIn([FromBody] CredentialsRequest body)
+        public IActionResult LogIn([FromBody] CredentialsDto body)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -48,10 +39,22 @@ namespace BfkPortal.Controllers
             var claims = new[] {new Claim(ClaimTypes.Email, body.Email)};
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Key"]));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
-            var token = new JwtSecurityToken(_configuration["Issuer"], _configuration["Issuer"], claims, null,
-                DateTime.Now.AddMinutes(double.Parse(_configuration["ExpirationMinutes"])), credentials);
+            var token = new JwtSecurityToken(_configuration["Issuer"], _configuration["Issuer"], claims, null, null, credentials);
 
-            return Ok(new {Token = new JwtSecurityTokenHandler().WriteToken(token)});
+            var dto = new AuthenticationDto(new JwtSecurityTokenHandler().WriteToken(token), new UserDto(body.Email));
+            return Ok(dto);
+        }
+
+        [Authorize]
+        [HttpPost("logout")]
+        public IActionResult ResetPassword([FromBody] EmailDto body)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            // TODO Send Email
+
+            return Ok();
         }
     }
 }

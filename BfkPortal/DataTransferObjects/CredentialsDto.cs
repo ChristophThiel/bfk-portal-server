@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BfkPortal.Communication.Requests
+namespace BfkPortal.DataTransferObjects
 {
-    public class CredentialsRequest
+    public class CredentialsDto
     {
         [Required, EmailAddress]
         public string Email { get; set; }
@@ -10,7 +10,7 @@ namespace BfkPortal.Communication.Requests
         [Required]
         public string Password { get; set; }
 
-        public CredentialsRequest(string email, string password)
+        public CredentialsDto(string email, string password)
         {
             this.Email = email;
             this.Password = password;

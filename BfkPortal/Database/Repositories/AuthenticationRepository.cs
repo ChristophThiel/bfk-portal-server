@@ -13,24 +13,6 @@ namespace BfkPortal.Database.Repositories
     {
         public AuthenticationRepository(ApplicationDbContext context, IConfiguration configuration) : base(context, configuration) { }
 
-        public void Add(User entity)
-        {
-            Context.Users.Add(entity);
-            Save();
-        }
-
-        public User Find(int id) => Context.Users.Find(id);
-
-        public User Find(User entity) => Context.Users.Find(entity);
-
-        public void Remove(User entity)
-        {
-            Context.Users.Remove(entity);
-            Save();
-        }
-
-        public IEnumerable<User> All() => Context.Users;
-
         public bool Verify(string email, string password)
         {
             var users = Context.Users.Where(user => user.Email == email);
@@ -46,7 +28,7 @@ namespace BfkPortal.Database.Repositories
             return false;
         }
 
-        //  Only for development
+        //  TODO Remove
         public void Reset()
         {
             Context.Database.EnsureDeleted();

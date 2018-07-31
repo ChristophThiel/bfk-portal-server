@@ -35,7 +35,6 @@ namespace BfkPortal
             {
                 // TODO Remove this
                 options.RequireHttpsMetadata = false;
-                options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidIssuer = Configuration["Issuer"],

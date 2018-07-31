@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BfkPortal.Communication.Requests;
 using BfkPortal.Database.Interfaces;
+using BfkPortal.DataTransferObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,7 +21,7 @@ namespace BfkPortal.Controllers
         }
 
         [HttpPost("add")]
-        public IActionResult Add([FromHeader] string token, [FromBody] CredentialsRequest request)
+        public IActionResult Add([FromBody] CredentialsDto request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
