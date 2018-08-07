@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BfkPortal.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
@@ -31,6 +30,7 @@ namespace BfkPortal.Controllers
         }
 
         // TODO Remove this
+        [Authorize]
         [HttpGet("test")]
         public IActionResult Test()
         {

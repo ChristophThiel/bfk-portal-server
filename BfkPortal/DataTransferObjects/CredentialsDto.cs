@@ -9,11 +9,5 @@ namespace BfkPortal.DataTransferObjects
 
         [Required]
         public string Password { get; set; }
-
-        public CredentialsDto(string email, string password)
-        {
-            this.Email = email;
-            this.Password = password;
-        }
     }
 }

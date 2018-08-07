@@ -1,5 +1,6 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using BfkPortal.Database.Interfaces;
@@ -29,8 +30,8 @@ namespace BfkPortal.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var isValidCredentials = _repository.Verify(body.Email, body.Password);
-            if (!isValidCredentials)
+            var validUser = _repository.Verify(body.Email, body.Password);
+            if (validUser == null)
             {
                 ModelState.AddModelError("Credentials", "Invalid email or password!");
                 return BadRequest(ModelState);
@@ -41,7 +42,15 @@ namespace BfkPortal.Controllers
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
             var token = new JwtSecurityToken(_configuration["Issuer"], _configuration["Issuer"], claims, null, null, credentials);
 
-            var dto = new AuthenticationDto(new JwtSecurityTokenHandler().WriteToken(token), new UserDto(body.Email));
+            var dto = new AuthenticationDto
+            {
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                User = new UserDto
+                {
+                    Email = body.Email,
+                    Roles = validUser.Roles.Select(ur => ur.Role.Name).ToList()
+                }
+            };
             return Ok(dto);
         }
 

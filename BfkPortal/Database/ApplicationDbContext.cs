@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BfkPortal.Models;
+﻿using BfkPortal.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BfkPortal.Database
@@ -11,7 +7,10 @@ namespace BfkPortal.Database
     {
         public DbSet<User> Users { get; set; }
 
-        public ApplicationDbContext(DbContextOptions options) : base(options) { }
+        public DbSet<Role> Roles { get; set; }
 
+        public DbSet<UserRole> UserRoles { get; set; }
+
+        public ApplicationDbContext(DbContextOptions options) : base(options) { }
     }
 }

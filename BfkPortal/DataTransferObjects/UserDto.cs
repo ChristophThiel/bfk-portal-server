@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BfkPortal.Models;
+﻿using System.Collections.Generic;
 
 namespace BfkPortal.DataTransferObjects
 {
@@ -10,14 +6,6 @@ namespace BfkPortal.DataTransferObjects
     {
         public string Email { get; set; }
 
-        public UserDto(string email)
-        {
-            this.Email = email;
-        }
-
-        public UserDto(User user)
-        {
-            this.Email = user.Email;
-        }
+        public ICollection<string> Roles { get; set; }
     }
 }
