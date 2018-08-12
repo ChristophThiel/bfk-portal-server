@@ -9,7 +9,6 @@ using BfkPortal.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using User = BfkPortal.Models.User;
 
 namespace BfkPortal.Controllers
 {
@@ -27,10 +26,7 @@ namespace BfkPortal.Controllers
         }
 
         [HttpGet]
-        public string TestConnection()
-        {
-            return "Everything worked fine!";
-        }
+        public string TestConnection() =>  "Everything worked fine!";
 
         [HttpGet("reset")]
         public async Task<IActionResult> Reset()

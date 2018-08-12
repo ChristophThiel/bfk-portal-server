@@ -9,6 +9,10 @@ namespace BfkPortal.Database.Contracts
     {
         Task Add(Appointment appointment);
 
+        Task Delete(int id);
+
+        Task Update(AppointmentDto appointment);
+
         Task<IEnumerable<AppointmentDto>> All(int userId);
     }
 }

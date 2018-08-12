@@ -36,31 +36,44 @@ namespace BfkPortal.Controllers
                 Description = body.Description,
                 From = DateTime.Parse(body.From, null, DateTimeStyles.RoundtripKind),
                 To = DateTime.Parse(body.To, null, DateTimeStyles.RoundtripKind),
+                Owner = user
             };
             await _unitOfWork.Appointments.Add(appointment);
+            await _unitOfWork.SaveChangesAsync();
 
-            // TODO UnitOfWork ManyToMany Solution
+            return Ok(new {appointment.Id});
+        }
 
+        [HttpGet("delete/{appointmentId:int}")]
+        public async Task<IActionResult> Delete(int appointmentId)
+        {
+            // TODO Check if the user is the owner of the appointment or has the role "AdminBfk"
+
+            await _unitOfWork.Appointments.Delete(appointmentId);
             await _unitOfWork.SaveChangesAsync();
 
             return Ok();
         }
 
-        [HttpGet("delete/{id:int}")]
-        public async Task<IActionResult> Delete()
+        [HttpPost("update")]
+        public async Task<IActionResult> Update([FromBody] AppointmentDto body)
         {
-            throw new NotImplementedException();
-        }
+            // TODO Check if the user is the owner of the appointment or has the role "AdminBfk"
 
-        [HttpGet("update/{id:int}")]
-        public async Task<IActionResult> Update()
-        {
-            throw new NotImplementedException();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            await _unitOfWork.Appointments.Update(body);
+            await _unitOfWork.SaveChangesAsync();
+
+            return Ok();
         }
 
         [HttpGet("all/{userId:int}")]
         public async Task<IActionResult> All(int userId)
         {
+            // TODO Solution for appointments which go over a day
+
             var result = await _unitOfWork.Appointments.All(userId);
             return Ok(result.ToList());
         }

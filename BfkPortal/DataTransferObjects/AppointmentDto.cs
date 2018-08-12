@@ -19,7 +19,6 @@ namespace BfkPortal.DataTransferObjects
         [Required, Iso8601]
         public string To { get; set; }
 
-        [Required]
         public UserDto Owner { get; set; }
     }
 }
