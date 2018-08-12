@@ -1,6 +1,6 @@
 ﻿using System.Linq;
-using System.Security.Cryptography;
-using BfkPortal.Database.Interfaces;
+using System.Threading.Tasks;
+using BfkPortal.Database.Contracts;
 using BfkPortal.Models;
 using BfkPortal.Services;
 using Microsoft.Extensions.Configuration;
@@ -11,7 +11,7 @@ namespace BfkPortal.Database.Repositories
     {
         public UserRepository(ApplicationDbContext context, IConfiguration configuration) : base(context, configuration) { }
         
-        public void Add(string email, string password)
+        public async Task Add(string email, string password)
         {
             var salt = DefaultHashingService.GenerateSalt();
             var pepper = Configuration["Pepper"];
@@ -23,15 +23,15 @@ namespace BfkPortal.Database.Repositories
                 Password = hashedPassword,
                 Salt = salt
             };
-            Context.Users.Add(user);
+            await Context.Users.AddAsync(user);
 
-            Context.UserRoles.Add(new UserRole
+            await Context.UserRoles.AddAsync(new UserRole
             {
                 Role = Context.Roles.First(),
                 User = user
             });
-
-            Save();
         }
+
+        public async Task<User> GetById(int id) => await Context.Users.FindAsync(id);
     }
 }

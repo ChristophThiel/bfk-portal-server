@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using BfkPortal.Database.Interfaces;
+using System.Threading.Tasks;
+using BfkPortal.Database.Contracts;
 using BfkPortal.DataTransferObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,12 +25,12 @@ namespace BfkPortal.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult LogIn([FromBody] CredentialsDto body)
+        public async Task<IActionResult> LogIn([FromBody] CredentialsDto body)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var validUser = _repository.Verify(body.Email, body.Password);
+            var validUser = await _repository.Verify(body.Email, body.Password);
             if (validUser == null)
             {
                 ModelState.AddModelError("Credentials", "Invalid email or password!");
@@ -47,6 +47,7 @@ namespace BfkPortal.Controllers
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 User = new UserDto
                 {
+                    Id = validUser.Id,
                     Email = body.Email,
                     Roles = validUser.Roles.Select(ur => ur.Role.Name).ToList()
                 }
@@ -56,7 +57,7 @@ namespace BfkPortal.Controllers
 
         [Authorize]
         [HttpPost("logout")]
-        public IActionResult ResetPassword([FromBody] EmailDto body)
+        public async Task<IActionResult> LogOut([FromBody] EmailDto body)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

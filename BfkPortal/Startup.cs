@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 using BfkPortal.Database;
-using BfkPortal.Database.Interfaces;
+using BfkPortal.Database.Contracts;
 using BfkPortal.Database.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -28,8 +28,7 @@ namespace BfkPortal
         {
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {

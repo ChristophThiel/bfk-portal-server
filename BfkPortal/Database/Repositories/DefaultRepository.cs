@@ -13,7 +13,5 @@ namespace BfkPortal.Database.Repositories
             Context = context;
             Configuration = configuration;
         }
-
-        public void Save() => Context.SaveChanges();
     }
 }

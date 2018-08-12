@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BfkPortal.Database.Interfaces;
+﻿using System.Threading.Tasks;
+using BfkPortal.Database.Contracts;
+using BfkPortal.Database.Repositories;
 using BfkPortal.DataTransferObjects;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BfkPortal.Controllers
 {
+    // TODO Authorization
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
@@ -20,21 +18,25 @@ namespace BfkPortal.Controllers
         }
 
         [HttpPost("add")]
-        public IActionResult Add([FromBody] CredentialsDto request)
+        public async Task<IActionResult> Add([FromBody] CredentialsDto body)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            _repository.Add(request.Email, request.Password);
+            await _repository.Add(body.Email, body.Password);
             return Ok();
         }
 
-        // TODO Remove this
-        [Authorize]
-        [HttpGet("test")]
-        public IActionResult Test()
+        [HttpPost("delete/{id:int}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            return Ok("This is a protected area");
+            return Ok();
+        }
+
+        [HttpPost("update/{id:int}")]
+        public async Task<IActionResult> Update(int id)
+        {
+            return Ok();
         }
     }
 }

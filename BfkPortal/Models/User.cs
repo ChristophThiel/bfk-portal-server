@@ -13,5 +13,7 @@ namespace BfkPortal.Models
         public string Salt { get; set; }
         
         public ICollection<UserRole> Roles { get; set; }
+
+        public ICollection<Appointment> Appointments { get; set; }
     }
 }

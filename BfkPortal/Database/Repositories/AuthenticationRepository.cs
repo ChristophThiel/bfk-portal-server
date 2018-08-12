@@ -1,5 +1,6 @@
 ﻿using System.Linq;
-using BfkPortal.Database.Interfaces;
+using System.Threading.Tasks;
+using BfkPortal.Database.Contracts;
 using BfkPortal.Models;
 using BfkPortal.Services;
 using Microsoft.EntityFrameworkCore;
@@ -11,32 +12,22 @@ namespace BfkPortal.Database.Repositories
     {
         public AuthenticationRepository(ApplicationDbContext context, IConfiguration configuration) : base(context, configuration) { }
 
-        public User Verify(string email, string password)
+        public async Task<User> Verify(string email, string password)
         {
-            var userRoles = Context.UserRoles.Include(ur => ur.User)
-                .Include(ur => ur.Role);
+            return await Task<User>.Factory.StartNew(() =>
+                {
+                    var userRoles = Context.UserRoles.Include(ur => ur.User)
+                        .Include(ur => ur.Role);
 
-            var result = !userRoles.Any()
-                ? null
-                : userRoles.FirstOrDefault(ur =>
-                    DefaultHashingService.VerifyPassword(email, ur.User.Password, password, ur.User.Salt,
-                        Configuration["Pepper"]));
+                    var result = !userRoles.Any()
+                        ? null
+                        : userRoles.FirstOrDefault(ur =>
+                            DefaultHashingService.VerifyPassword(email, ur.User.Password, password, ur.User.Salt,
+                                Configuration["Pepper"]));
 
-            return result?.User;
-
-            /*var test = Context.UserRoles.Include(ur => ur.User)
-                .Include(ur => ur.Role);
-            var users = Context.Users.Include(u => u.Roles);
-            return !users.Any() ? 
-                null : 
-                Enumerable.FirstOrDefault(users, user => DefaultHashingService.VerifyPassword(email, user.Password, password, user.Salt, Configuration["Pepper"]));*/
-        }
-
-        //  TODO Remove
-        public void Reset()
-        {
-            Context.Database.EnsureDeleted();
-            Context.Database.EnsureCreated();
+                    return result?.User;
+                }
+            );
         }
     }
 }
