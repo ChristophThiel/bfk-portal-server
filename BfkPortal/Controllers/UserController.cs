@@ -10,11 +10,11 @@ namespace BfkPortal.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly IUserRepository _repository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public UserController(IUserRepository repository)
+        public UserController(IUnitOfWork unitOfWork)
         {
-            _repository = repository;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpPost("add")]
@@ -23,7 +23,7 @@ namespace BfkPortal.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            await _repository.Add(body.Email, body.Password);
+            await _unitOfWork.Users.Add(body.Email, body.Password);
             return Ok();
         }
 

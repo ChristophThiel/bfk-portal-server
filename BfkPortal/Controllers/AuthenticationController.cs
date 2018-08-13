@@ -15,12 +15,12 @@ namespace BfkPortal.Controllers
     [Route("api/[controller]")]
     public class AuthenticationController : ControllerBase
     {
-        private readonly IAuthenticationRepository _repository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IConfiguration _configuration;
 
-        public AuthenticationController(IAuthenticationRepository repository, IConfiguration configuration)
+        public AuthenticationController(IUnitOfWork unitOfWork, IConfiguration configuration)
         {
-            _repository = repository;
+            _unitOfWork = unitOfWork;
             _configuration = configuration;
         }
 
@@ -30,7 +30,7 @@ namespace BfkPortal.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var validUser = await _repository.Verify(body.Email, body.Password);
+            var validUser = await _unitOfWork.Authentications.Verify(body.Email, body.Password);
             if (validUser == null)
             {
                 ModelState.AddModelError("Credentials", "Invalid email or password!");
