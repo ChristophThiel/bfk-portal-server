@@ -13,6 +13,8 @@ namespace BfkPortal.Database.Contracts
 
         IAppointmentRepository Appointments { get; }
 
+        IShiftRepository Shifts { get; }
+
         Task<int> SaveChangesAsync();
 
         Task<bool> DeleteAsync();

@@ -39,7 +39,7 @@ namespace BfkPortal
                     ValidIssuer = Configuration["Issuer"],
                     ValidAudience = Configuration["Issuer"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Key"])),
-                    ClockSkew = TimeSpan.Zero
+                    RequireExpirationTime = false
                 };
             });
 

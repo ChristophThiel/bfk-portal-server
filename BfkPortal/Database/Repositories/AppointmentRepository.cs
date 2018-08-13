@@ -36,6 +36,28 @@ namespace BfkPortal.Database.Repositories
             });
         }
 
+        public async Task<Appointment> Find(int id) => await Context.Appointments.Include(a => a.Owner).FirstAsync(a => a.Id == id);
+
+        public async Task<IEnumerable<AppointmentDto>> All()
+        {
+            return await Task<IEnumerable<AppointmentDto>>.Factory.StartNew(() =>
+                Context.Appointments.Include(a => a.Owner)
+                    .Select(a => new AppointmentDto
+                    {
+                        Id = a.Id,
+                        Title = a.Title,
+                        Description = a.Description,
+                        From = a.From.ToString("O"),
+                        To = a.To.ToString("O"),
+                        Owner = new UserDto
+                        {
+                            Id = a.Owner.Id,
+                            Email = a.Owner.Email,
+                            Roles = a.Owner.Roles.Select(ur => ur.Role.Name).ToList()
+                        }
+                    }));
+        }
+
         public async Task<IEnumerable<AppointmentDto>> All(int userId)
         {
             var owner = await Context.Users.Include(u => u.Roles).FirstAsync(u => u.Id == userId);

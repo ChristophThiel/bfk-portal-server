@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using BfkPortal.Database.Contracts;
 using BfkPortal.Database.Repositories;
 using BfkPortal.DataTransferObjects;
@@ -30,13 +31,13 @@ namespace BfkPortal.Controllers
         [HttpPost("delete/{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            return Ok();
+            throw new NotImplementedException();
         }
 
         [HttpPost("update/{id:int}")]
         public async Task<IActionResult> Update(int id)
         {
-            return Ok();
+            throw new NotImplementedException();
         }
     }
 }

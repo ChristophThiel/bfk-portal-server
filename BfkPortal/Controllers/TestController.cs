@@ -123,6 +123,26 @@ namespace BfkPortal.Controllers
             };
             await _context.Appointments.AddRangeAsync(appointments);
 
+            var shifts = new[]
+            {
+                new Shift
+                {
+                    Title = "FirstShift",
+                    From = DateTime.UtcNow,
+                    To = DateTime.UtcNow.AddDays(1),
+                    User = user4
+                },
+                new Shift
+                {
+                    Title = "SecondShift",
+                    From = DateTime.UtcNow,
+                    To = DateTime.UtcNow.AddHours(3),
+                    User = user4
+                }
+            };
+            await _context.Shifts.AddRangeAsync(shifts);
+            await _context.SaveChangesAsync();
+
             await _context.SaveChangesAsync();
             return Ok();
         }
@@ -161,6 +181,28 @@ namespace BfkPortal.Controllers
                         Roles = a.Owner.Roles.Select(ur => ur.Role.Name).ToList()
                     }
                 });
+            });
+        }
+
+        [HttpGet("shifts")]
+        public async Task<IEnumerable<ShiftDto>> Shifts()
+        {
+            return await Task<IEnumerable<ShiftDto>>.Factory.StartNew(() =>
+            {
+                return _context.Shifts.Include(s => s.User)
+                    .Select(s => new ShiftDto
+                    {
+                        Id = s.Id,
+                        Title = s.Title,
+                        From = s.From.ToString("O"),
+                        To = s.To.ToString("O"),
+                        User = new UserDto
+                        {
+                            Id = s.User.Id,
+                            Email = s.User.Email,
+                            Roles = s.User.Roles.Select(ur => ur.Role.Name).ToList()
+                        }
+                    });
             });
         }
     }

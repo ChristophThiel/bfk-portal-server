@@ -15,5 +15,7 @@ namespace BfkPortal.Models
         public ICollection<UserRole> Roles { get; set; }
 
         public ICollection<Appointment> Appointments { get; set; }
+
+        public ICollection<Shift> Shifts { get; set; }
     }
 }

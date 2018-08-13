@@ -11,6 +11,8 @@ namespace BfkPortal.Database
 
         public DbSet<Appointment> Appointments { get; set; }
 
+        public DbSet<Shift> Shifts { get; set; }
+
         public DbSet<UserRole> UserRoles { get; set; }
 
         public ApplicationDbContext(DbContextOptions options) : base(options) { }

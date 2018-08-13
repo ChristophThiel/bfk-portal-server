@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,6 +16,8 @@ namespace BfkPortal.Controllers
     [Route("api/[controller]")]
     public class AppointmentController : ControllerBase
     {
+        private const string AdminRoleName = "AdminBfk";
+
         private readonly IUnitOfWork _unitOfWork;
         private readonly IConfiguration _configuration;
 
@@ -26,6 +30,8 @@ namespace BfkPortal.Controllers
         [HttpPost("add/{userId:int}")]
         public async Task<IActionResult> Add(int userId, [FromBody] AppointmentDto body)
         {
+            // TODO Check the role of the user
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -47,7 +53,7 @@ namespace BfkPortal.Controllers
         [HttpGet("delete/{appointmentId:int}")]
         public async Task<IActionResult> Delete(int appointmentId)
         {
-            // TODO Check if the user is the owner of the appointment or has the role "AdminBfk"
+            // TODO Check the role of the user
 
             await _unitOfWork.Appointments.Delete(appointmentId);
             await _unitOfWork.SaveChangesAsync();
@@ -55,10 +61,10 @@ namespace BfkPortal.Controllers
             return Ok();
         }
 
-        [HttpPost("update")]
-        public async Task<IActionResult> Update([FromBody] AppointmentDto body)
+        [HttpPost("update/{userId:int}")]
+        public async Task<IActionResult> Update(int userId, [FromBody] AppointmentDto body)
         {
-            // TODO Check if the user is the owner of the appointment or has the role "AdminBfk"
+            // TODO Check the role of the user
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -73,9 +79,20 @@ namespace BfkPortal.Controllers
         public async Task<IActionResult> All(int userId)
         {
             // TODO Solution for appointments which go over a day
+            // TODO Get id from JWT
 
-            var result = await _unitOfWork.Appointments.All(userId);
-            return Ok(result.ToList());
+            // TODO Replace with ASP.NET Identity
+            var user = await _unitOfWork.Users.GetById(userId);
+            if (user.Roles.Any(ur => ur.Role.Name == AdminRoleName))
+            {
+                var allAppointments = await _unitOfWork.Appointments.All();
+                return Ok(allAppointments.ToList());
+            }
+
+            var userAppointments = await _unitOfWork.Appointments.All(userId);
+            return Ok(userAppointments.ToList());
         }
+
+
     }
 }

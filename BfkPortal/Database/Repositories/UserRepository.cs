@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using BfkPortal.Database.Contracts;
 using BfkPortal.Models;
 using BfkPortal.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace BfkPortal.Database.Repositories
@@ -32,6 +33,6 @@ namespace BfkPortal.Database.Repositories
             });
         }
 
-        public async Task<User> GetById(int id) => await Context.Users.FindAsync(id);
+        public async Task<User> GetById(int id) => await Task.Factory.StartNew(() => Context.Users.Include(u => u.Roles).ThenInclude(u => u.Role).First(u => u.Id == id));
     }
 }
