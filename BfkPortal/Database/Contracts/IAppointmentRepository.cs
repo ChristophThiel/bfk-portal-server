@@ -15,8 +15,10 @@ namespace BfkPortal.Database.Contracts
 
         Task<Appointment> Find(int id);
 
+        Task<AppointmentType> FindType(string name);
+
         Task<IEnumerable<AppointmentDto>> All();
 
-        Task<IEnumerable<AppointmentDto>> All(int userId);
+        Task<IEnumerable<string>> AllTypes();
     }
 }

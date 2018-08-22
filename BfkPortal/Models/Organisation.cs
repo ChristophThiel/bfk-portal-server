@@ -3,13 +3,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BfkPortal.Models
 {
-    public class Role
+    public class Organisation
     {
         public int Id { get; set; }
 
         [Required]
         public string Name { get; set; }
 
-        public ICollection<UserRole> Users { get; set; }
+        [Required]
+        public bool IsDeleted { get; set; }
+
+        public ICollection<UserOrganisation> Members { get; set; }
     }
 }

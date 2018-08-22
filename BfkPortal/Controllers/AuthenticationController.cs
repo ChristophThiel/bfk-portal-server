@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace BfkPortal.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class AuthenticationController : ControllerBase
     {
@@ -24,6 +25,7 @@ namespace BfkPortal.Controllers
             _configuration = configuration;
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> LogIn([FromBody] CredentialsDto body)
         {
@@ -37,27 +39,22 @@ namespace BfkPortal.Controllers
                 return BadRequest(ModelState);
             }
 
-            var claims = new[] {new Claim(ClaimTypes.Email, body.Email)};
+            var claims = new[] {new Claim(ClaimTypes.Sid, validUser.Id.ToString()), new Claim(ClaimTypes.Name, validUser.Name()), new Claim(ClaimTypes.Email, body.Email)};
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Key"]));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
             var token = new JwtSecurityToken(_configuration["Issuer"], _configuration["Issuer"], claims, null, null, credentials);
 
-            var dto = new AuthenticationDto
+            var userDto = new UserDto
             {
-                Token = new JwtSecurityTokenHandler().WriteToken(token),
-                User = new UserDto
-                {
-                    Id = validUser.Id,
-                    Email = body.Email,
-                    Roles = validUser.Roles.Select(ur => ur.Role.Name).ToList()
-                }
+                Id = validUser.Id,
+                Email = body.Email,
+                Roles = validUser.Roles.Select(ur => ur.Role.Name).ToList()
             };
-            return Ok(dto);
+            return Ok(new {Token = new JwtSecurityTokenHandler().WriteToken(token), User = userDto});
         }
 
-        [Authorize]
         [HttpPost("logout")]
-        public async Task<IActionResult> LogOut([FromBody] EmailDto body)
+        public async Task<IActionResult> LogOut()
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

@@ -16,7 +16,7 @@ namespace BfkPortal.Database
 
         public IAppointmentRepository Appointments { get; }
 
-        public IShiftRepository Shifts { get; }
+        public IOrganisationRepository Organisations { get; }
 
         public UnitOfWork(ApplicationDbContext context, IConfiguration configuration)
         {
@@ -25,7 +25,7 @@ namespace BfkPortal.Database
             Authentications = new AuthenticationRepository(context, configuration);
             Users = new UserRepository(context, configuration);
             Appointments = new AppointmentRepository(context, configuration);
-            Shifts = new ShiftRepository(context, configuration);
+            Organisations = new OrganisationRepository(context, configuration);
         }
 
         public void Dispose() => _context.Dispose();

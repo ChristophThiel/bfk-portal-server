@@ -1,15 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace BfkPortal.Models
+namespace BfkPortal.DataTransferObjects
 {
-    public class Role
+    public class AppointmentTypeDto
     {
         public int Id { get; set; }
 
         [Required]
         public string Name { get; set; }
-
-        public ICollection<UserRole> Users { get; set; }
     }
 }

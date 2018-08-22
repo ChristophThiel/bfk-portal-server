@@ -3,11 +3,12 @@ using System.Threading.Tasks;
 using BfkPortal.Database.Contracts;
 using BfkPortal.Database.Repositories;
 using BfkPortal.DataTransferObjects;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BfkPortal.Controllers
 {
-    // TODO Authorization
+    [Authorize]
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
@@ -38,6 +39,12 @@ namespace BfkPortal.Controllers
         public async Task<IActionResult> Update(int id)
         {
             throw new NotImplementedException();
+        }
+
+        [HttpGet("all")]
+        public async Task<IActionResult> All()
+        {
+            return Ok(await _unitOfWork.Users.All());
         }
     }
 }

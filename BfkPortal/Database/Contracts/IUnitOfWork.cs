@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BfkPortal.Database.Contracts
@@ -13,7 +11,7 @@ namespace BfkPortal.Database.Contracts
 
         IAppointmentRepository Appointments { get; }
 
-        IShiftRepository Shifts { get; }
+        IOrganisationRepository Organisations { get; }
 
         Task<int> SaveChangesAsync();
 

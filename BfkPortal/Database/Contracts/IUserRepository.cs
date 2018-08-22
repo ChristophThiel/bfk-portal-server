@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using BfkPortal.DataTransferObjects;
 using BfkPortal.Models;
 
 namespace BfkPortal.Database.Contracts
@@ -7,6 +9,8 @@ namespace BfkPortal.Database.Contracts
     {
         Task Add(string email, string password);
 
-        Task<User> GetById(int id);
+        Task<User> Find(int id);
+
+        Task<IEnumerable<UserDto>> All();
     }
 }

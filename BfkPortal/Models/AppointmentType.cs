@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace BfkPortal.Models
 {
-    public class Role
+    public class AppointmentType
     {
         public int Id { get; set; }
 
         [Required]
         public string Name { get; set; }
 
-        public ICollection<UserRole> Users { get; set; }
+        public ICollection<Appointment> Appointments { get; set; }
     }
 }
