@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using BfkPortal.Communication.DataTransferObjects;
 using BfkPortal.Database.Contracts;
-using BfkPortal.Database.Repositories;
-using BfkPortal.DataTransferObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,15 +28,17 @@ namespace BfkPortal.Controllers
             return Ok();
         }
 
-        [HttpPost("delete/{id:int}")]
-        public async Task<IActionResult> Delete(int id)
+        [HttpGet("delete/{userId:int}")]
+        public async Task<IActionResult> Delete(int userId)
         {
-            throw new NotImplementedException();
+            await _unitOfWork.Users.Remove(userId);
+            return Ok();
         }
 
-        [HttpPost("update/{id:int}")]
-        public async Task<IActionResult> Update(int id)
+        [HttpPost("update")]
+        public async Task<IActionResult> Update([FromBody] UserDto body)
         {
+            await _unitOfWork.Users.Update(body);
             throw new NotImplementedException();
         }
 

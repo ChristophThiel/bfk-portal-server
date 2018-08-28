@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BfkPortal.DataTransferObjects
+namespace BfkPortal.Communication.DataTransferObjects
 {
     public class CredentialsDto
     {

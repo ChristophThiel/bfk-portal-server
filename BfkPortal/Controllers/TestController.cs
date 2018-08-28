@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BfkPortal.Communication.DataTransferObjects;
 using BfkPortal.Database;
-using BfkPortal.DataTransferObjects;
 using BfkPortal.Models;
 using BfkPortal.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -125,9 +125,11 @@ namespace BfkPortal.Controllers
 
             var appointmentTypes = new[]
             {
-                new AppointmentType {Name = "Appointment"},
-                new AppointmentType {Name = "Plenum"},
-                new AppointmentType {Name = "Shift"}
+                new AppointmentType {Name = "Termin"},
+                new AppointmentType {Name = "Vollversammlung"},
+                new AppointmentType {Name = "Dienst"},
+                new AppointmentType {Name = "Übung"},
+                new AppointmentType {Name = "Bewerb"}
             };
             await _context.AppointmentTypes.AddRangeAsync(appointmentTypes);  
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using BfkPortal.DataTransferObjects;
+using BfkPortal.Communication.DataTransferObjects;
+using BfkPortal.Communication.Requests;
 using BfkPortal.Models;
 
 namespace BfkPortal.Database.Contracts
@@ -9,9 +10,9 @@ namespace BfkPortal.Database.Contracts
     {
         Task Add(Appointment appointment);
 
-        Task Delete(int id);
+        Task<bool> Delete(int id);
 
-        Task Update(AppointmentDto appointment);
+        Task<bool> Update(AppointmentUpdateRequest appointment);
 
         Task<Appointment> Find(int id);
 

@@ -5,7 +5,6 @@ namespace BfkPortal.Models
 {
     public class User
     {
-        [Key]
         public int Id { get; set; }
 
         [Required]
@@ -30,9 +29,6 @@ namespace BfkPortal.Models
 
         public ICollection<UserAppointment> Appointments { get; set; }
 
-        [Required]
         public ICollection<UserOrganisation> Organisations { get; set; }
-
-        public string Name() => $"{Firstname} {Lastname}";
     }
 }

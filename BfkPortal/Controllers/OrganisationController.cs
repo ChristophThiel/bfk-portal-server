@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BfkPortal.Database.Contracts;
-using BfkPortal.DataTransferObjects;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BfkPortal.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class OrganisationController : ControllerBase
     {

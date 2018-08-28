@@ -20,20 +20,7 @@ namespace BfkPortal.Services
             return result != null;
         }
 
-        public static bool ContainsRole(User user, string[] roles)
-        {
-            var count = 0;
-            foreach (var ur in user.Roles)
-            {
-                foreach (var role in roles)
-                {
-                    if (count == roles.Length)
-                        return true;
-                    if (ur.Role.Name == role)
-                        count++;
-                }
-            }
-            return false;
-        }
+        public static bool ContainsRole(User user, string[] roles) =>
+            user.Roles.Any(ur => roles.Any(role => ur.Role.Name == role));
     }
 }

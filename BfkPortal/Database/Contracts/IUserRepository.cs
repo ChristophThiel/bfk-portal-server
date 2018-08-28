@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using BfkPortal.DataTransferObjects;
+using BfkPortal.Communication.DataTransferObjects;
 using BfkPortal.Models;
 
 namespace BfkPortal.Database.Contracts
@@ -12,5 +12,9 @@ namespace BfkPortal.Database.Contracts
         Task<User> Find(int id);
 
         Task<IEnumerable<UserDto>> All();
+
+        Task Remove(int userId);
+
+        Task Update(UserDto body);
     }
 }

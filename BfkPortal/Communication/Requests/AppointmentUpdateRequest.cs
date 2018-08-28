@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using BfkPortal.ValidationAttributes;
 
-namespace BfkPortal.DataTransferObjects
+namespace BfkPortal.Communication.Requests
 {
-    public class AppointmentDto
+    public class AppointmentUpdateRequest
     {
+        [Required]
         public int Id { get; set; }
 
         [Required]
@@ -21,18 +22,17 @@ namespace BfkPortal.DataTransferObjects
         public string To { get; set; }
 
         [Required]
-        public string Type { get; set; }
+        public int MaxParticipants { get; set; }
 
-        public int? MaxParticipants { get; set; }
+        [Required]
+        public bool ShowParticipants { get; set; }
 
-        public bool? ShowParticipants { get; set; }
+        public string Deadline { get; set; }
 
-        public DateTime? Deadline { get; set; }
+        [Required]
+        public bool IsVisible { get; set; }
 
-        public bool? IsVisible { get; set; }
-
-        public ICollection<UserDto> Participants { get; set; }
-
-        public UserDto Owner { get; set; }
+        [Required]
+        public IEnumerable<int> Participants { get; set; }
     }
 }

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using BfkPortal.Database;
 using BfkPortal.Database.Contracts;
-using BfkPortal.Database.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

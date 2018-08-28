@@ -3,8 +3,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using BfkPortal.Communication.DataTransferObjects;
 using BfkPortal.Database.Contracts;
-using BfkPortal.DataTransferObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -39,7 +39,7 @@ namespace BfkPortal.Controllers
                 return BadRequest(ModelState);
             }
 
-            var claims = new[] {new Claim(ClaimTypes.Sid, validUser.Id.ToString()), new Claim(ClaimTypes.Name, validUser.Name()), new Claim(ClaimTypes.Email, body.Email)};
+            var claims = new[] {new Claim(ClaimTypes.Sid, validUser.Id.ToString()), new Claim(ClaimTypes.Email, body.Email)};
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Key"]));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
             var token = new JwtSecurityToken(_configuration["Issuer"], _configuration["Issuer"], claims, null, null, credentials);
@@ -47,8 +47,17 @@ namespace BfkPortal.Controllers
             var userDto = new UserDto
             {
                 Id = validUser.Id,
-                Email = body.Email,
-                Roles = validUser.Roles.Select(ur => ur.Role.Name).ToList()
+                Firstname = validUser.Firstname,
+                Lastname = validUser.Lastname,
+                Email = validUser.Email,
+                IsDeleted = validUser.IsDeleted,
+                Roles = validUser.Roles.Select(ur => ur.Role.Name).ToList(),
+                Organisations = validUser.Organisations.Select(uo => new OrganisationDto
+                {
+                    Id = uo.Organisation.Id,
+                    Name = uo.Organisation.Name,
+                    IsDeleted = uo.Organisation.IsDeleted
+                }).ToList()
             };
             return Ok(new {Token = new JwtSecurityTokenHandler().WriteToken(token), User = userDto});
         }

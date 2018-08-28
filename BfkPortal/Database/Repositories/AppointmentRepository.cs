@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using BfkPortal.Communication.DataTransferObjects;
+using BfkPortal.Communication.Requests;
 using BfkPortal.Database.Contracts;
-using BfkPortal.DataTransferObjects;
 using BfkPortal.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -17,34 +18,67 @@ namespace BfkPortal.Database.Repositories
 
         public async Task Add(Appointment appointment) => await Context.Appointments.AddAsync(appointment);
 
-        public async Task Delete(int id) => Context.Appointments.Remove(await Context.Appointments.FindAsync(id));
-
-        public async Task Update(AppointmentDto appointment)
+        public async Task<bool> Delete(int id)
         {
-            await Task.Factory.StartNew(() =>
+            var user = await Context.Appointments.FindAsync(id);
+            if (user == null)
+                return false;
+
+            Context.Appointments.Remove(await Context.Appointments.FindAsync(id));
+            return true;
+        }
+
+        public async Task<bool> Update(AppointmentUpdateRequest appointment)
+        {
+            var entity = await Context.Appointments.Include(a => a.Owner)
+                .Include(a => a.Participants)
+                .FirstOrDefaultAsync(a => a.Id == appointment.Id);
+            if (entity == null)
+                return false;
+
+            entity.Title = appointment.Title;
+            entity.Description = appointment.Description;
+            entity.From = DateTime.Parse(appointment.From, null, DateTimeStyles.RoundtripKind);
+            entity.To = DateTime.Parse(appointment.To, null, DateTimeStyles.RoundtripKind);
+            entity.Type = entity.Type;
+            entity.MaxParticipants = appointment.MaxParticipants;
+            entity.ShowParticipants = appointment.ShowParticipants;
+            entity.Deadline = appointment.Deadline == null
+                ? (DateTime?) null
+                : DateTime.Parse(appointment.Deadline, null, DateTimeStyles.RoundtripKind);
+            entity.IsVisible = appointment.IsVisible;
+
+            foreach (var participant in entity.Participants)
+                Context.UserAppointments.Remove(participant);
+
+            foreach (var participant in appointment.Participants)
             {
-                var update = new Appointment
+                var user = await Context.Users.FirstOrDefaultAsync(u => u.Id == participant);
+                if (user == null) continue;
+
+                await Context.UserAppointments.AddAsync(new UserAppointment
                 {
-                    Id = appointment.Id,
-                    Title = appointment.Title,
-                    Description = appointment.Description,
-                    From = DateTime.Parse(appointment.From, null, DateTimeStyles.RoundtripKind),
-                    To = DateTime.Parse(appointment.To, null, DateTimeStyles.RoundtripKind),
-                };
-                Context.Appointments.Update(update);
-            });
+                    User = user,
+                    Appointment = entity
+                });
+            }
+
+            Context.Appointments.Update(entity);
+            return true;
         }
 
         public async Task<Appointment> Find(int id) =>
-            await Context.Appointments.Include(a => a.Owner).FirstAsync(a => a.Id == id);
+            await Context.Appointments.Include(a => a.Owner)
+                .Include(a => a.Participants)
+                .FirstOrDefaultAsync(a => a.Id == id);
 
-        public async Task<AppointmentType> FindType(string name) => 
-            await Task.Factory.StartNew(() => Context.AppointmentTypes.First(at => at.Name == name));
+        public async Task<AppointmentType> FindType(string name) =>
+            await Context.AppointmentTypes.FirstOrDefaultAsync(at => at.Name == name);
 
-        public async Task<IEnumerable<AppointmentDto>> All()
-        {
-            return await Task<IEnumerable<AppointmentDto>>.Factory.StartNew(() =>
+        public async Task<IEnumerable<AppointmentDto>> All() =>
+            await Task<IEnumerable<AppointmentDto>>.Factory.StartNew(() =>
                 Context.Appointments.Include(a => a.Owner)
+                    .Include(a => a.Participants)
                     .Select(a => new AppointmentDto
                     {
                         Id = a.Id,
@@ -88,9 +122,10 @@ namespace BfkPortal.Database.Repositories
                             }).ToList()
                         }
                     }));
-        }
 
         public async Task<IEnumerable<string>> AllTypes() =>
-            await Context.AppointmentTypes.Select(at => at.Name).ToListAsync();
+            await Context.AppointmentTypes.Select(at => at.Name)
+                .DefaultIfEmpty(null)
+                .ToListAsync();
     }
 }

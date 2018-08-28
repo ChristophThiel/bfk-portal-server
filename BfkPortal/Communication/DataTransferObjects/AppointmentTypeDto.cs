@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace BfkPortal.DataTransferObjects
+namespace BfkPortal.Communication.DataTransferObjects
 {
     public class AppointmentTypeDto
     {

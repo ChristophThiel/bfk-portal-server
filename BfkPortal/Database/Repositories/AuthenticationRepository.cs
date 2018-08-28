@@ -14,20 +14,17 @@ namespace BfkPortal.Database.Repositories
 
         public async Task<User> Verify(string email, string password)
         {
-            return await Task<User>.Factory.StartNew(() =>
-                {
-                    var userRoles = Context.UserRoles.Include(ur => ur.User)
-                        .Include(ur => ur.Role);
+            var users = Context.Users.Include(u => u.Roles)
+                .ThenInclude(ur => ur.Role)
+                .Include(u => u.Organisations)
+                .ThenInclude(uo => uo.Organisation)
+                .Where(u => u.Email == email);
 
-                    var result = !userRoles.Any()
-                        ? null
-                        : userRoles.FirstOrDefault(ur =>
-                            DefaultHashingService.VerifyPassword(email, ur.User.Password, password, ur.User.Salt,
-                                Configuration["Pepper"]));
+            var result = !await users.AnyAsync()
+                ? null
+                : await users.FirstOrDefaultAsync(u => DefaultHashingService.VerifyPassword(email, u.Password, password, u.Salt, Configuration["Pepper"]));
 
-                    return result?.User;
-                }
-            );
+            return result;
         }
     }
 }

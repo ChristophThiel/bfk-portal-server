@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace BfkPortal.DataTransferObjects
+namespace BfkPortal.Communication.DataTransferObjects
 {
     public class UserDto
     {
@@ -15,13 +15,12 @@ namespace BfkPortal.DataTransferObjects
 
         [Required, EmailAddress]
         public string Email { get; set; }
-
+        
         [Required]
         public bool IsDeleted { get; set; }
 
         public ICollection<string> Roles { get; set; }
 
-        [Required]
         public ICollection<OrganisationDto> Organisations { get; set; }
     }
 }

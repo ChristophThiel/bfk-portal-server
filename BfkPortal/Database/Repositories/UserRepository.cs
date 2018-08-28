@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BfkPortal.Communication.DataTransferObjects;
 using BfkPortal.Database.Contracts;
-using BfkPortal.DataTransferObjects;
 using BfkPortal.Models;
 using BfkPortal.Services;
 using Microsoft.EntityFrameworkCore;
@@ -56,6 +56,29 @@ namespace BfkPortal.Database.Repositories
                         IsDeleted = uo.Organisation.IsDeleted
                     }).ToList()
                 }).ToListAsync();
+        }
+
+        public async Task Remove(int userId)
+        {
+            var user = await Context.Users.FindAsync(userId);
+
+            if (user == null)
+                return;
+
+            user.IsDeleted = true;
+            Context.Users.Update(user);
+        }
+
+        public async Task Update(UserDto body)
+        {
+            var user = await Context.Users.FindAsync(body.Id);
+
+            if (user == null)
+                return;
+
+            user.Firstname = body.Firstname;
+            user.Lastname = body.Lastname;
+            user.Email = body.Email;
         }
     }
 }

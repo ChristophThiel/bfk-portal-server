@@ -18,6 +18,8 @@ namespace BfkPortal.Database
 
         public IOrganisationRepository Organisations { get; }
 
+        public IUserAppointmentRepository UserAppointments { get; }
+
         public UnitOfWork(ApplicationDbContext context, IConfiguration configuration)
         {
             _context = context;
@@ -26,6 +28,7 @@ namespace BfkPortal.Database
             Users = new UserRepository(context, configuration);
             Appointments = new AppointmentRepository(context, configuration);
             Organisations = new OrganisationRepository(context, configuration);
+            UserAppointments = new UserAppointmentRepository(context, configuration);
         }
 
         public void Dispose() => _context.Dispose();
