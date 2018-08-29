@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using BfkPortal.Communication.DataTransferObjects;
+using BfkPortal.Communication.Requests;
 using BfkPortal.Database.Contracts;
 using BfkPortal.Models;
 using BfkPortal.Services;
@@ -14,26 +15,7 @@ namespace BfkPortal.Database.Repositories
     {
         public UserRepository(ApplicationDbContext context, IConfiguration configuration) : base(context, configuration) { }
 
-        public async Task Add(string email, string password)
-        {
-            var salt = DefaultHashingService.GenerateSalt();
-            var pepper = Configuration["Pepper"];
-
-            var hashedPassword = DefaultHashingService.HashPassword(email, password, salt, pepper);
-            var user = new User
-            {
-                Email = email,
-                Password = hashedPassword,
-                Salt = salt
-            };
-            await Context.Users.AddAsync(user);
-
-            await Context.UserRoles.AddAsync(new UserRole
-            {
-                Role = Context.Roles.First(),
-                User = user
-            });
-        }
+        public async Task Add(User user) => await Context.Users.AddAsync(user);
 
         public async Task<User> Find(int id) => await Task.Factory.StartNew(() => Context.Users.Include(u => u.Roles).ThenInclude(u => u.Role).First(u => u.Id == id));
 
@@ -58,27 +40,47 @@ namespace BfkPortal.Database.Repositories
                 }).ToListAsync();
         }
 
-        public async Task Remove(int userId)
+        public async Task<bool> Delete(int id)
         {
-            var user = await Context.Users.FindAsync(userId);
-
+            var user = await Context.Users.FindAsync(id);
             if (user == null)
-                return;
+                return false;
 
             user.IsDeleted = true;
             Context.Users.Update(user);
+            return true;
         }
 
-        public async Task Update(UserDto body)
+        public async Task<bool> Update(UserUpdateRequest update)
         {
-            var user = await Context.Users.FindAsync(body.Id);
+            var entity = await Context.Users.FindAsync(update.Id);
+            if (entity == null)
+                return false;
 
-            if (user == null)
-                return;
+            entity.Firstname = update.Firstname;
+            entity.Lastname = update.Lastname;
+            entity.Email = update.Email;
 
-            user.Firstname = body.Firstname;
-            user.Lastname = body.Lastname;
-            user.Email = body.Email;
+            var hashedPassword =
+                DefaultHashingService.HashPassword(entity.Email, update.Password, entity.Salt, Configuration["Pepper"]);
+            entity.Password = hashedPassword;
+            foreach (var role in entity.Roles)
+                Context.UserRoles.Remove(role);
+
+            foreach (var roleId in update.Roles)
+            {
+                var role = await Context.Roles.FindAsync(roleId);
+                if (role == null) continue;
+
+                await Context.UserRoles.AddAsync(new UserRole
+                {
+                    User = entity,
+                    Role = role
+                });
+            }
+
+            Context.Users.Update(entity);
+            return true;
         }
     }
 }

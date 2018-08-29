@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BfkPortal.Communication.DataTransferObjects
+namespace BfkPortal.Communication.Requests
 {
-    public class CredentialsDto
+    public class LogInRequest
     {
         [Required, EmailAddress]
         public string Email { get; set; }

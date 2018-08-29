@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using BfkPortal.Communication.DataTransferObjects;
+using BfkPortal.Communication.Requests;
 using BfkPortal.Database.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +28,7 @@ namespace BfkPortal.Controllers
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<IActionResult> LogIn([FromBody] CredentialsDto body)
+        public async Task<IActionResult> LogIn([FromBody] LogInRequest body)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

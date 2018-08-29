@@ -29,12 +29,6 @@ namespace BfkPortal.Controllers
         [HttpPost("add")]
         public async Task<IActionResult> Add([FromHeader] string authorization, [FromBody] AppointmentAddRequest body)
         {
-            // ModelState
-            // User
-            // Roles
-            // Create Appointment
-            // Create UserAppointments
-
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -74,7 +68,6 @@ namespace BfkPortal.Controllers
                 await _unitOfWork.UserAppointments.Add(userAppointment);
             }
             await _unitOfWork.SaveChangesAsync();
-
             return Ok(new {appointment.Id});
         }
 
