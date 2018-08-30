@@ -45,21 +45,7 @@ namespace BfkPortal.Controllers
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
             var token = new JwtSecurityToken(_configuration["Issuer"], _configuration["Issuer"], claims, null, null, credentials);
 
-            var userDto = new UserDto
-            {
-                Id = validUser.Id,
-                Firstname = validUser.Firstname,
-                Lastname = validUser.Lastname,
-                Email = validUser.Email,
-                IsDeleted = validUser.IsDeleted,
-                Roles = validUser.Roles.Select(ur => ur.Role.Name).ToList(),
-                Organisations = validUser.Organisations.Select(uo => new OrganisationDto
-                {
-                    Id = uo.Organisation.Id,
-                    Name = uo.Organisation.Name,
-                    IsDeleted = uo.Organisation.IsDeleted
-                }).ToList()
-            };
+            var userDto = new UserDto(validUser);
             return Ok(new {Token = new JwtSecurityTokenHandler().WriteToken(token), User = userDto});
         }
 

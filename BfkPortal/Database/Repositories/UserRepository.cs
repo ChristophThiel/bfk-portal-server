@@ -1,86 +1,73 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using BfkPortal.Communication.DataTransferObjects;
-using BfkPortal.Communication.Requests;
 using BfkPortal.Database.Contracts;
 using BfkPortal.Models;
-using BfkPortal.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace BfkPortal.Database.Repositories
 {
-    public class UserRepository : DefaultRepository, IUserRepository
+    public class UserRepository : BaseRepository, IUserRepository
     {
         public UserRepository(ApplicationDbContext context, IConfiguration configuration) : base(context, configuration) { }
 
-        public async Task Add(User user) => await Context.Users.AddAsync(user);
-
-        public async Task<User> Find(int id) => await Task.Factory.StartNew(() => Context.Users.Include(u => u.Roles).ThenInclude(u => u.Role).First(u => u.Id == id));
-
-        public async Task<IEnumerable<UserDto>> All()
+        public bool Add(User entity)
         {
-            return await Context.Users.Include(u => u.Roles)
-                .Include(u => u.Organisations)
-                .Select(u => new UserDto
-                {
-                    Id = u.Id,
-                    Firstname = u.Firstname,
-                    Lastname = u.Lastname,
-                    Email = u.Email,
-                    IsDeleted = u.IsDeleted,
-                    Roles = u.Roles.Select(ur => ur.Role.Name).ToList(),
-                    Organisations = u.Organisations.Select(uo => new OrganisationDto
-                    {
-                        Id = uo.Organisation.Id,
-                        Name = uo.Organisation.Name,
-                        IsDeleted = uo.Organisation.IsDeleted
-                    }).ToList()
-                }).ToListAsync();
+            try
+            {
+                Context.Users.Add(entity);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public async Task<bool> Delete(int id)
         {
-            var user = await Context.Users.FindAsync(id);
-            if (user == null)
-                return false;
-
-            user.IsDeleted = true;
-            Context.Users.Update(user);
-            return true;
-        }
-
-        public async Task<bool> Update(UserUpdateRequest update)
-        {
-            var entity = await Context.Users.FindAsync(update.Id);
+            var entity = await Context.Users.FindAsync(id);
             if (entity == null)
                 return false;
 
-            entity.Firstname = update.Firstname;
-            entity.Lastname = update.Lastname;
-            entity.Email = update.Email;
-
-            var hashedPassword =
-                DefaultHashingService.HashPassword(entity.Email, update.Password, entity.Salt, Configuration["Pepper"]);
-            entity.Password = hashedPassword;
-            foreach (var role in entity.Roles)
-                Context.UserRoles.Remove(role);
-
-            foreach (var roleId in update.Roles)
-            {
-                var role = await Context.Roles.FindAsync(roleId);
-                if (role == null) continue;
-
-                await Context.UserRoles.AddAsync(new UserRole
-                {
-                    User = entity,
-                    Role = role
-                });
-            }
-
+            entity.IsDeleted = true;
             Context.Users.Update(entity);
             return true;
+        }
+
+        public bool Update(User entity)
+        {
+            try
+            {
+                Context.Users.Update(entity);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task<User> Find(int id)
+        {
+            return await Context.Users
+                .Include(u => u.Roles)
+                .Include(u => u.Organisations)
+                .Include(u => u.Appointments)
+                .FirstOrDefaultAsync(u => u.Id == id);
+        }
+
+        public async Task<List<User>> All()
+        {
+            return await Context.Users
+                .Include(u => u.Roles)
+                .ThenInclude(ur => ur.Role)
+                .Include(u => u.Appointments)
+                .ThenInclude(ua => ua.Appointment)
+                .Include(u => u.Organisations)
+                .ThenInclude(uo => uo.Organisation)
+                .ToListAsync();
         }
     }
 }

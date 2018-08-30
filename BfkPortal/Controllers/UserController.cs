@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BfkPortal.Communication.DataTransferObjects;
@@ -6,7 +7,6 @@ using BfkPortal.Communication.Requests;
 using BfkPortal.Database.Contracts;
 using BfkPortal.Models;
 using BfkPortal.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
@@ -25,6 +25,7 @@ namespace BfkPortal.Controllers
             _configuration = configuration;
         }
 
+        // DONE
         [HttpPost("add")]
         public async Task<IActionResult> Add([FromBody] UserAddRequest body)
         {
@@ -32,61 +33,44 @@ namespace BfkPortal.Controllers
                 return BadRequest(ModelState);
 
             var salt = DefaultHashingService.GenerateSalt();
-            var pepper = _configuration["Pepper"];
-
-            var hashedPassword = DefaultHashingService.HashPassword(body.Email, body.Password, salt, pepper);
+            var password = DefaultHashingService.HashPassword(body.Email, body.Password, salt, _configuration["Pepper"]);
             var user = new User
             {
                 Firstname = body.Firstname,
                 Lastname = body.Lastname,
                 Email = body.Email,
-                Password = hashedPassword,
+                Password = password,
                 Salt = salt,
-                IsDeleted = false
+                IsDeleted = false,
+                Roles = new List<UserRole>(),
+                Appointments = new List<UserAppointment>(),
+                Organisations = new List<UserOrganisation>()
             };
 
-            await _unitOfWork.Users.Add(user);
+            AddRolesAndOrganisations(ref user, body.Roles, body.Organisations);
 
-            foreach (var roleId in body.Roles)
-            {
-                var role = await _unitOfWork.Roles.Find(roleId);
-                if (role == null) continue;
-                var userRole = new UserRole
-                {
-                    User = user,
-                    Role = role
-                };
-                await _unitOfWork.UserRoles.Add(userRole);
-            }
+            _unitOfWork.Users.Add(user);
 
-            foreach (var organisationId in body.Organisations)
+            await _unitOfWork.SaveChangesAsync();
+            return Ok();
+        }
+
+        // DONE
+        [HttpGet("delete/{userId:int}")]
+        public async Task<IActionResult> Delete(int userId)
+        {
+            var result = await _unitOfWork.Users.Delete(userId);
+            if (!result)
             {
-                var organisation = await _unitOfWork.Organisations.Find(organisationId);
-                if (organisation == null) continue;
-                var userOrganisation = new UserOrganisation
-                {
-                    User = user,
-                    Organisation = organisation
-                };
-                await _unitOfWork.UserOrganisations.Add(userOrganisation);
+                ModelState.AddModelError("Delete", "An error occurred during the delete!");
+                return BadRequest(ModelState);
             }
 
             await _unitOfWork.SaveChangesAsync();
             return Ok();
         }
 
-        [HttpGet("delete/{userId:int}")]
-        public async Task<IActionResult> Delete(int userId)
-        {
-            var result = await _unitOfWork.Users.Delete(userId);
-            await _unitOfWork.SaveChangesAsync();
-            if (result)
-                return Ok();
-
-            ModelState.AddModelError("Id", "A user with this id does not exists!");
-            return BadRequest(ModelState);
-        }
-
+        // DONE
         [HttpPost("update")]
         public async Task<IActionResult> Update([FromBody] UserUpdateRequest body)
         {
@@ -96,23 +80,78 @@ namespace BfkPortal.Controllers
             var user = await _unitOfWork.Users.Find(body.Id);
             if (user == null)
             {
-                ModelState.AddModelError("Id", "A user with this id does not exists!");
+                ModelState.AddModelError("Id", "A user with this id does not exist!");
                 return BadRequest(ModelState);
             }
 
-            var result = await _unitOfWork.Users.Update(body);
-            await _unitOfWork.SaveChangesAsync();
+            var salt = DefaultHashingService.GenerateSalt();
+            var password = DefaultHashingService.HashPassword(body.Email, body.Password, salt, _configuration["Pepper"]);
 
-            if (result)
-                return Ok();
-            ModelState.AddModelError("Id", "A user with this id does not exists!");
-            return BadRequest(ModelState);
+            user.Firstname = body.Firstname;
+            user.Lastname = body.Lastname;
+            user.Email = body.Email;
+            user.Password = password;
+            user.Salt = salt;
+
+            user.Roles = new List<UserRole>();
+            user.Organisations = new List<UserOrganisation>();
+
+            AddRolesAndOrganisations(ref user, body.Roles, body.Organisations);
+
+            _unitOfWork.Users.Update(user);
+
+            await _unitOfWork.SaveChangesAsync();
+            return Ok();
         }
 
+        // DONE
         [HttpGet("all")]
         public async Task<IActionResult> All()
         {
-            return Ok(await _unitOfWork.Users.All());
+            var users = await _unitOfWork.Users.All();
+            return Ok(users.Select(u => new UserDto(u)));
         }
+
+        // DONE
+        [HttpGet("roles")]
+        public async Task<IActionResult> AllRoles()
+        {
+            var roles = await _unitOfWork.Roles.All();
+            return Ok(roles.Where(r => !r.Name.StartsWith("Admin"))
+                .Select(r => r.Name));
+        }
+
+        #region Private methods
+
+        private void AddRolesAndOrganisations(ref User user, IEnumerable<string> roleNames, IEnumerable<string> organsationNames)
+        {
+            var roles = _unitOfWork.Roles.All().Result.ToList();
+            foreach (var roleName in roleNames)
+            {
+                var role = roles.FirstOrDefault(r => r.Name == roleName);
+                if (role == null) continue;
+
+                user.Roles.Add(new UserRole
+                {
+                    User = user,
+                    Role = role
+                });
+            }
+
+            var organisations = _unitOfWork.Organisations.All().Result.ToList();
+            foreach (var organisatioName in organsationNames)
+            {
+                var organisation = organisations.FirstOrDefault(o => o.Name == organisatioName);
+                if (organisation == null) continue;
+
+                user.Organisations.Add(new UserOrganisation
+                {
+                    User = user,
+                    Organisation = organisation
+                });
+            }
+        }
+
+        #endregion
     }
 }

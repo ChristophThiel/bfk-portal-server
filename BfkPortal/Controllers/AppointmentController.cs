@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -6,24 +7,23 @@ using System.Threading.Tasks;
 using BfkPortal.Communication.Requests;
 using BfkPortal.Database.Contracts;
 using BfkPortal.Models;
-using BfkPortal.Services;
+using BfkPortal.Models.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 
 namespace BfkPortal.Controllers
 {
+    //[Authorize]
     [Route("api/[controller]")]
     public class AppointmentController : ControllerBase
     {
         private const string JwtTokenPrefix = "Bearer ";
 
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IConfiguration _configuration;
 
-        public AppointmentController(IUnitOfWork unitOfWork, IConfiguration configuration)
+        public AppointmentController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _configuration = configuration;
         }
         
         [HttpPost("add")]
@@ -39,8 +39,7 @@ namespace BfkPortal.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (!DefaultRoleService.ContainsRole(user, new []{ DefaultRoleService.UserBfk, DefaultRoleService.AdminBfk}))
-                return Forbid();
+            // TODO Check if the user is allowed to create a appointment
 
             var appointment = new Appointment
             {
@@ -48,25 +47,36 @@ namespace BfkPortal.Controllers
                 Description = body.Description,
                 From = DateTime.Parse(body.From, null, DateTimeStyles.RoundtripKind),
                 To = DateTime.Parse(body.To, null, DateTimeStyles.RoundtripKind),
-                Type = await _unitOfWork.Appointments.FindType(body.Type),
+                Type = Enum.IsDefined(typeof(AppointmentTypes), body.Type)
+                    ? Enum.Parse<AppointmentTypes>(body.Type)
+                    : AppointmentTypes.Termin,
                 MaxParticipants = body.MaxParticipants,
                 ShowParticipants = body.ShowParticipants,
                 Deadline = string.IsNullOrEmpty(body.Deadline) ? (DateTime?) null : DateTime.Parse(body.Deadline, null, DateTimeStyles.RoundtripKind),
                 IsVisible = body.IsVisible,
-                Owner = user
+                Owner = user,
+                Participants = new List<UserAppointment>()
             };
-            await _unitOfWork.Appointments.Add(appointment);
 
-            var participants = body.Participants.Select(p => _unitOfWork.Users.Find(p));
-            foreach (var participant in participants)
+            var result = _unitOfWork.Appointments.Add(appointment);
+            if (!result)
             {
-                var userAppointment = new UserAppointment
-                {
-                    Appointment = appointment,
-                    User = await participant
-                };
-                await _unitOfWork.UserAppointments.Add(userAppointment);
+                ModelState.AddModelError("Add", "Failed to add the new entity.");
+                return BadRequest(ModelState);
             }
+            
+            foreach (var userId in body.Participants)
+            {
+                var participant = await _unitOfWork.Users.Find(userId);
+                if (participant == null) continue;
+
+                appointment.Participants.Add(new UserAppointment
+                {
+                    User = participant,
+                    Appointment = appointment
+                });
+            }
+
             await _unitOfWork.SaveChangesAsync();
             return Ok(new {appointment.Id});
         }
@@ -100,7 +110,7 @@ namespace BfkPortal.Controllers
 
             // TODO Check if the user is allowed to update this appointment
 
-            await _unitOfWork.Appointments.Update(body);
+            //await _unitOfWork.Appointments.Update(body);
             await _unitOfWork.SaveChangesAsync();
 
             return Ok();
@@ -116,16 +126,28 @@ namespace BfkPortal.Controllers
         [HttpGet("types")]
         public async Task<IActionResult> AllTypes()
         {
-            var allTypes = await _unitOfWork.Appointments.AllTypes();
-            return Ok(allTypes.ToList());
+            /*var allTypes = await _unitOfWork.Appointments.AllTypes();
+            return Ok(allTypes.Where(t => t.Name != "Termin")
+                .Select(t => t.Name));*/
+            throw new NotImplementedException();
         }
+
+        #region Private Methods
 
         private async Task<User> GetUserFromToken(string token)
         {
-            var jwt = new JwtSecurityToken(token.Substring(JwtTokenPrefix.Length));
-            var id = int.Parse(jwt.Claims.First().Value);
-            return await _unitOfWork.Users.Find(id);
+            try
+            {
+                var jwt = new JwtSecurityToken(token.Substring(JwtTokenPrefix.Length));
+                var id = int.Parse(jwt.Claims.First().Value);
+                return await _unitOfWork.Users.Find(id);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
+        #endregion
     }
 }

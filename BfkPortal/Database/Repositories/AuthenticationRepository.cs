@@ -8,14 +8,13 @@ using Microsoft.Extensions.Configuration;
 
 namespace BfkPortal.Database.Repositories
 {
-    public class AuthenticationRepository : DefaultRepository, IAuthenticationRepository
+    public class AuthenticationRepository : BaseRepository, IAuthenticationRepository
     {
         public AuthenticationRepository(ApplicationDbContext context, IConfiguration configuration) : base(context, configuration) { }
 
         public async Task<User> Verify(string email, string password)
         {
-            var users = Context.Users.Include(u => u.Roles)
-                .ThenInclude(ur => ur.Role)
+            var users = Context.Users
                 .Include(u => u.Organisations)
                 .ThenInclude(uo => uo.Organisation)
                 .Where(u => u.Email == email);

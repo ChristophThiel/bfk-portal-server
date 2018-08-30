@@ -11,13 +11,11 @@ namespace BfkPortal.Database.Contracts
 
         IAppointmentRepository Appointments { get; }
 
-        IOrganisationRepository Organisations { get; }
-
         IRoleRepository Roles { get; }
 
-        IUserAppointmentRepository UserAppointments { get; }
+        IOrganisationRepository Organisations { get; }
 
-        IUserRoleRepository UserRoles { get; }
+        IUserAppointmentRepository UserAppointments { get; }
 
         IUserOrganisationRepository UserOrganisations { get; }
 

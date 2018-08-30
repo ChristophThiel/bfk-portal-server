@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using BfkPortal.Communication.DataTransferObjects;
 using BfkPortal.Database.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +21,8 @@ namespace BfkPortal.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> All()
         {
-            return Ok(await _unitOfWork.Organisations.All());
+            var organisations = await _unitOfWork.Organisations.All();
+            return Ok(organisations.Select(o => new OrganisationDto(o)));
         }
     }
 }

@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BfkPortal.Communication.DataTransferObjects;
 using BfkPortal.Database;
 using BfkPortal.Models;
+using BfkPortal.Models.Enums;
 using BfkPortal.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace BfkPortal.Controllers
@@ -123,16 +121,6 @@ namespace BfkPortal.Controllers
             };
             await _context.UserRoles.AddRangeAsync(userRoles);
 
-            var appointmentTypes = new[]
-            {
-                new AppointmentType {Name = "Termin"},
-                new AppointmentType {Name = "Vollversammlung"},
-                new AppointmentType {Name = "Dienst"},
-                new AppointmentType {Name = "Übung"},
-                new AppointmentType {Name = "Bewerb"}
-            };
-            await _context.AppointmentTypes.AddRangeAsync(appointmentTypes);  
-
             var appointments = new[]
             {
                 new Appointment
@@ -141,7 +129,7 @@ namespace BfkPortal.Controllers
                     Description = "This is a exaple description",
                     From = DateTime.UtcNow,
                     To = DateTime.UtcNow.AddDays(3),
-                    Type = appointmentTypes.First(),
+                    Type = AppointmentTypes.Vollversammlung,
                     MaxParticipants = 4,
                     ShowParticipants = false,
                     Deadline = DateTime.UtcNow.AddDays(-3),
@@ -153,7 +141,7 @@ namespace BfkPortal.Controllers
                     Title = "Nachtdienst Alexander Koblmüller",
                     From = DateTime.UtcNow,
                     To = DateTime.UtcNow.AddDays(1),
-                    Type = appointmentTypes.Last(),
+                    Type = AppointmentTypes.Dienst,
                     MaxParticipants = 1,
                     ShowParticipants = true,
                     IsVisible = true,
@@ -172,84 +160,6 @@ namespace BfkPortal.Controllers
 
             await _context.SaveChangesAsync();
             return Ok();
-        }
-
-        [HttpGet("users")]
-        public async Task<IEnumerable<UserDto>> Users()
-        {
-            return await Task<IEnumerable<UserDto>>.Factory.StartNew(() =>
-            {
-                return _context.Users.Include(u => u.Roles)
-                    .Include(u => u.Organisations)
-                    .Select(u => new UserDto
-                    {
-                        Id = u.Id,
-                        Firstname = u.Firstname,
-                        Lastname = u.Lastname,
-                        Email = u.Email,
-                        IsDeleted = u.IsDeleted,
-                        Roles = u.Roles.Select(r => r.Role.Name).ToList(),
-                        Organisations = u.Organisations.Select(uo => new OrganisationDto
-                        {
-                            Id = uo.Organisation.Id,
-                            Name = uo.Organisation.Name,
-                            IsDeleted = uo.Organisation.IsDeleted
-                        }).ToList()
-                    });
-            });
-        }
-
-        [HttpGet("appointments")]
-        public async Task<IEnumerable<AppointmentDto>> Appointments()
-        {
-            return await Task<IEnumerable<AppointmentDto>>.Factory.StartNew(() =>
-            {
-                return _context.Appointments.Include(a => a.Participants)
-                    .Include(a => a.Owner)
-                    .Select(a => new AppointmentDto
-                {
-                    Id = a.Id,
-                    Title = a.Title,
-                    Description = a.Description,
-                    From = a.From.ToString("O"),
-                    To = a.To.ToString("O"),
-                    Type = a.Type.Name,
-                    MaxParticipants = a.MaxParticipants,
-                    ShowParticipants = a.ShowParticipants,
-                    Deadline = a.Deadline,
-                    IsVisible = a.IsVisible,
-                    Participants = a.Participants.Select(ua => new UserDto
-                    {
-                        Id = ua.UserId,
-                        Firstname = ua.User.Firstname,
-                        Lastname = ua.User.Lastname,
-                        Email = ua.User.Email,
-                        IsDeleted = ua.User.IsDeleted,
-                        Organisations = ua.User.Organisations.Select(uo => new OrganisationDto
-                        {
-                            Id = uo.Organisation.Id,
-                            Name = uo.Organisation.Name,
-                            IsDeleted = uo.Organisation.IsDeleted
-                        }).ToList(),
-                        Roles = ua.User.Roles.Select(r => r.Role.Name).ToList()
-                    }).ToList(),
-                    Owner = new UserDto
-                    {
-                        Id = a.Owner.Id,
-                        Firstname = a.Owner.Firstname,
-                        Lastname = a.Owner.Lastname,
-                        Email = a.Owner.Email,
-                        IsDeleted = a.Owner.IsDeleted,
-                        Roles = a.Owner.Roles.Select(ur => ur.Role.Name).ToList(),
-                        Organisations = a.Owner.Organisations.Select(uo => new OrganisationDto
-                        {
-                            Id = uo.Organisation.Id,
-                            Name = uo.Organisation.Name,
-                            IsDeleted = uo.Organisation.IsDeleted
-                        }).ToList()
-                    }
-                });
-            });
         }
     }
 }

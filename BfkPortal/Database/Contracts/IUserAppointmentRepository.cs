@@ -1,10 +1,9 @@
-﻿using System.Threading.Tasks;
-using BfkPortal.Models;
+﻿using BfkPortal.Models;
 
 namespace BfkPortal.Database.Contracts
 {
-    public interface IUserAppointmentRepository
+    public interface IUserAppointmentRepository : IBaseRepository<UserAppointment>
     {
-        Task Add(UserAppointment userAppointment);
+
     }
 }

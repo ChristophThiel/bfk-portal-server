@@ -1,14 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using BfkPortal.Communication.DataTransferObjects;
-using BfkPortal.Models;
+﻿using BfkPortal.Models;
 
 namespace BfkPortal.Database.Contracts
 {
-    public interface IOrganisationRepository
+    public interface IOrganisationRepository : IBaseRepository<Organisation>
     {
-        Task<Organisation> Find(int id);
 
-        Task<IEnumerable<OrganisationDto>> All();
     }
 }

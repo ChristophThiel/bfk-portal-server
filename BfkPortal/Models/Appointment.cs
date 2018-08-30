@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Globalization;
-using BfkPortal.Communication.Requests;
+using BfkPortal.Models.Enums;
 
 namespace BfkPortal.Models
 {
@@ -22,7 +21,7 @@ namespace BfkPortal.Models
         public DateTime To { get; set; }
 
         [Required]
-        public AppointmentType Type { get; set; }
+        public AppointmentTypes Type { get; set; }
 
         [Required]
         public int MaxParticipants { get; set; }

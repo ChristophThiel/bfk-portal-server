@@ -16,13 +16,11 @@ namespace BfkPortal.Database
 
         public IAppointmentRepository Appointments { get; }
 
-        public IOrganisationRepository Organisations { get; }
-
         public IRoleRepository Roles { get; }
 
-        public IUserAppointmentRepository UserAppointments { get; }
+        public IOrganisationRepository Organisations { get; }
 
-        public IUserRoleRepository UserRoles { get; }
+        public IUserAppointmentRepository UserAppointments { get; }
 
         public IUserOrganisationRepository UserOrganisations { get; }
 
@@ -32,12 +30,11 @@ namespace BfkPortal.Database
             _configuration = configuration;
             Authentications = new AuthenticationRepository(context, configuration);
             Users = new UserRepository(context, configuration);
-            Appointments = new AppointmentRepository(context, configuration);
-            Organisations = new OrganisationRepository(context, configuration);
+            Appointments = new AppointmentRepository(context);
             Roles = new RoleRepository(context, configuration);
-            UserAppointments = new UserAppointmentRepository(context, configuration);
-            UserRoles = new UserRoleRepository(context, configuration);
-            UserOrganisations = new UserOrganisationRepository(context, configuration);
+            Organisations = new OrganisationRepository(context);
+            UserAppointments = new UserAppointmentRepository(context);
+            UserOrganisations = new UserOrganisationRepository(context);
         }
 
         public void Dispose() => _context.Dispose();

@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using BfkPortal.Models;
+﻿using BfkPortal.Models;
 
 namespace BfkPortal.Database.Contracts
 {
-    public interface IRoleRepository
+    public interface IRoleRepository : IBaseRepository<Role>
     {
-        Task<Role> Find(int id);
 
-        Task<IEnumerable<Role>> All();
     }
 }

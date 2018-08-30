@@ -21,9 +21,9 @@ namespace BfkPortal.Communication.Requests
         public string Password { get; set; }
 
         [Required]
-        public IEnumerable<int> Roles { get; set; }
+        public IEnumerable<string> Roles { get; set; }
 
         [Required]
-        public IEnumerable<int> Organisations { get; set; }
+        public IEnumerable<string> Organisations { get; set; }
     }
 }
