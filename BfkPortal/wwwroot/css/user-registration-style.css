@@ -1,0 +1,67 @@
+﻿.email-background {
+    font-family: sans-serif;
+    font-size: 1.5em;
+    padding: 1em;
+    -ms-border-radius: 3px;
+    border-radius: 3px;
+}
+
+@media screen and (min-width: 1024px) {
+    .email-background {
+        width: 60%;
+        margin: 0 20%;
+    }
+}
+
+.pre-header {
+    background-color: #d3ffd5;
+    text-align: center;
+    border: 1.5px solid #32CD32;
+    -ms-border-radius: 5px 5px 0 0;
+    border-radius: 5px 5px 0 0;
+}
+
+.pre-header h3 {
+        margin: 0;
+        padding: 0.5em;
+        color: #32CD32;
+    }
+
+.email-container {
+    background-color: white;
+    padding: 0.5em 1.5em;
+    border: 1.5px solid #32CD32;
+    border-top: 0;
+    -ms-border-radius: 0 0 5px 5px;
+    border-radius: 0 0 5px 5px;
+}
+
+.email-container ul {
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+.website-link {
+    text-align: center;
+}
+
+    .website-link a {
+        margin-top: 2em;
+        padding: 0.5em 1em;
+        color: #32CD32;
+        background-color: white;
+        text-decoration: none;
+        font-weight: bold;
+        border: 2px solid #32CD32;
+        -ms-border-radius: 5px;
+        border-radius: 5px;
+        -ms-transition: 0.2s;
+        -o-transition: 0.2s;
+        -webkit-transition: 0.2s;
+        transition: 0.2s;
+    }
+
+.website-link a:hover {
+            color: white;
+            background-color: #32CD32
+        }

@@ -5,6 +5,7 @@ using BfkPortal.Database;
 using BfkPortal.Models;
 using BfkPortal.Models.Enums;
 using BfkPortal.Services;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
@@ -16,11 +17,13 @@ namespace BfkPortal.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _configuration;
+        private readonly IHostingEnvironment _environment;
 
-        public TestController(ApplicationDbContext context, IConfiguration configuration)
+        public TestController(ApplicationDbContext context, IConfiguration configuration, IHostingEnvironment environment)
         {
             this._context = context;
             this._configuration = configuration;
+            this._environment = environment;
         }
 
         [HttpGet]
@@ -159,6 +162,13 @@ namespace BfkPortal.Controllers
             await _context.UserAppointments.AddRangeAsync(userAppointments);
 
             await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpGet("mail")]
+        public IActionResult Mail()
+        {
+            var result = DefaultMailService.SendUserAddMessage("christoph.thiel@liwest.at", "Christoph","Thiel", "test", _environment.WebRootPath);
             return Ok();
         }
     }
