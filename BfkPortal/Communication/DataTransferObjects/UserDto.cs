@@ -1,6 +1,5 @@
 ﻿using BfkPortal.Models;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace BfkPortal.Communication.DataTransferObjects

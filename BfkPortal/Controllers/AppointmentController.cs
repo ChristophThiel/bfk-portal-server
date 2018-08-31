@@ -4,11 +4,11 @@ using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
+using BfkPortal.Communication.DataTransferObjects;
 using BfkPortal.Communication.Requests;
 using BfkPortal.Database.Contracts;
 using BfkPortal.Models;
 using BfkPortal.Models.Enums;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BfkPortal.Controllers
@@ -39,8 +39,6 @@ namespace BfkPortal.Controllers
                 return BadRequest(ModelState);
             }
 
-            // TODO Check if the user is allowed to create a appointment
-
             var appointment = new Appointment
             {
                 Title = body.Title,
@@ -50,6 +48,7 @@ namespace BfkPortal.Controllers
                 Type = Enum.IsDefined(typeof(AppointmentTypes), body.Type)
                     ? Enum.Parse<AppointmentTypes>(body.Type)
                     : AppointmentTypes.Termin,
+                AreParticipantsOrganisations = body.AreParticipantsOrganisations,
                 MaxParticipants = body.MaxParticipants,
                 ShowParticipants = body.ShowParticipants,
                 Deadline = string.IsNullOrEmpty(body.Deadline) ? (DateTime?) null : DateTime.Parse(body.Deadline, null, DateTimeStyles.RoundtripKind),
@@ -84,17 +83,13 @@ namespace BfkPortal.Controllers
         [HttpGet("delete/{appointmentId:int}")]
         public async Task<IActionResult> Delete(int appointmentId, [FromHeader] string authorization)
         {
-            var user = await GetUserFromToken(authorization);
-            var appointment = await _unitOfWork.Appointments.Find(appointmentId);
-
-            // TODO Check, if the user is allowed to delete this appointment
-
             var result = await _unitOfWork.Appointments.Delete(appointmentId);
             if (!result)
             {
                 ModelState.AddModelError("Id", "An appointment with this id does not exists!");
                 return BadRequest(ModelState);
             }
+
             await _unitOfWork.SaveChangesAsync();
             return Ok();
         }
@@ -105,32 +100,58 @@ namespace BfkPortal.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = await GetUserFromToken(authorization);
             var appointment = await _unitOfWork.Appointments.Find(body.Id);
+            if (appointment == null)
+            {
+                ModelState.AddModelError("Id", "An appointment with this id does not exist!");
+                return BadRequest(ModelState);
+            }
 
-            // TODO Check if the user is allowed to update this appointment
+            appointment.Title = body.Title;
+            appointment.Description = body.Description;
+            appointment.From = DateTime.Parse(body.From, null, DateTimeStyles.RoundtripKind);
+            appointment.To = DateTime.Parse(body.To, null, DateTimeStyles.RoundtripKind);
+            appointment.AreParticipantsOrganisations = body.AreParticipantsOrganisations;
+            appointment.MaxParticipants = body.MaxParticipants;
+            appointment.ShowParticipants = body.ShowParticipants;
+            appointment.Deadline = string.IsNullOrEmpty(body.Deadline)
+                ? DateTime.Parse(body.Deadline, null, DateTimeStyles.RoundtripKind)
+                : (DateTime?) null;
+            appointment.IsVisible = body.IsVisible;
 
-            //await _unitOfWork.Appointments.Update(body);
+            appointment.Participants = new List<UserAppointment>();
+
+            foreach (var userId in body.Participants)
+            {
+                var user = await _unitOfWork.Users.Find(userId);
+                if (user == null) continue;
+
+                appointment.Participants.Add(new UserAppointment
+                {
+                    User = user,
+                    Appointment = appointment
+                });
+            }
+            
+            var result = _unitOfWork.Appointments.Update(appointment);
+
             await _unitOfWork.SaveChangesAsync();
-
             return Ok();
         }
 
         [HttpGet("all")]
         public async Task<IActionResult> All()
         {
-            var allAppointments = await _unitOfWork.Appointments.All();
-            return Ok(allAppointments.ToList());
+            var appointments = await _unitOfWork.Appointments.All();
+            foreach (var appointment in appointments)
+            {
+                var help = new AppointmentDto(appointment);
+            }
+            return Ok(appointments.Select(a => new AppointmentDto(a)));
         }
 
         [HttpGet("types")]
-        public async Task<IActionResult> AllTypes()
-        {
-            /*var allTypes = await _unitOfWork.Appointments.AllTypes();
-            return Ok(allTypes.Where(t => t.Name != "Termin")
-                .Select(t => t.Name));*/
-            throw new NotImplementedException();
-        }
+        public IActionResult AllTypes() => Ok(_unitOfWork.Appointments.Types());
 
         #region Private Methods
 

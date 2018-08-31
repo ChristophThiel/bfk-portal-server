@@ -21,11 +21,15 @@ namespace BfkPortal.Communication.Requests
         public string Type { get; set; }
 
         [Required]
+        public bool AreParticipantsOrganisations { get; set; }
+
+        [Required]
         public int MaxParticipants { get; set; }
 
         [Required]
         public bool ShowParticipants { get; set; }
         
+        [Iso8601]
         public string Deadline { get; set; }
 
         [Required]

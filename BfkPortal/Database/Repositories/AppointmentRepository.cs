@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BfkPortal.Database.Contracts;
 using BfkPortal.Models;
+using BfkPortal.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace BfkPortal.Database.Repositories
@@ -58,8 +61,36 @@ namespace BfkPortal.Database.Repositories
         {
             return await Context.Appointments
                 .Include(a => a.Participants)
+                .ThenInclude(ua => ua.User)
+                .ThenInclude(u => u.Roles)
+                .ThenInclude(ur => ur.Role)
+                .Include(a => a.Participants)
+                .ThenInclude(ua => ua.User)
+                .ThenInclude(u => u.Organisations)
+                .ThenInclude(uo => uo.Organisation)
                 .Include(a => a.Owner)
+                .ThenInclude(u => u.Roles)
+                .ThenInclude(ur => ur.Role)
+                .Include(a => a.Owner)
+                .ThenInclude(u => u.Organisations)
+                .ThenInclude(uo => uo.Organisation)
                 .ToListAsync();
+            /*return await Context.Appointments
+                .Include(a => a.Participants)
+                .ThenInclude(a => a.User)
+                .Include(a => a.Owner)
+                .ThenInclude(a => a.Roles)
+                .ThenInclude(r => r.Role)
+                .Include(a => a.Owner)
+                .ThenInclude(a => a.Organisations)
+                .ThenInclude(o => o.Organisation)
+                .ToListAsync();*/
         }
+
+        public IEnumerable<string> Types() =>
+            Enum.GetValues(typeof(AppointmentTypes))
+                .Cast<AppointmentTypes>()
+                .Skip(1)
+                .Select(t => t.ToString());
     }
 }
