@@ -2,8 +2,7 @@
 {
     public enum AppointmentTypes
     {
-        Termin = 0,
-        Dienst,
+        Dienst = 0,
         Übung,
         Bewerb,
         Vollversammlung

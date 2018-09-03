@@ -53,8 +53,11 @@ namespace BfkPortal.Database.Repositories
         {
             return await Context.Users
                 .Include(u => u.Roles)
+                .ThenInclude(ur => ur.Role)
                 .Include(u => u.Organisations)
+                .ThenInclude(uo => uo.Organisation)
                 .Include(u => u.Appointments)
+                .ThenInclude(ua => ua.Appointment)
                 .FirstOrDefaultAsync(u => u.Id == id);
         }
 

@@ -3,17 +3,20 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using BfkPortal.Communication.DataTransferObjects;
 using BfkPortal.Communication.Requests;
 using BfkPortal.Database.Contracts;
 using BfkPortal.Models;
 using BfkPortal.Models.Enums;
+using BfkPortal.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BfkPortal.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     public class AppointmentController : ControllerBase
     {
@@ -39,6 +42,10 @@ namespace BfkPortal.Controllers
                 return BadRequest(ModelState);
             }
 
+            var allowed = DefaultRoleService.RequireRoles(new[] {Roles.AdminBfk, Roles.AdminBwst, Roles.UserBfk}, user);
+            if (!allowed)
+                return Forbid();
+
             var appointment = new Appointment
             {
                 Title = body.Title,
@@ -47,7 +54,7 @@ namespace BfkPortal.Controllers
                 To = DateTime.Parse(body.To, null, DateTimeStyles.RoundtripKind),
                 Type = Enum.IsDefined(typeof(AppointmentTypes), body.Type)
                     ? Enum.Parse<AppointmentTypes>(body.Type)
-                    : AppointmentTypes.Termin,
+                    : AppointmentTypes.Vollversammlung,
                 AreParticipantsOrganisations = body.AreParticipantsOrganisations,
                 MaxParticipants = body.MaxParticipants,
                 ShowParticipants = body.ShowParticipants,
@@ -83,12 +90,28 @@ namespace BfkPortal.Controllers
         [HttpGet("delete/{appointmentId:int}")]
         public async Task<IActionResult> Delete(int appointmentId, [FromHeader] string authorization)
         {
-            var result = await _unitOfWork.Appointments.Delete(appointmentId);
-            if (!result)
+            var user = await GetUserFromToken(authorization);
+            if (user == null)
+            {
+                ModelState.AddModelError("Token", "An error occurred with the token!");
+                return BadRequest(ModelState);
+            }
+
+            var allowed = DefaultRoleService.RequireRoles(new[] {Roles.AdminBfk, Roles.AdminBwst, Roles.UserBfk}, user);
+            if (!allowed)
+                return Forbid();
+
+            var appointment = await _unitOfWork.Appointments.Find(appointmentId);
+            if (appointment == null)
             {
                 ModelState.AddModelError("Id", "An appointment with this id does not exists!");
                 return BadRequest(ModelState);
             }
+
+            if (DefaultRoleService.HasRole(Roles.UserBfk, user) && appointment.Owner.Id != user.Id)
+                return Forbid();
+
+            await _unitOfWork.Appointments.Delete(appointmentId);
 
             await _unitOfWork.SaveChangesAsync();
             return Ok();
@@ -100,12 +123,26 @@ namespace BfkPortal.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            var owner = await GetUserFromToken(authorization);
+            if (owner == null)
+            {
+                ModelState.AddModelError("Token", "An error occurred with the token!");
+                return BadRequest(ModelState);
+            }
+
+            var allowed = DefaultRoleService.RequireRoles(new[] { Roles.AdminBfk, Roles.AdminBwst, Roles.UserBfk }, owner);
+            if (!allowed)
+                return Forbid();
+
             var appointment = await _unitOfWork.Appointments.Find(body.Id);
             if (appointment == null)
             {
                 ModelState.AddModelError("Id", "An appointment with this id does not exist!");
                 return BadRequest(ModelState);
             }
+
+            if (DefaultRoleService.HasRole(Roles.UserBfk, owner) && appointment.Owner.Id != owner.Id)
+                return Forbid();
 
             appointment.Title = body.Title;
             appointment.Description = body.Description;
@@ -114,7 +151,7 @@ namespace BfkPortal.Controllers
             appointment.AreParticipantsOrganisations = body.AreParticipantsOrganisations;
             appointment.MaxParticipants = body.MaxParticipants;
             appointment.ShowParticipants = body.ShowParticipants;
-            appointment.Deadline = string.IsNullOrEmpty(body.Deadline)
+            appointment.Deadline = !string.IsNullOrEmpty(body.Deadline)
                 ? DateTime.Parse(body.Deadline, null, DateTimeStyles.RoundtripKind)
                 : (DateTime?) null;
             appointment.IsVisible = body.IsVisible;
@@ -140,18 +177,47 @@ namespace BfkPortal.Controllers
         }
 
         [HttpGet("all")]
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> All([FromHeader] string authorization)
         {
-            var appointments = await _unitOfWork.Appointments.All();
-            foreach (var appointment in appointments)
+            var user = await GetUserFromToken(authorization);
+            if (user == null)
             {
-                var help = new AppointmentDto(appointment);
+                ModelState.AddModelError("Token", "An error occurred with the token!");
+                return BadRequest(ModelState);
             }
-            return Ok(appointments.Select(a => new AppointmentDto(a)));
+
+
+            var appointments = await _unitOfWork.Appointments.All();
+            var result = new List<AppointmentDto>();
+            
+            if (DefaultRoleService.RequireRoles(DefaultRoleService.BfkRoles, user))
+                result.AddRange(appointments.Where(a => a.Type != AppointmentTypes.Dienst).Select(a => new AppointmentDto(a)));
+            if (DefaultRoleService.RequireRoles(DefaultRoleService.BwstRoles, user))
+                result.AddRange(appointments.Where(a => a.Type == AppointmentTypes.Dienst).Select(a => new AppointmentDto(a)));
+
+            return Ok(result);
         }
 
         [HttpGet("types")]
-        public IActionResult AllTypes() => Ok(_unitOfWork.Appointments.Types());
+        public async Task<IActionResult> AllTypes([FromHeader] string authorization)
+        {
+            var user = await GetUserFromToken(authorization);
+            if (user == null)
+            {
+                ModelState.AddModelError("Token", "An error occurred with the token!");
+                return BadRequest(ModelState);
+            }
+
+            var types = _unitOfWork.Appointments.Types();
+            var result = new List<string>();
+
+            if (DefaultRoleService.RequireRoles(DefaultRoleService.BfkRoles, user))
+                result.AddRange(types.Where(t => t != AppointmentTypes.Dienst.ToString()).Select(t => t));
+            if (DefaultRoleService.RequireRoles(DefaultRoleService.BwstRoles, user))
+                result.AddRange(types.Where(t => t == AppointmentTypes.Dienst.ToString()).Select(t => t));
+
+            return Ok(result);
+        }
 
         #region Private Methods
 

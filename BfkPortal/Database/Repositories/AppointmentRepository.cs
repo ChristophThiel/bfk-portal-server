@@ -87,10 +87,10 @@ namespace BfkPortal.Database.Repositories
                 .ToListAsync();*/
         }
 
-        public IEnumerable<string> Types() =>
+        public List<string> Types() =>
             Enum.GetValues(typeof(AppointmentTypes))
                 .Cast<AppointmentTypes>()
-                .Skip(1)
-                .Select(t => t.ToString());
+                .Select(t => t.ToString())
+                .ToList();
     }
 }

@@ -116,7 +116,7 @@ namespace BfkPortal.Controllers
             var userRoles = new[]
             {
                 new UserRole {User = user1, Role = roles[0]},
-                new UserRole {User = user1, Role = roles[3]},
+                new UserRole {User = user1, Role = roles[2]},
                 new UserRole {User = user2, Role = roles[1]},
                 new UserRole {User = user3, Role = roles[1]},
                 new UserRole {User = user3, Role = roles[4]},
@@ -137,7 +137,7 @@ namespace BfkPortal.Controllers
                     ShowParticipants = false,
                     Deadline = DateTime.UtcNow.AddDays(-3),
                     IsVisible = true,
-                    Owner = user1
+                    Owner = user4
                 },
                 new Appointment
                 {

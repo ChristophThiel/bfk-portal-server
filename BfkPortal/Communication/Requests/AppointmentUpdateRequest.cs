@@ -30,7 +30,7 @@ namespace BfkPortal.Communication.Requests
         [Required]
         public bool ShowParticipants { get; set; }
 
-        [Iso8601]
+        [NullableIso8601]
         public string Deadline { get; set; }
 
         [Required]

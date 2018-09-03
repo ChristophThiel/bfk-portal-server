@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using BfkPortal.Communication.DataTransferObjects;
 using BfkPortal.Communication.Requests;
@@ -31,16 +32,14 @@ namespace BfkPortal.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
-            var salt = DefaultHashingService.GenerateSalt();
-            var password = DefaultHashingService.HashPassword(body.Email, body.Password, salt, _configuration["Pepper"]);
+            
             var user = new User
             {
                 Firstname = body.Firstname,
                 Lastname = body.Lastname,
                 Email = body.Email,
-                Password = password,
-                Salt = salt,
+                Password = GeneratePassword(),
+                Salt = "",
                 IsDeleted = false,
                 Roles = new List<UserRole>(),
                 Appointments = new List<UserAppointment>(),
@@ -150,6 +149,19 @@ namespace BfkPortal.Controllers
                     Organisation = organisation
                 });
             }
+        }
+
+        private string GeneratePassword()
+        {
+            var set = "abcdefghijklmnopqrstuvwxyz";
+            set += set.ToUpper();
+
+            var builder = new StringBuilder();
+            var random = new Random();
+            for (var i = 0; i < 8; i++)
+                builder.Append(set[random.Next(0, set.Length)]);
+
+            return builder.ToString();
         }
 
         #endregion

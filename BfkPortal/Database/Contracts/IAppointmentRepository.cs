@@ -6,6 +6,6 @@ namespace BfkPortal.Database.Contracts
 {
     public interface IAppointmentRepository : IBaseRepository<Appointment>
     {
-        IEnumerable<string> Types();
+        List<string> Types();
     }
 }

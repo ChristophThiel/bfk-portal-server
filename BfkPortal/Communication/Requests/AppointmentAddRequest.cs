@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using BfkPortal.Models.Enums;
 using BfkPortal.ValidationAttributes;
 
 namespace BfkPortal.Communication.Requests
@@ -17,7 +18,7 @@ namespace BfkPortal.Communication.Requests
         [Required, Iso8601]
         public string To { get; set; }
 
-        [Required]
+        [Required, EnumDataType(typeof(AppointmentTypes), ErrorMessage = "Value is not a valid type for an appointment")]
         public string Type { get; set; }
 
         [Required]
@@ -29,7 +30,7 @@ namespace BfkPortal.Communication.Requests
         [Required]
         public bool ShowParticipants { get; set; }
         
-        [Iso8601]
+        [NullableIso8601]
         public string Deadline { get; set; }
 
         [Required]
