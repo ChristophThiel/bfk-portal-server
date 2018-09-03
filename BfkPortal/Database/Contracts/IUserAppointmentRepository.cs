@@ -2,7 +2,7 @@
 
 namespace BfkPortal.Database.Contracts
 {
-    public interface IUserAppointmentRepository : IBaseRepository<UserAppointment>
+    public interface IUserAppointmentRepository : IBaseRepository<AppointmentUser>
     {
 
     }

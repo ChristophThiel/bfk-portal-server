@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using BfkPortal.Communication.DataTransferObjects;
 using BfkPortal.Communication.Requests;
@@ -61,7 +60,8 @@ namespace BfkPortal.Controllers
                 Deadline = string.IsNullOrEmpty(body.Deadline) ? (DateTime?) null : DateTime.Parse(body.Deadline, null, DateTimeStyles.RoundtripKind),
                 IsVisible = body.IsVisible,
                 Owner = user,
-                Participants = new List<UserAppointment>()
+                UserParticipants = new List<AppointmentUser>(),
+                OrganisationParticipants = new List<AppointmentOrganisation>()
             };
 
             var result = _unitOfWork.Appointments.Add(appointment);
@@ -71,16 +71,30 @@ namespace BfkPortal.Controllers
                 return BadRequest(ModelState);
             }
             
-            foreach (var userId in body.Participants)
+            foreach (var participantId in body.Participants)
             {
-                var participant = await _unitOfWork.Users.Find(userId);
-                if (participant == null) continue;
-
-                appointment.Participants.Add(new UserAppointment
+                if (body.AreParticipantsOrganisations)
                 {
-                    User = participant,
-                    Appointment = appointment
-                });
+                    var participant = await _unitOfWork.Organisations.Find(participantId);
+                    if (participant == null) continue;
+
+                    appointment.OrganisationParticipants.Add(new AppointmentOrganisation
+                    {
+                        Appointment = appointment,
+                        Organisation = participant
+                    });
+                }
+                else
+                {
+                    var participant = await _unitOfWork.Users.Find(participantId);
+                    if (participant == null) continue;
+
+                    appointment.UserParticipants.Add(new AppointmentUser
+                    {
+                        Appointment = appointment,
+                        User = participant
+                    });
+                }
             }
 
             await _unitOfWork.SaveChangesAsync();
@@ -155,21 +169,35 @@ namespace BfkPortal.Controllers
                 ? DateTime.Parse(body.Deadline, null, DateTimeStyles.RoundtripKind)
                 : (DateTime?) null;
             appointment.IsVisible = body.IsVisible;
+            appointment.UserParticipants = new List<AppointmentUser>();
+            appointment.OrganisationParticipants = new List<AppointmentOrganisation>();
 
-            appointment.Participants = new List<UserAppointment>();
-
-            foreach (var userId in body.Participants)
+            foreach (var participantId in body.Participants)
             {
-                var user = await _unitOfWork.Users.Find(userId);
-                if (user == null) continue;
-
-                appointment.Participants.Add(new UserAppointment
+                if (body.AreParticipantsOrganisations)
                 {
-                    User = user,
-                    Appointment = appointment
-                });
+                    var participant = await _unitOfWork.Organisations.Find(participantId);
+                    if (participant == null) continue;
+
+                    appointment.OrganisationParticipants.Add(new AppointmentOrganisation
+                    {
+                        Appointment = appointment,
+                        Organisation = participant
+                    });
+                }
+                else
+                {
+                    var participant = await _unitOfWork.Users.Find(participantId);
+                    if (participant == null) continue;
+
+                    appointment.UserParticipants.Add(new AppointmentUser
+                    {
+                        Appointment = appointment,
+                        User = participant
+                    });
+                }
             }
-            
+
             var result = _unitOfWork.Appointments.Update(appointment);
 
             await _unitOfWork.SaveChangesAsync();

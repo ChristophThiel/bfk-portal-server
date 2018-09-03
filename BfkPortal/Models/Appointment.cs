@@ -39,6 +39,8 @@ namespace BfkPortal.Models
 
         public User Owner { get; set; }
 
-        public ICollection<UserAppointment> Participants { get; set; }
+        public ICollection<AppointmentUser> UserParticipants { get; set; }
+
+        public ICollection<AppointmentOrganisation> OrganisationParticipants { get; set; }
     }
 }

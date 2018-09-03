@@ -133,6 +133,7 @@ namespace BfkPortal.Controllers
                     From = DateTime.UtcNow,
                     To = DateTime.UtcNow.AddDays(3),
                     Type = AppointmentTypes.Vollversammlung,
+                    AreParticipantsOrganisations = false,
                     MaxParticipants = 4,
                     ShowParticipants = false,
                     Deadline = DateTime.UtcNow.AddDays(-3),
@@ -145,6 +146,7 @@ namespace BfkPortal.Controllers
                     From = DateTime.UtcNow,
                     To = DateTime.UtcNow.AddDays(1),
                     Type = AppointmentTypes.Dienst,
+                    AreParticipantsOrganisations = true,
                     MaxParticipants = 1,
                     ShowParticipants = true,
                     IsVisible = true,
@@ -153,13 +155,25 @@ namespace BfkPortal.Controllers
             };
             await _context.Appointments.AddRangeAsync(appointments);
 
-            var userAppointments = new[]
+            /*var userAppointments = new[]
             {
                 new UserAppointment {User = user1, Appointment = appointments.First()},
                 new UserAppointment {User = user2, Appointment = appointments.First()},
                 new UserAppointment {User = user4, Appointment = appointments.Last()}
             };
-            await _context.UserAppointments.AddRangeAsync(userAppointments);
+            await _context.UserAppointments.AddRangeAsync(userAppointments);*/
+            var appointmentUsers = new[]
+            {
+                new AppointmentUser {Appointment = appointments.First(), User = user1},
+                new AppointmentUser {Appointment = appointments.First(), User = user2}
+            };
+            _context.AppointmentUsers.AddRange(appointmentUsers);
+
+            var appointmentOrganisations = new[]
+            {
+                new AppointmentOrganisation {Appointment = appointments.Last(), Organisation = organisations.First()}
+            };
+            _context.AppointmentOrganisations.AddRange(appointmentOrganisations);
 
             await _context.SaveChangesAsync();
             return Ok();

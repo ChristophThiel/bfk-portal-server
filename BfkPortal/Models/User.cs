@@ -27,7 +27,7 @@ namespace BfkPortal.Models
 
         public ICollection<UserRole> Roles { get; set; }
 
-        public ICollection<UserAppointment> Appointments { get; set; }
+        public ICollection<AppointmentUser> Appointments { get; set; }
 
         public ICollection<UserOrganisation> Organisations { get; set; }
     }

@@ -53,21 +53,24 @@ namespace BfkPortal.Database.Repositories
         {
             return await Context.Appointments
                 .Include(a => a.Owner)
-                .Include(a => a.Participants)
+                .Include(a => a.UserParticipants)
+                .Include(a => a.OrganisationParticipants)
                 .FirstOrDefaultAsync(a => a.Id == id);
         }
 
         public async Task<List<Appointment>> All()
         {
             return await Context.Appointments
-                .Include(a => a.Participants)
-                .ThenInclude(ua => ua.User)
-                .ThenInclude(u => u.Roles)
+                .Include(a => a.UserParticipants)
+                .ThenInclude(au => au.User)
+                .ThenInclude(au => au.Roles)
                 .ThenInclude(ur => ur.Role)
-                .Include(a => a.Participants)
-                .ThenInclude(ua => ua.User)
-                .ThenInclude(u => u.Organisations)
+                .Include(a => a.UserParticipants)
+                .ThenInclude(au => au.User)
+                .ThenInclude(au => au.Organisations)
                 .ThenInclude(uo => uo.Organisation)
+                .Include(a => a.OrganisationParticipants)
+                .ThenInclude(ao => ao.Organisation)
                 .Include(a => a.Owner)
                 .ThenInclude(u => u.Roles)
                 .ThenInclude(ur => ur.Role)
@@ -77,13 +80,19 @@ namespace BfkPortal.Database.Repositories
                 .ToListAsync();
             /*return await Context.Appointments
                 .Include(a => a.Participants)
-                .ThenInclude(a => a.User)
+                .ThenInclude(ua => ua.User)
+                .ThenInclude(u => u.Roles)
+                .ThenInclude(ur => ur.Role)
+                .Include(a => a.Participants)
+                .ThenInclude(ua => ua.User)
+                .ThenInclude(u => u.Organisations)
+                .ThenInclude(uo => uo.Organisation)
                 .Include(a => a.Owner)
-                .ThenInclude(a => a.Roles)
-                .ThenInclude(r => r.Role)
+                .ThenInclude(u => u.Roles)
+                .ThenInclude(ur => ur.Role)
                 .Include(a => a.Owner)
-                .ThenInclude(a => a.Organisations)
-                .ThenInclude(o => o.Organisation)
+                .ThenInclude(u => u.Organisations)
+                .ThenInclude(uo => uo.Organisation)
                 .ToListAsync();*/
         }
 

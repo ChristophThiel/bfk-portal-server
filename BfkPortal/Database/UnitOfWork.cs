@@ -20,8 +20,6 @@ namespace BfkPortal.Database
 
         public IOrganisationRepository Organisations { get; }
 
-        public IUserAppointmentRepository UserAppointments { get; }
-
         public IUserOrganisationRepository UserOrganisations { get; }
 
         public UnitOfWork(ApplicationDbContext context, IConfiguration configuration)
@@ -33,7 +31,6 @@ namespace BfkPortal.Database
             Appointments = new AppointmentRepository(context);
             Roles = new RoleRepository(context, configuration);
             Organisations = new OrganisationRepository(context);
-            UserAppointments = new UserAppointmentRepository(context);
             UserOrganisations = new UserOrganisationRepository(context);
         }
 

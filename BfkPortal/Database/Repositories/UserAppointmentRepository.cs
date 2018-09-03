@@ -11,11 +11,11 @@ namespace BfkPortal.Database.Repositories
         public UserAppointmentRepository(ApplicationDbContext context) : base(context) { }
 
 
-        public bool Add(UserAppointment entity)
+        public bool Add(AppointmentUser entity)
         {
             try
             {
-                Context.UserAppointments.Add(entity);
+                //Context.UserAppointments.Add(entity);
                 return true;
             }
             catch
@@ -26,41 +26,44 @@ namespace BfkPortal.Database.Repositories
 
         public async Task<bool> Delete(int id)
         {
-            var entity = await Context.UserAppointments.FindAsync(id);
-            if (entity == null)
-                return false;
+            ////var entity = await Context.UserAppointments.FindAsync(id);
+            //if (entity == null)
+            //    return false;
 
-            Context.UserAppointments.Remove(entity);
+            //Context.UserAppointments.Remove(entity);
             return true;
         }
 
-        public bool Update(UserAppointment entity)
+        public bool Update(AppointmentUser entity)
         {
-            try
-            {
-                Context.UserAppointments.Update(entity);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            //try
+            //{
+            //    Context.UserAppointments.Update(entity);
+            //    return true;
+            //}
+            //catch
+            //{
+            //    return false;
+            //}
+            return true;
         }
 
-        public async Task<UserAppointment> Find(int id)
+        public async Task<AppointmentUser> Find(int id)
         {
-            return await Context.UserAppointments
-                .Include(ua => ua.User)
-                .Include(ua => ua.Appointment)
-                .FirstOrDefaultAsync(ua => ua.Id == id);
+            return null;
+            //return await Context.UserAppointments
+            //    .Include(ua => ua.User)
+            //    .Include(ua => ua.Appointment)
+            //    .FirstOrDefaultAsync(ua => ua.Id == id);
         }
 
-        public async Task<List<UserAppointment>> All()
+        public async Task<List<AppointmentUser>> All()
         {
-            return await Context.UserAppointments
-                .Include(ua => ua.User)
-                .Include(ua => ua.Appointment)
-                .ToListAsync();
+            return null;
+            //return await Context.UserAppointments
+            //    .Include(ua => ua.User)
+            //    .Include(ua => ua.Appointment)
+            //    .ToListAsync();
         }
     }
 }

@@ -42,7 +42,7 @@ namespace BfkPortal.Controllers
                 Salt = "",
                 IsDeleted = false,
                 Roles = new List<UserRole>(),
-                Appointments = new List<UserAppointment>(),
+                Appointments = new List<AppointmentUser>(),
                 Organisations = new List<UserOrganisation>()
             };
 
