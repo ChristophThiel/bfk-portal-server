@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BfkPortal.Database.Contracts;
 using BfkPortal.Models;
+using BfkPortal.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace BfkPortal.Database.Repositories
@@ -117,5 +120,11 @@ namespace BfkPortal.Database.Repositories
 
                 .ToListAsync();
         }
+
+        public List<string> Status() => 
+            Enum.GetValues(typeof(OfferStatus))
+                .Cast<OfferStatus>()
+                .Select(t => t.ToString())
+                .ToList();
     }
 }

@@ -161,7 +161,10 @@ namespace BfkPortal.Controllers
         }
 
         [HttpGet("status")]
-        public IActionResult AllStatus() => Ok(Enum.GetValues(typeof(OfferStatus)));
+        public IActionResult AllStatus()
+        {
+            return Ok(_unitOfWork.Offers.Status());
+        }
 
         private async Task<User> GetUserFromToken(string token)
         {

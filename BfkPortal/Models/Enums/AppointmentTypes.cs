@@ -5,6 +5,8 @@
         Dienst = 0,
         Übung,
         Bewerb,
-        Vollversammlung
+        Vollversammlung,
+        Weiterbildung,
+        Lehrgang
     }
 }
