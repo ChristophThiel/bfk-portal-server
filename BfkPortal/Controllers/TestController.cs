@@ -154,14 +154,7 @@ namespace BfkPortal.Controllers
                 }
             };
             await _context.Appointments.AddRangeAsync(appointments);
-
-            /*var userAppointments = new[]
-            {
-                new UserAppointment {User = user1, Appointment = appointments.First()},
-                new UserAppointment {User = user2, Appointment = appointments.First()},
-                new UserAppointment {User = user4, Appointment = appointments.Last()}
-            };
-            await _context.UserAppointments.AddRangeAsync(userAppointments);*/
+            
             var appointmentUsers = new[]
             {
                 new AppointmentUser {Appointment = appointments.First(), User = user1},

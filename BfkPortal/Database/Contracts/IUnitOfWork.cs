@@ -15,7 +15,7 @@ namespace BfkPortal.Database.Contracts
 
         IOrganisationRepository Organisations { get; }
 
-        IUserOrganisationRepository UserOrganisations { get; }
+        IOfferRepository Offers { get; }
 
         Task<int> SaveChangesAsync();
 

@@ -19,8 +19,7 @@ namespace BfkPortal.Database
         public IRoleRepository Roles { get; }
 
         public IOrganisationRepository Organisations { get; }
-
-        public IUserOrganisationRepository UserOrganisations { get; }
+        public IOfferRepository Offers { get; }
 
         public UnitOfWork(ApplicationDbContext context, IConfiguration configuration)
         {
@@ -31,7 +30,7 @@ namespace BfkPortal.Database
             Appointments = new AppointmentRepository(context);
             Roles = new RoleRepository(context, configuration);
             Organisations = new OrganisationRepository(context);
-            UserOrganisations = new UserOrganisationRepository(context);
+            Offers = new OfferRepository(context);
         }
 
         public void Dispose() => _context.Dispose();

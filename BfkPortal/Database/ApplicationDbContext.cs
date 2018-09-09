@@ -13,6 +13,8 @@ namespace BfkPortal.Database
 
         public DbSet<Organisation> Organisations { get; set; }
 
+        public DbSet<Offer> Offers { get; set; }
+
         public DbSet<UserRole> UserRoles { get; set; }
 
         public DbSet<UserOrganisation> UserOrganisations { get; set; }

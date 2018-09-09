@@ -51,9 +51,7 @@ namespace BfkPortal.Controllers
                 Description = body.Description,
                 From = DateTime.Parse(body.From, null, DateTimeStyles.RoundtripKind),
                 To = DateTime.Parse(body.To, null, DateTimeStyles.RoundtripKind),
-                Type = Enum.IsDefined(typeof(AppointmentTypes), body.Type)
-                    ? Enum.Parse<AppointmentTypes>(body.Type)
-                    : AppointmentTypes.Vollversammlung,
+                Type = Enum.Parse<AppointmentTypes>(body.Type),
                 AreParticipantsOrganisations = body.AreParticipantsOrganisations,
                 MaxParticipants = body.MaxParticipants,
                 ShowParticipants = body.ShowParticipants,
@@ -199,6 +197,11 @@ namespace BfkPortal.Controllers
             }
 
             var result = _unitOfWork.Appointments.Update(appointment);
+            if (!result)
+            {
+                ModelState.AddModelError("Update", "An error occured during the update!");
+                return BadRequest(ModelState);
+            }
 
             await _unitOfWork.SaveChangesAsync();
             return Ok();

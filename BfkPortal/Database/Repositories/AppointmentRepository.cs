@@ -78,22 +78,6 @@ namespace BfkPortal.Database.Repositories
                 .ThenInclude(u => u.Organisations)
                 .ThenInclude(uo => uo.Organisation)
                 .ToListAsync();
-            /*return await Context.Appointments
-                .Include(a => a.Participants)
-                .ThenInclude(ua => ua.User)
-                .ThenInclude(u => u.Roles)
-                .ThenInclude(ur => ur.Role)
-                .Include(a => a.Participants)
-                .ThenInclude(ua => ua.User)
-                .ThenInclude(u => u.Organisations)
-                .ThenInclude(uo => uo.Organisation)
-                .Include(a => a.Owner)
-                .ThenInclude(u => u.Roles)
-                .ThenInclude(ur => ur.Role)
-                .Include(a => a.Owner)
-                .ThenInclude(u => u.Organisations)
-                .ThenInclude(uo => uo.Organisation)
-                .ToListAsync();*/
         }
 
         public List<string> Types() =>
