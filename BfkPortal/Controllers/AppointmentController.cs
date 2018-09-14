@@ -69,31 +69,7 @@ namespace BfkPortal.Controllers
                 return BadRequest(ModelState);
             }
             
-            foreach (var participantId in body.Participants)
-            {
-                if (body.AreParticipantsOrganisations)
-                {
-                    var participant = await _unitOfWork.Organisations.Find(participantId);
-                    if (participant == null) continue;
-
-                    appointment.OrganisationParticipants.Add(new AppointmentOrganisation
-                    {
-                        Appointment = appointment,
-                        Organisation = participant
-                    });
-                }
-                else
-                {
-                    var participant = await _unitOfWork.Users.Find(participantId);
-                    if (participant == null) continue;
-
-                    appointment.UserParticipants.Add(new AppointmentUser
-                    {
-                        Appointment = appointment,
-                        User = participant
-                    });
-                }
-            }
+            AddParticipants(appointment, body.Participants, body.AreParticipantsOrganisations);
 
             await _unitOfWork.SaveChangesAsync();
             return Ok(new {appointment.Id});
@@ -170,31 +146,7 @@ namespace BfkPortal.Controllers
             appointment.UserParticipants = new List<AppointmentUser>();
             appointment.OrganisationParticipants = new List<AppointmentOrganisation>();
 
-            foreach (var participantId in body.Participants)
-            {
-                if (body.AreParticipantsOrganisations)
-                {
-                    var participant = await _unitOfWork.Organisations.Find(participantId);
-                    if (participant == null) continue;
-
-                    appointment.OrganisationParticipants.Add(new AppointmentOrganisation
-                    {
-                        Appointment = appointment,
-                        Organisation = participant
-                    });
-                }
-                else
-                {
-                    var participant = await _unitOfWork.Users.Find(participantId);
-                    if (participant == null) continue;
-
-                    appointment.UserParticipants.Add(new AppointmentUser
-                    {
-                        Appointment = appointment,
-                        User = participant
-                    });
-                }
-            }
+            AddParticipants(appointment, body.Participants, body.AreParticipantsOrganisations);
 
             var result = _unitOfWork.Appointments.Update(appointment);
             if (!result)
@@ -263,6 +215,35 @@ namespace BfkPortal.Controllers
             catch (Exception)
             {
                 return null;
+            }
+        }
+
+        private async void AddParticipants(Appointment appointment, IEnumerable<int> participantIds, bool areParticipantsOrganisations)
+        {
+            foreach (var participantId in participantIds)
+            {
+                if (areParticipantsOrganisations)
+                {
+                    var participant = await _unitOfWork.Organisations.Find(participantId);
+                    if (participant == null) continue;
+
+                    appointment.OrganisationParticipants.Add(new AppointmentOrganisation
+                    {
+                        Appointment = appointment,
+                        Organisation = participant
+                    });
+                }
+                else
+                {
+                    var participant = await _unitOfWork.Users.Find(participantId);
+                    if (participant == null) continue;
+
+                    appointment.UserParticipants.Add(new AppointmentUser
+                    {
+                        Appointment = appointment,
+                        User = participant
+                    });
+                }
             }
         }
 
