@@ -34,5 +34,7 @@ namespace BfkPortal.Communication.Requests
 
         [Required]
         public IEnumerable<int> Participants { get; set; }
+
+        public int Owner { get; set; }
     }
 }
