@@ -20,5 +20,11 @@ namespace BfkPortal.Persistence
         public DbSet<Membership> Memberships { get; set; }
 
         public DbSet<Participation> Participations { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            // TODO Change to MariaDb provider
+            optionsBuilder.UseSqlite("Data Source=../../../../bfkportal.db");
+        }
     }
 }

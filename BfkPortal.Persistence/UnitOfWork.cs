@@ -21,14 +21,14 @@ namespace BfkPortal.Persistence
 
         public IGenericRepository<User> Users { get; }
 
-        public UnitOfWork(DbContext context)
+        public UnitOfWork()
         {
-            this.Context = context;
-            this.Appointments = new GenericRepository<Appointment>(context);
-            this.Offers = new GenericRepository<Offer>(context);
-            this.Organisations = new GenericRepository<Organisation>(context);
-            this.Roles = new GenericRepository<Role>(context);
-            this.Users = new GenericRepository<User>(context);
+            this.Context = new ApplicationDbContext();
+            this.Appointments = new GenericRepository<Appointment>(Context);
+            this.Offers = new GenericRepository<Offer>(Context);
+            this.Organisations = new GenericRepository<Organisation>(Context);
+            this.Roles = new GenericRepository<Role>(Context);
+            this.Users = new GenericRepository<User>(Context);
         }
 
         public async Task SaveChangesAsync()
@@ -44,6 +44,8 @@ namespace BfkPortal.Persistence
         }
 
         public async Task DropDatabaseAsync() => await Context.Database.EnsureDeletedAsync();
+
+        public async Task CreatDatabaseAsync() => await Context.Database.EnsureCreatedAsync();
 
         public void Dispose() => Context.Dispose();
     }

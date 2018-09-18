@@ -1,6 +1,6 @@
 ﻿using BfkPortal.Core.Contracts;
 
-namespace BfkPortal.Core
+namespace BfkPortal.Core.Models
 {
     public class EntityObject : IEntityObject
     {

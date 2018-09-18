@@ -9,7 +9,8 @@ namespace BfkPortal.Core.Models
     {
         [Required]
         public string Title { get; set; }
-
+        
+        [Required(AllowEmptyStrings = true)]
         public string Description { get; set; }
 
         [Required]
@@ -29,7 +30,7 @@ namespace BfkPortal.Core.Models
 
         [Required]
         public bool ShowParticipants { get; set; }
-
+        
         public DateTime? Deadline { get; set; }
 
         [Required]

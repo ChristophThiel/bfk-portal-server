@@ -19,5 +19,7 @@ namespace BfkPortal.Core.Contracts
         Task SaveChangesAsync();
 
         Task DropDatabaseAsync();
+
+        Task CreatDatabaseAsync();
     }
 }
