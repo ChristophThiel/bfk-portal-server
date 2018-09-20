@@ -1,7 +1,9 @@
 ﻿namespace BfkPortal.Core.Models
 {
-    public class Entitlement : EntityObject
+    public class Entitlement
     {
+        public int Id { get; set; }
+
         public User User { get; set; }
 
         public int UserId { get; set; }

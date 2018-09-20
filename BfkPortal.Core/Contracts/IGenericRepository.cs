@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace BfkPortal.Core.Contracts
 {
-    public interface IGenericRepository<T> where T : IEntityObject
+    public interface IGenericRepository<T>
     {
         void Add(T entity);
 

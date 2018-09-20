@@ -3,13 +3,12 @@ using System.Threading.Tasks;
 using BfkPortal.Core.Contracts;
 using BfkPortal.Core.Models;
 using BfkPortal.Persistence.Repositories;
-using Microsoft.EntityFrameworkCore;
 
 namespace BfkPortal.Persistence
 {
     public class UnitOfWork : IUnitOfWork
     {
-        internal DbContext Context;
+        internal ApplicationDbContext Context;
 
         public IGenericRepository<Appointment> Appointments { get; }
 
@@ -37,7 +36,7 @@ namespace BfkPortal.Persistence
             {
                 await Context.SaveChangesAsync();
             }
-            catch
+            catch (Exception e)
             {
                 Console.WriteLine("An error occured during the save operation!");
             }

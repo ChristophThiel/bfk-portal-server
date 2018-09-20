@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace BfkPortal.Core.Models
+namespace BfkPortal.Web.ViewModels
 {
-    public class User
+    public class UserViewModel
     {
         public int Id { get; set; }
 
@@ -13,22 +13,19 @@ namespace BfkPortal.Core.Models
         [Required]
         public string Lastname { get; set; }
 
-        [Required]
+        [Required, EmailAddress]
         public string Email { get; set; }
 
         [Required]
         public string Password { get; set; }
 
         [Required]
-        public string Salt { get; set; }
+        public bool? IsDeleted { get; set; }
 
         [Required]
-        public bool IsDeleted { get; set; }
+        public IEnumerable<int> Entitlements { get; set; }
 
-        public ICollection<Entitlement> Entitlements { get; set; }
-
-        public ICollection<Membership> Memberships { get; set; }
-
-        public ICollection<Participation> Participations { get; set; }
+        [Required]
+        public IEnumerable<int> Memberships { get; set; }
     }
 }

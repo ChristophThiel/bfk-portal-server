@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace BfkPortal.Web.Controllers
 {
     [Route("api/[controller]")]
-    public class TestController : ControllerBase
+    public class ValuesController : Controller
     {
         [HttpPost]
-        public IActionResult Post([FromBody] Appointment body)
+        public IActionResult Post([FromBody] Appointment value)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

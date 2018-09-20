@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using BfkPortal.Core;
 using BfkPortal.Core.Contracts;
+using BfkPortal.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BfkPortal.Persistence.Repositories
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : EntityObject
+    public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         internal DbContext Context;
         internal DbSet<T> Set;

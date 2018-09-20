@@ -48,7 +48,7 @@ namespace BfkPortal.Controllers
             return Ok(new {Token = new JwtSecurityTokenHandler().WriteToken(token), User = userDto});
         }
 
-        [HttpPost("logout")]
+        /*[HttpPost("logout")]
         public async Task<IActionResult> LogOut()
         {
             if (!ModelState.IsValid)
@@ -57,6 +57,6 @@ namespace BfkPortal.Controllers
             // TODO Send Email
 
             return Ok();
-        }
+        }*/
     }
 }

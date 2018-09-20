@@ -24,7 +24,7 @@ namespace BfkPortal.Persistence
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // TODO Change to MariaDb provider
-            optionsBuilder.UseSqlite("Data Source=../../../../bfkportal.db");
+            optionsBuilder.UseSqlite("Data Source=bfkportal.db");
         }
     }
 }

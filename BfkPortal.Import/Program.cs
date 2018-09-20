@@ -15,15 +15,6 @@ namespace BfkPortal.Import
 
                 Console.WriteLine("Erstellen der Datenbank ...");
                 unitOfWork.CreatDatabaseAsync().Wait();
-
-                var role = new Role
-                {
-                    Name = "Test"
-                };
-                unitOfWork.Roles.Add(role);
-                unitOfWork.SaveChangesAsync().Wait();
-
-                Console.WriteLine(unitOfWork.Roles.FindAsync(1).Result.Name);
             }
         }
     }
