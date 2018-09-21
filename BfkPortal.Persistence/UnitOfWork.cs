@@ -38,11 +38,14 @@ namespace BfkPortal.Persistence
             }
             catch (Exception e)
             {
-                Console.WriteLine("An error occured during the save operation!");
+                var next = e;
+                while (next.InnerException != null)
+                    next = next.InnerException;
+                Console.WriteLine(next.Message);
             }
         }
 
-        public async Task DropDatabaseAsync() => await Context.Database.EnsureDeletedAsync();
+        public async Task DeleteDatabaseAsync() => await Context.Database.EnsureDeletedAsync();
 
         public async Task CreatDatabaseAsync() => await Context.Database.EnsureCreatedAsync();
 

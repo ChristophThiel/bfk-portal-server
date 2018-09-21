@@ -10,11 +10,11 @@ namespace BfkPortal.Web.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        internal IUserService<User, UserViewModel> Service;
+        private readonly IUserService<User, UserViewModel> _service;
 
-        public UserController()
+        public UserController(IUnitOfWork unitOfWork)
         {
-            Service = new UserService(ModelState);
+            _service = new UserService(ModelState, unitOfWork);
         }
 
         [HttpPost("add")]
@@ -23,7 +23,7 @@ namespace BfkPortal.Web.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var id = await Service.Add(body);
+            var id = await _service.Add(body);
             return Ok(new {id});
         }
     }

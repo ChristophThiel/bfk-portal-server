@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using BfkPortal.Core.Contracts;
 using BfkPortal.Core.Models;
-using BfkPortal.Persistence;
 using BfkPortal.Web.Security;
 using BfkPortal.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -13,10 +12,10 @@ namespace BfkPortal.Web.Services
         private readonly ModelStateDictionary _modelState;
         private readonly IUnitOfWork _unitOfWork;
 
-        public UserService(ModelStateDictionary modelState)
+        public UserService(ModelStateDictionary modelState, IUnitOfWork unitOfWork)
         {
-            this._modelState = modelState;
-            this._unitOfWork = new UnitOfWork();
+            _modelState = modelState;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<int> Add(UserViewModel viewModel)
@@ -40,8 +39,6 @@ namespace BfkPortal.Web.Services
 
             _unitOfWork.Users.Add(entity);
             await _unitOfWork.SaveChangesAsync();
-
-            var test = await _unitOfWork.Users.FindAsync(entity.Id);
 
             return entity.Id;
         }
