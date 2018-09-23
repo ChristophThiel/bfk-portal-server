@@ -18,7 +18,7 @@ namespace BfkPortal.Persistence.Contracts
 
         Task SaveChangesAsync();
 
-        Task DropDatabaseAsync();
+        Task DeleteDatabaseAsync();
 
         Task CreatDatabaseAsync();
 
