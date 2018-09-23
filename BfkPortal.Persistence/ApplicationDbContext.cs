@@ -1,8 +1,5 @@
 ﻿using System;
-<<<<<<< HEAD
 using System.IO;
-=======
->>>>>>> ff856af5104cd25be151dc5ec33a4689be8ce9d6
 using BfkPortal.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,13 +25,9 @@ namespace BfkPortal.Persistence
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-<<<<<<< HEAD
             var source = Path.Combine(Environment.CurrentDirectory, "bfkportal.db");
             // TODO Change to MariaDb provider
             optionsBuilder.UseSqlite($"Data Source={source}");
-=======
-            optionsBuilder.UseSqlite($"Data Source={Environment.CurrentDirectory}/bfkportal.db");
->>>>>>> ff856af5104cd25be151dc5ec33a4689be8ce9d6
         }
     }
 }

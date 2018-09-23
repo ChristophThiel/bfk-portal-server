@@ -2,10 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using BfkPortal.Core.Models;
-<<<<<<< HEAD
+using BfkPortal.Persistence.Contracts;
 using BfkPortal.Web.Contracts;
-=======
->>>>>>> ff856af5104cd25be151dc5ec33a4689be8ce9d6
 using BfkPortal.Web.Security;
 using BfkPortal.Web.ViewModels;
 using BfkPortal.Web.ViewModels.DataTransferObjects;
@@ -16,16 +14,8 @@ namespace BfkPortal.Web.Services
     public class UserService : GenericService<User, UserViewModel, UserDto>, IUserService
     {
         public UserService(ModelStateDictionary modelState) : base(modelState) { }
-
-<<<<<<< HEAD
+        
         public override IEnumerable<UserDto> All() => UnitOfWork.Users.All().Select(u => new UserDto(u));
-=======
-        public UserService(ModelStateDictionary modelState, IUnitOfWork unitOfWork)
-        {
-            _modelState = modelState;
-            _unitOfWork = unitOfWork;
-        }
->>>>>>> ff856af5104cd25be151dc5ec33a4689be8ce9d6
 
         public override async Task<User> CastViewModelToModel(UserViewModel viewModel)
         {
@@ -69,8 +59,7 @@ namespace BfkPortal.Web.Services
                         Organisation = organisation
                     });
             }
-
-<<<<<<< HEAD
+            
             return entity;
         }
 
@@ -88,9 +77,6 @@ namespace BfkPortal.Web.Services
             }
 
             await UnitOfWork.SaveChangesAsync();
-=======
-            return entity.Id;
->>>>>>> ff856af5104cd25be151dc5ec33a4689be8ce9d6
         }
     }
 }

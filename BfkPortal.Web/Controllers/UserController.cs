@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using BfkPortal.Persistence.Contracts;
 using BfkPortal.Web.Contracts;
 using BfkPortal.Web.Services;
 using BfkPortal.Web.ViewModels;
@@ -9,19 +10,11 @@ namespace BfkPortal.Web.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-<<<<<<< HEAD
         private readonly IUserService _service;
-=======
-        private readonly IUserService<User, UserViewModel> _service;
->>>>>>> ff856af5104cd25be151dc5ec33a4689be8ce9d6
 
         public UserController(IUnitOfWork unitOfWork)
         {
-<<<<<<< HEAD
             _service = new UserService(ModelState);
-=======
-            _service = new UserService(ModelState, unitOfWork);
->>>>>>> ff856af5104cd25be151dc5ec33a4689be8ce9d6
         }
 
         [HttpPost("add")]
@@ -31,13 +24,10 @@ namespace BfkPortal.Web.Controllers
                 return BadRequest(ModelState);
 
             var id = await _service.Add(body);
-<<<<<<< HEAD
 
             if (!_service.ModelState.IsValid)
                 return BadRequest(_service.ModelState);
 
-=======
->>>>>>> ff856af5104cd25be151dc5ec33a4689be8ce9d6
             return Ok(new {id});
         }
 
