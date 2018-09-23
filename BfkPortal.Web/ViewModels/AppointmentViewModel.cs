@@ -5,10 +5,8 @@ using BfkPortal.Web.Validations;
 
 namespace BfkPortal.Web.ViewModels
 {
-    public class AppointmentViewModel
+    public class AppointmentViewModel : BaseViewModel
     {
-        public int Id { get; set; }
-
         [Required]
         public string Title { get; set; }
 

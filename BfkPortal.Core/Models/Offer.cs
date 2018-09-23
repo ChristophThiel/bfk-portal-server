@@ -3,10 +3,8 @@ using BfkPortal.Models.Enums;
 
 namespace BfkPortal.Core.Models
 {
-    public class Offer
+    public class Offer : EntityObject
     {
-        public int Id { get; set; }
-
         [Required]
         public OfferStatus Status { get; set; }
 

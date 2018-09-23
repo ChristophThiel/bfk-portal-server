@@ -3,10 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BfkPortal.Core.Models
 {
-    public class Role
+    public class Role : EntityObject
     {
-        public int Id { get; set; }
-
         [Required]
         public string Name { get; set; }
 

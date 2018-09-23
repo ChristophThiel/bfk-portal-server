@@ -1,25 +1,75 @@
-﻿using BfkPortal.Core.Contracts;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using BfkPortal.Core.Models;
-using BfkPortal.Persistence;
+using BfkPortal.Core.Models.Enums;
+using BfkPortal.Web.Contracts;
+using BfkPortal.Web.ViewModels;
+using BfkPortal.Web.ViewModels.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace BfkPortal.Web.Services
 {
-    public class AppointmentService : IAppointmentService
+    public class AppointmentService : GenericService<Appointment, AppointmentViewModel, AppointmentDto>, IAppointmentService
     {
-        private readonly ModelStateDictionary _modelState;
-        private readonly IUnitOfWork _unitOfWork;
+        public AppointmentService(ModelStateDictionary modelState) : base(modelState) { }
 
-        public AppointmentService(ModelStateDictionary modelState)
+        public override IEnumerable<AppointmentDto> All() =>
+            UnitOfWork.Appointments.All().Select(a => new AppointmentDto(a));
+
+        public override async Task<Appointment> CastViewModelToModel(AppointmentViewModel viewModel)
         {
-            this._modelState = modelState;
-            this._unitOfWork = new UnitOfWork();
+            var entity = new Appointment
+            {
+                Title = viewModel.Title,
+                Description = viewModel.Description,
+                From = DateTime.Parse(viewModel.From),
+                To = DateTime.Parse(viewModel.To),
+                Type = viewModel.Type ?? AppointmentTypes.Dienst,
+                AreParticipantsOrganisations = viewModel.AreParticipantsOrganisations ?? false,
+                MaxParticipants = viewModel.MaxParticipants ?? 0,
+                ShowParticipants = viewModel.ShowParticipants ?? false,
+                Deadline = string.IsNullOrEmpty(viewModel.Deadline)
+                    ? (DateTime?) null
+                    : DateTime.Parse(viewModel.Deadline),
+                IsVisible = viewModel.IsVisible ?? true
+            };
+            
+            var owner = await UnitOfWork.Users.FindAsync(viewModel.Owner.Value);
+
+            foreach (var participationId in viewModel.Participations)
+            {
+                EntityObject participant;
+                if (entity.AreParticipantsOrganisations)
+                {
+                    participant = await UnitOfWork.Organisations.FindAsync(participationId);
+                    if (participant == null)
+                        ModelState.AddModelError("Organisation Id", "An organisation with this id does not exist!");
+                    else
+                        entity.Participations.Add(new Participation
+                        {
+                            Appointment = entity,
+                            Organisation = (Organisation) participant
+                        });
+                }
+                else
+                {
+                    participant = await UnitOfWork.Users.FindAsync(participationId);
+                    if (participant == null)
+                        ModelState.AddModelError("User Id", "An user with this id does not exist!");
+                    else
+                        entity.Participations.Add(new Participation
+                        {
+                            Appointment = entity,
+                            User = (User) participant
+                        });
+                }
+            }
+
+            return entity;
         }
 
-        public ModelStateDictionary Add(Appointment entity)
-        {
-            _unitOfWork.Appointments.Add(entity);
-            return _modelState;
-        }
+        public IEnumerable<string> Types() => Enum.GetNames(typeof(AppointmentTypes));
     }
 }

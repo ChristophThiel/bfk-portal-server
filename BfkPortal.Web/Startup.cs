@@ -1,5 +1,6 @@
 ﻿using BfkPortal.Core.Contracts;
 using BfkPortal.Persistence;
+using BfkPortal.Persistence.Contracts;
 using BfkPortal.Web.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

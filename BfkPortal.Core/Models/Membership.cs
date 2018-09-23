@@ -1,9 +1,7 @@
 ﻿namespace BfkPortal.Core.Models
 {
-    public class Membership
+    public class Membership : EntityObject
     {
-        public int Id { get; set; }
-
         public int UserId { get; set; }
 
         public User User { get; set; }

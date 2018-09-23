@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using BfkPortal.Core.Contracts;
-using BfkPortal.Core.Models;
+using BfkPortal.Persistence.Contracts;
 using Microsoft.EntityFrameworkCore;
 
 namespace BfkPortal.Persistence.Repositories
@@ -13,8 +12,8 @@ namespace BfkPortal.Persistence.Repositories
 
         public GenericRepository(DbContext context)
         {
-            this.Context = context;
-            this.Set = context.Set<T>();
+            Context = context;
+            Set = context.Set<T>();
         }
 
         public void Add(T entity) => Set.Add(entity);

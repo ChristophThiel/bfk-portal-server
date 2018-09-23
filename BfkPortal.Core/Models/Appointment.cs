@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 using BfkPortal.Core.Models.Enums;
 
 namespace BfkPortal.Core.Models
 {
-    public class Appointment
+    public class Appointment : EntityObject
     {
-        public int Id { get; set; }
-
         [Required]
         public string Title { get; set; }
         

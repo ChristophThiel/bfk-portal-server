@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using BfkPortal.Core.Contracts;
 using BfkPortal.Core.Models;
+using BfkPortal.Persistence.Contracts;
 using BfkPortal.Persistence.Repositories;
 
 namespace BfkPortal.Persistence
@@ -22,12 +22,12 @@ namespace BfkPortal.Persistence
 
         public UnitOfWork()
         {
-            this.Context = new ApplicationDbContext();
-            this.Appointments = new GenericRepository<Appointment>(Context);
-            this.Offers = new GenericRepository<Offer>(Context);
-            this.Organisations = new GenericRepository<Organisation>(Context);
-            this.Roles = new GenericRepository<Role>(Context);
-            this.Users = new GenericRepository<User>(Context);
+            Context = new ApplicationDbContext();
+            Appointments = new GenericRepository<Appointment>(Context);
+            Offers = new GenericRepository<Offer>(Context);
+            Organisations = new GenericRepository<Organisation>(Context);
+            Roles = new GenericRepository<Role>(Context);
+            Users = new GenericRepository<User>(Context);
         }
 
         public async Task SaveChangesAsync()
@@ -36,7 +36,7 @@ namespace BfkPortal.Persistence
             {
                 await Context.SaveChangesAsync();
             }
-            catch (Exception e)
+            catch
             {
                 Console.WriteLine("An error occured during the save operation!");
             }
@@ -45,6 +45,17 @@ namespace BfkPortal.Persistence
         public async Task DropDatabaseAsync() => await Context.Database.EnsureDeletedAsync();
 
         public async Task CreatDatabaseAsync() => await Context.Database.EnsureCreatedAsync();
+
+        public IGenericRepository<TEntity> GetRepository<TEntity>()
+        {
+            foreach (var property in GetType().GetProperties())
+            {
+                if (property.PropertyType == typeof(IGenericRepository<TEntity>))
+                    return property.GetValue(this) as IGenericRepository<TEntity>;
+            }
+
+            return null;
+        }
 
         public void Dispose() => Context.Dispose();
     }

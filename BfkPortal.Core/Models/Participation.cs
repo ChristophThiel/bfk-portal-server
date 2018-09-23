@@ -2,10 +2,8 @@
 
 namespace BfkPortal.Core.Models
 {
-    public class Participation
+    public class Participation : EntityObject
     {
-        public int Id { get; set; }
-
         public Appointment Appointment { get; set; }
 
         public int AppointmentId { get; set; }

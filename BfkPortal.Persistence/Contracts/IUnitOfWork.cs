@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using BfkPortal.Core.Models;
 
-namespace BfkPortal.Core.Contracts
+namespace BfkPortal.Persistence.Contracts
 {
     public interface IUnitOfWork : IDisposable
     {
@@ -21,5 +21,7 @@ namespace BfkPortal.Core.Contracts
         Task DropDatabaseAsync();
 
         Task CreatDatabaseAsync();
+
+        IGenericRepository<TEntity> GetRepository<TEntity>();
     }
 }

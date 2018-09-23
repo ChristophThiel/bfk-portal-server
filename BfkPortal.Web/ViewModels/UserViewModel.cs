@@ -3,10 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BfkPortal.Web.ViewModels
 {
-    public class UserViewModel
+    public class UserViewModel : BaseViewModel
     {
-        public int Id { get; set; }
-
         [Required]
         public string Firstname { get; set; }
 
