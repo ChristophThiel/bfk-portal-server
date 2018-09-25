@@ -78,9 +78,13 @@ namespace BfkPortal.Web.Services
             var appointment = await UnitOfWork.Appointments.FindAsync(appointmentId);
             if (appointment == null)
                 ModelState.AddModelError("Appointment Id", "An appointment with this id does not exist");
+            else if (appointment.MaxParticipants == 0)
+                ModelState.AddModelError("MaxParticipants", "You cannot participate on this appointment!");
+            else if (appointment.MaxParticipants == UnitOfWork.Participations.All().Count(p => p.AppointmentId == appointmentId))
+                ModelState.AddModelError("MaxParticipants", "You cannot participate on this appointment! (Maximum reached)");
             else
             {
-                if (appointment.MaxParticipants >= 0)
+
             }
         }
     }

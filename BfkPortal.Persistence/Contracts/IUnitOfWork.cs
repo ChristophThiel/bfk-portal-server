@@ -16,6 +16,12 @@ namespace BfkPortal.Persistence.Contracts
 
         IGenericRepository<User> Users { get; }
 
+        IGenericRepository<Entitlement> Entitlements { get; }
+
+        IGenericRepository<Membership> Memberships { get; }
+
+        IGenericRepository<Participation> Participations { get; }
+
         Task SaveChangesAsync();
 
         Task DeleteDatabaseAsync();

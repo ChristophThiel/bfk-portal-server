@@ -20,6 +20,12 @@ namespace BfkPortal.Persistence
 
         public IGenericRepository<User> Users { get; }
 
+        public IGenericRepository<Entitlement> Entitlements { get; }
+
+        public IGenericRepository<Membership> Memberships { get; }
+
+        public IGenericRepository<Participation> Participations { get; }
+
         public UnitOfWork()
         {
             Context = new ApplicationDbContext();
@@ -28,6 +34,9 @@ namespace BfkPortal.Persistence
             Organisations = new GenericRepository<Organisation>(Context);
             Roles = new GenericRepository<Role>(Context);
             Users = new GenericRepository<User>(Context);
+            Entitlements = new GenericRepository<Entitlement>(Context);
+            Memberships = new GenericRepository<Membership>(Context);
+            Participations = new GenericRepository<Participation>(Context);
         }
 
         public async Task SaveChangesAsync()
