@@ -38,7 +38,6 @@ namespace BfkPortal.Web.ViewModels
         [Required]
         public bool? IsVisible { get; set; }
         
-        [Required(AllowEmptyStrings = true)]
         public int? Owner { get; set; }
 
         [Required]

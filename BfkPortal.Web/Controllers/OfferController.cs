@@ -1,23 +1,23 @@
-﻿using System.Threading.Tasks;
-using BfkPortal.Web.Contracts;
+﻿using BfkPortal.Web.Contracts;
 using BfkPortal.Web.Services;
 using BfkPortal.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace BfkPortal.Web.Controllers
 {
     [Route("api/[controller]")]
-    public class AppointmentController : ControllerBase
+    public class OfferController : ControllerBase
     {
-        private readonly IAppointmentService _service;
+        private readonly IOfferService _service;
 
-        public AppointmentController()
+        public OfferController()
         {
-            _service = new AppointmentService(ModelState);
+            _service = new OfferService(ModelState);
         }
 
-        [HttpPost("add")]
-        public async Task<IActionResult> Add([FromBody] AppointmentViewModel body)
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Add([FromBody] OfferViewModel body)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -30,10 +30,10 @@ namespace BfkPortal.Web.Controllers
             return Ok(new {id});
         }
 
-        [HttpGet("delete/{appointmentId:int}")]
-        public async Task<IActionResult> Delete(int appointmentId)
+        [HttpGet("[action]/{offerId:int}")]
+        public async Task<IActionResult> Delete(int offerId)
         {
-            await _service.Remove(appointmentId);
+            await _service.Remove(offerId);
 
             if (!_service.ModelState.IsValid)
                 return BadRequest(_service.ModelState);
@@ -41,8 +41,8 @@ namespace BfkPortal.Web.Controllers
             return Ok();
         }
 
-        [HttpPost("update")]
-        public async Task<IActionResult> Update([FromBody] AppointmentViewModel body)
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Update([FromBody] OfferViewModel body)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -50,15 +50,15 @@ namespace BfkPortal.Web.Controllers
             await _service.Update(body);
 
             if (!_service.ModelState.IsValid)
-                return BadRequest(_service.ModelState);
+                return BadRequest(ModelState);
 
             return Ok();
         }
 
-        [HttpGet("all")]
+        [HttpGet("[action]")]
         public IActionResult All() => Ok(_service.All());
 
-        [HttpGet("types")]
-        public IActionResult Roles() => Ok(_service.Types());
+        [HttpGet("[action]")]
+        public IActionResult Status() => Ok(_service.Status());
     }
 }

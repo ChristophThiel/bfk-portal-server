@@ -12,6 +12,8 @@ namespace BfkPortal.Web
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseKestrel()
+                .UseUrls("http://localhost:4000")
                 .UseStartup<Startup>()
                 .Build();
     }

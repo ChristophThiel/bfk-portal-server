@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using BfkPortal.Persistence.Contracts;
 using BfkPortal.Web.Contracts;
 using BfkPortal.Web.Services;
 using BfkPortal.Web.ViewModels;
@@ -12,12 +11,12 @@ namespace BfkPortal.Web.Controllers
     {
         private readonly IUserService _service;
 
-        public UserController(IUnitOfWork unitOfWork)
+        public UserController()
         {
             _service = new UserService(ModelState);
         }
-
-        [HttpPost("add")]
+        
+        [HttpPost("[action]")]
         public async Task<IActionResult> Add([FromBody] UserViewModel body)
         {
             if (!ModelState.IsValid)
@@ -31,7 +30,7 @@ namespace BfkPortal.Web.Controllers
             return Ok(new {id});
         }
 
-        [HttpGet("delete/{userId:int}")]
+        [HttpGet("[action]/{userId:int}")]
         public async Task<IActionResult> Delete(int userId)
         {
             await _service.Remove(userId);
@@ -42,7 +41,7 @@ namespace BfkPortal.Web.Controllers
             return Ok();
         }
 
-        [HttpPost("update")]
+        [HttpPost("[action]")]
         public async Task<IActionResult> Update([FromBody] UserViewModel body)
         {
             if (!ModelState.IsValid)
@@ -56,10 +55,10 @@ namespace BfkPortal.Web.Controllers
             return Ok();
         }
 
-        [HttpGet("all")]
+        [HttpGet("[action]")]
         public IActionResult All() => Ok(_service.All());
 
-        [HttpGet("roles")]
+        [HttpGet("[action]")]
         public IActionResult Roles() => Ok(_service.Roles());
     }
 }

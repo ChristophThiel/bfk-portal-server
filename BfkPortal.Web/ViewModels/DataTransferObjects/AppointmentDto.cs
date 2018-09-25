@@ -16,7 +16,7 @@ namespace BfkPortal.Web.ViewModels.DataTransferObjects
 
         public DateTime To { get; set; }
 
-        public AppointmentTypes Type { get; set; }
+        public string Type { get; set; }
 
         public bool AreParticipantsOrganisations { get; set; }
 
@@ -35,7 +35,7 @@ namespace BfkPortal.Web.ViewModels.DataTransferObjects
             Description = a.Description;
             From = a.From;
             To = a.To;
-            Type = a.Type;
+            Type = a.Type.ToString();
             AreParticipantsOrganisations = a.AreParticipantsOrganisations;
             MaxParticipants = a.MaxParticipants;
             ShowParticipants = a.ShowParticipants;

@@ -37,6 +37,7 @@ namespace BfkPortal.Web.Services
             };
             
             var owner = await UnitOfWork.Users.FindAsync(viewModel.Owner.Value);
+            entity.Owner = owner;
 
             foreach (var participationId in viewModel.Participations)
             {
@@ -71,5 +72,16 @@ namespace BfkPortal.Web.Services
         }
 
         public IEnumerable<string> Types() => Enum.GetNames(typeof(AppointmentTypes));
+
+        public async Task Participate(int appointmentId, int particpantId)
+        {
+            var appointment = await UnitOfWork.Appointments.FindAsync(appointmentId);
+            if (appointment == null)
+                ModelState.AddModelError("Appointment Id", "An appointment with this id does not exist");
+            else
+            {
+                if (appointment.MaxParticipants >= 0)
+            }
+        }
     }
 }

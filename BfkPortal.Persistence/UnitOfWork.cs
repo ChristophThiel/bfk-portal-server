@@ -36,7 +36,7 @@ namespace BfkPortal.Persistence
             {
                 await Context.SaveChangesAsync();
             }
-            catch
+            catch (Exception e)
             {
                 var next = e;
                 while (next.InnerException != null)

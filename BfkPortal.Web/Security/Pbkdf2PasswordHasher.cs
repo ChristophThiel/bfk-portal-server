@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 using BfkPortal.Core.Models;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Identity;
 
 namespace BfkPortal.Web.Security
@@ -9,20 +10,18 @@ namespace BfkPortal.Web.Security
     {
         public const int Iterations = 10000;
         public const int SaltLength = 16;
-        public const int HashLength = 20;
+        public const int HashLength = 32;
 
         public string HashPassword(User user, string password)
         {
             var salt = Convert.FromBase64String(user.Salt);
-            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, Iterations);
 
-            var hashedPassword = pbkdf2.GetBytes(HashLength);
-            var hash = new byte[HashLength + SaltLength];
-
-            Array.Copy(hashedPassword, 0, hash, 0, HashLength);
-            Array.Copy(salt, 0, hash, HashLength, SaltLength);
-
-            return Convert.ToBase64String(hash);
+            var hash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password,
+                salt,
+                KeyDerivationPrf.HMACSHA1,
+                Iterations, HashLength));
+            return hash;
         }
 
         public PasswordVerificationResult VerifyHashedPassword(User user, string hashedPassword, string providedPassword)
