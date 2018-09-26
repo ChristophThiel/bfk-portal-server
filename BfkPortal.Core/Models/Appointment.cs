@@ -13,20 +13,27 @@ namespace BfkPortal.Core.Models
         [Required(AllowEmptyStrings = true)]
         public string Description { get; set; }
         
-        public DateTime From { get; set; }
+        [Required]
+        public DateTime? From { get; set; }
         
-        public DateTime To { get; set; }
+        [Required]
+        public DateTime? To { get; set; }
         
-        public AppointmentTypes Type { get; set; }
+        [Required]
+        public AppointmentTypes? Type { get; set; }
         
-        public bool AreParticipantsOrganisations { get; set; }
+        [Required]
+        public bool? AreParticipantsOrganisations { get; set; }
         
-        public int MaxParticipants { get; set; }
+        [Required]
+        public int? MaxParticipants { get; set; }
         
-        public bool ShowParticipants { get; set; }
+        [Required]
+        public bool? ShowParticipants { get; set; }
         
         public DateTime? Deadline { get; set; }
         
+        [Required]
         public bool IsVisible { get; set; }
 
         public User Owner { get; set; }

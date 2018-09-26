@@ -19,6 +19,10 @@ namespace BfkPortal.Persistence.Contracts
 
         Task<T> FindAsync(int id);
 
+        Task LoadCollectionAsync(T entity, string propertyName);
+
+        Task LoadReferenceAsync(T entity, string propertyName);
+
         IEnumerable<T> All();
     }
 }

@@ -60,5 +60,17 @@ namespace BfkPortal.Web.Controllers
 
         [HttpGet("types")]
         public IActionResult Roles() => Ok(_service.Types());
+
+        [HttpPost("participate/{appointmentId:int}")]
+        public async Task<IActionResult> Participate(int appointmentId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        [HttpGet("offer/{appointmentId:int}")]
+        public async Task<IActionResult> Offer(int appointmentId)
+        {
+            return Ok();
+        }
     }
 }

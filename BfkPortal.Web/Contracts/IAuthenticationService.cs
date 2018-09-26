@@ -15,6 +15,6 @@ namespace BfkPortal.Web.Contracts
 
         Task<string> CreateJsonWebTokenAsync(int id);
 
-        int VerifyPassword(string email, string password);
+        Task<int> VerifyPassword(string email, string password);
     }
 }

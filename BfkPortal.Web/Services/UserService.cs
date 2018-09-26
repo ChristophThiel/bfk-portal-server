@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using BfkPortal.Core.Models;
-using BfkPortal.Persistence.Contracts;
 using BfkPortal.Web.Contracts;
 using BfkPortal.Web.Security;
 using BfkPortal.Web.ViewModels;
@@ -28,7 +27,10 @@ namespace BfkPortal.Web.Services
                 Lastname = viewModel.Lastname,
                 Email = viewModel.Email,
                 Salt = salt,
-                IsDeleted = viewModel.IsDeleted ?? false
+                IsDeleted = viewModel.IsDeleted ?? false,
+                Entitlements = new List<Entitlement>(),
+                Memberships = new List<Membership>(),
+                Participations = new List<Participation>()
             };
 
             var password = hasher.HashPassword(entity, viewModel.Password);

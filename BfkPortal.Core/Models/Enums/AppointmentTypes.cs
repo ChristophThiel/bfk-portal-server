@@ -3,6 +3,8 @@
     public enum AppointmentTypes
     {
         Dienst = 0,
+        FreierDienst,
+        MarktplatzDienst,
         Übung,
         Bewerb,
         Vollversammlung,

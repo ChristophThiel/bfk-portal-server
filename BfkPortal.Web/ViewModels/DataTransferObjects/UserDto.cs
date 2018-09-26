@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using BfkPortal.Core.Models;
 
 namespace BfkPortal.Web.ViewModels.DataTransferObjects
@@ -18,6 +16,10 @@ namespace BfkPortal.Web.ViewModels.DataTransferObjects
 
         public bool IsDeleted { get; set; }
 
+        public IEnumerable<string> Roles { get; set; }
+
+        public IEnumerable<OrganisationDto> Organisations { get; set; }
+
         public UserDto(User u)
         {
             Id = u.Id;
@@ -25,6 +27,8 @@ namespace BfkPortal.Web.ViewModels.DataTransferObjects
             Lastname = u.Lastname;
             Email = u.Email;
             IsDeleted = u.IsDeleted;
+            Roles = u.Entitlements?.Select(e => e.Role.Name);
+            Organisations = u.Memberships?.Select(m => new OrganisationDto(m.Organisation));
         }
     }
 }

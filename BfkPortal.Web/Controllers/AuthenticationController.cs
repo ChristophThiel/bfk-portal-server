@@ -2,6 +2,7 @@
 using BfkPortal.Web.Contracts;
 using BfkPortal.Web.Services;
 using BfkPortal.Web.ViewModels;
+using BfkPortal.Web.ViewModels.DataTransferObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -26,11 +27,17 @@ namespace BfkPortal.Web.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var userId = _service.VerifyPassword(body.Email, body.Password);
+            var userId = await _service.VerifyPassword(body.Email, body.Password);
             if (!_service.ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            return Ok(new {Token = await _service.CreateJsonWebTokenAsync(userId)});
+            var result = new
+            {
+                Token = await _service.CreateJsonWebTokenAsync(userId),
+                User = new UserDto(await _service.UnitOfWork.Users.FindAsync(userId))
+            };
+
+            return Ok(result);
         }
     }
 }

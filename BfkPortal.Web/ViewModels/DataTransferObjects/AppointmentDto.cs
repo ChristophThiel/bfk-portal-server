@@ -33,12 +33,12 @@ namespace BfkPortal.Web.ViewModels.DataTransferObjects
             Id = a.Id;
             Title = a.Title;
             Description = a.Description;
-            From = a.From;
-            To = a.To;
+            From = a.From.Value;
+            To = a.To.Value;
             Type = a.Type.ToString();
-            AreParticipantsOrganisations = a.AreParticipantsOrganisations;
-            MaxParticipants = a.MaxParticipants;
-            ShowParticipants = a.ShowParticipants;
+            AreParticipantsOrganisations = a.AreParticipantsOrganisations.Value;
+            MaxParticipants = a.MaxParticipants.Value;
+            ShowParticipants = a.ShowParticipants.Value;
             Deadline = a.Deadline;
             IsVisible = a.IsVisible;
         }

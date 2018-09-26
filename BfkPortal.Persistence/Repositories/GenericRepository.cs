@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using BfkPortal.Persistence.Contracts;
 using Microsoft.EntityFrameworkCore;
@@ -30,7 +31,12 @@ namespace BfkPortal.Persistence.Repositories
 
         public async Task<T> FindAsync(int id) => await Set.FindAsync(id);
 
-        public IEnumerable<T> All() => Set;
+        public async Task LoadCollectionAsync(T entity, string propertyName) => 
+            await Context.Entry(entity).Collection(propertyName).LoadAsync();
 
+        public async Task LoadReferenceAsync(T entity, string propertyName) =>
+            await Context.Entry(entity).Reference(propertyName).LoadAsync();
+
+        public IEnumerable<T> All() => Set;
     }
 }

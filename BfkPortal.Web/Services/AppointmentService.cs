@@ -33,16 +33,19 @@ namespace BfkPortal.Web.Services
                 Deadline = string.IsNullOrEmpty(viewModel.Deadline)
                     ? (DateTime?) null
                     : DateTime.Parse(viewModel.Deadline),
-                IsVisible = viewModel.IsVisible ?? true
+                IsVisible = viewModel.IsVisible ?? true,
+                Participations = new List<Participation>()
             };
-            
-            var owner = await UnitOfWork.Users.FindAsync(viewModel.Owner.Value);
-            entity.Owner = owner;
+
+            User value = null;
+            if (viewModel.Owner.HasValue)
+                value = await UnitOfWork.Users.FindAsync(viewModel.Owner.Value);
+            entity.Owner = value;
 
             foreach (var participationId in viewModel.Participations)
             {
                 EntityObject participant;
-                if (entity.AreParticipantsOrganisations)
+                if (entity.AreParticipantsOrganisations.Value)
                 {
                     participant = await UnitOfWork.Organisations.FindAsync(participationId);
                     if (participant == null)
@@ -86,6 +89,11 @@ namespace BfkPortal.Web.Services
             {
 
             }
+        }
+
+        public Task DutyToMarketplace(int appointmentId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

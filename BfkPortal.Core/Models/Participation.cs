@@ -1,6 +1,4 @@
-﻿using BfkPortal.Core.Contracts;
-
-namespace BfkPortal.Core.Models
+﻿namespace BfkPortal.Core.Models
 {
     public class Participation : EntityObject
     {
@@ -10,10 +8,10 @@ namespace BfkPortal.Core.Models
 
         public User User { get; set; }
 
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
 
         public Organisation Organisation { get; set; }
 
-        public int OrganisationId { get; set; }
+        public int? OrganisationId { get; set; }
     }
 }

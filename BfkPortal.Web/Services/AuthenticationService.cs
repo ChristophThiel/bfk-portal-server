@@ -3,11 +3,11 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using BfkPortal.Core.Models;
 using BfkPortal.Persistence;
 using BfkPortal.Persistence.Contracts;
 using BfkPortal.Web.Contracts;
 using BfkPortal.Web.Security;
-using BfkPortal.Web.ViewModels.DataTransferObjects;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Configuration;
@@ -42,7 +42,7 @@ namespace BfkPortal.Web.Services
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public int VerifyPassword(string email, string password)
+        public async Task<int> VerifyPassword(string email, string password)
         {
             var possibleUsers = UnitOfWork.Users.All()
                 .Where(u => u.Email == email)
@@ -53,10 +53,14 @@ namespace BfkPortal.Web.Services
                 ModelState.AddModelError("Email or Password", "Email or Password invalid!");
                 return -1;
             }
-
+            
             var hasher = new Pbkdf2PasswordHasher();
             foreach (var user in possibleUsers)
             {
+                await UnitOfWork.Users.LoadCollectionAsync(user, nameof(user.Entitlements));
+                foreach (var entitlement in user.Entitlements)
+                    await UnitOfWork.Entitlements.LoadReferenceAsync(entitlement, nameof(entitlement.Role));
+
                 if (hasher.VerifyHashedPassword(user, user.Password, password) == PasswordVerificationResult.Success)
                     return user.Id;
             }
