@@ -61,15 +61,32 @@ namespace BfkPortal.Web.Controllers
         [HttpGet("types")]
         public IActionResult Roles() => Ok(_service.Types());
 
-        [HttpPost("participate/{appointmentId:int}")]
-        public async Task<IActionResult> Participate(int appointmentId)
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Participate([FromBody] ParticipateViewModel body)
         {
-            throw new System.NotImplementedException();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            await _service.ParticipateAsync(body.AppointmentId.Value, body.ParticipantId.Value);
+            if (!_service.ModelState.IsValid)
+                return BadRequest(_service.ModelState);
+
+            return Ok();
         }
 
-        [HttpGet("offer/{appointmentId:int}")]
-        public async Task<IActionResult> Offer(int appointmentId)
+        [HttpPost("offer")]
+        public async Task<IActionResult> Offer([FromBody] AppointmentToMarketplaceViewModel body)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _service.DutyToMarketplaceAsync(body.AppointmentId.Value, body.OwnerId.Value);
+            if (!_service.ModelState.IsValid)
+                return BadRequest(_service.ModelState);
+
+            if (!result)
+                return Unauthorized();
+
             return Ok();
         }
     }

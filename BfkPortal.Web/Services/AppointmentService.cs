@@ -76,24 +76,85 @@ namespace BfkPortal.Web.Services
 
         public IEnumerable<string> Types() => Enum.GetNames(typeof(AppointmentTypes));
 
-        public async Task Participate(int appointmentId, int particpantId)
+        public async Task ParticipateAsync(int appointmentId, int participantId)
         {
             var appointment = await UnitOfWork.Appointments.FindAsync(appointmentId);
+
             if (appointment == null)
-                ModelState.AddModelError("Appointment Id", "An appointment with this id does not exist");
-            else if (appointment.MaxParticipants == 0)
-                ModelState.AddModelError("MaxParticipants", "You cannot participate on this appointment!");
-            else if (appointment.MaxParticipants == UnitOfWork.Participations.All().Count(p => p.AppointmentId == appointmentId))
-                ModelState.AddModelError("MaxParticipants", "You cannot participate on this appointment! (Maximum reached)");
+                ModelState.AddModelError("Appointment Id", "An appointment with this id does not exist!");
+
             else
             {
+                if (appointment.MaxParticipants.Value == 0)
+                    ModelState.AddModelError("MaxParticipants", "This appointment cannot have any particiapants!");
 
+                else
+                {
+                    await UnitOfWork.Appointments.LoadCollectionAsync(appointment, nameof(appointment.Participations));
+
+                    if (appointment.MaxParticipants.Value == appointment.Participations.Count())
+                        ModelState.AddModelError("MaxParticipants", "The maximum of participants is reached!");
+
+                    else
+                    {
+                        EntityObject participant;
+                        if (appointment.AreParticipantsOrganisations.Value)
+                            participant = await UnitOfWork.Organisations.FindAsync(participantId);
+                        else
+                            participant = await UnitOfWork.Users.FindAsync(participantId);
+
+                        await UnitOfWork.Appointments.LoadReferenceAsync(appointment, nameof(appointment.Owner));
+
+                        if (appointment.Owner.Id == participant.Id)
+                            ModelState.AddModelError("Owner", "You are the owner of this appointment!");
+
+                        else
+                        {
+                            var isAlreadyParticipant = false;
+                            foreach (var participation in appointment.Participations)
+                            {
+                                if (participation.UserId == participant.Id)
+                                    isAlreadyParticipant = true;
+                            }
+
+                            if (isAlreadyParticipant)
+                                ModelState.AddModelError("Participants", "You are already a participant!");
+
+                            else
+                            {
+                                appointment.Participations.Add(new Participation
+                                {
+                                    Appointment = appointment,
+                                    User = !appointment.AreParticipantsOrganisations.Value ? participant as User : null,
+                                    Organisation = appointment.AreParticipantsOrganisations.Value ? participant as Organisation : null
+                                });
+                                await UnitOfWork.SaveChangesAsync();
+                            }
+                        }
+                    }
+
+                }
             }
         }
 
-        public Task DutyToMarketplace(int appointmentId)
+        public async Task<bool> DutyToMarketplaceAsync(int appointmentId, int ownerId)
         {
-            throw new NotImplementedException();
+            var appointment = await UnitOfWork.Appointments.FindAsync(appointmentId);
+            if (appointment == null)
+                ModelState.AddModelError("Appointment Id", $"An appointment with the id {appointmentId} does not exist!");
+
+            await UnitOfWork.Appointments.LoadReferenceAsync(appointment, nameof(appointment.Owner));
+            var owner = await UnitOfWork.Users.FindAsync(ownerId);
+            if (owner == null)
+                ModelState.AddModelError("Owner Id", $"An user with the id {ownerId} does not exist!");
+
+            if (appointment.Owner.Id != ownerId)
+                return false;
+
+            appointment.Type = AppointmentTypes.MarktplatzDienst;
+            UnitOfWork.Appointments.Update(appointment);
+            await UnitOfWork.SaveChangesAsync();
+            return true;
         }
     }
 }

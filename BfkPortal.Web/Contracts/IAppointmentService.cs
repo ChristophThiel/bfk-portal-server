@@ -10,8 +10,8 @@ namespace BfkPortal.Web.Contracts
     {
         IEnumerable<string> Types();
 
-        Task Participate(int appointmentId, int particpantId);
+        Task ParticipateAsync(int appointmentId, int particpantId);
 
-        Task DutyToMarketplace(int appointmentId);
+        Task<bool> DutyToMarketplaceAsync(int appointmentId, int ownerId);
     }
 }

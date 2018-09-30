@@ -1,4 +1,4 @@
-﻿namespace BfkPortal.Models.Enums
+﻿namespace BfkPortal.Core.Models.Enums
 {
     public enum Roles
     {

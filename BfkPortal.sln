@@ -3,15 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2000
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BfkPortal", "BfkPortal\BfkPortal.csproj", "{77C4977F-EA70-4640-B20F-C7E825E70FD8}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BfkPortal.Core", "BfkPortal.Core\BfkPortal.Core.csproj", "{09D36866-6A07-4ECF-A96C-A28EE76D1DAE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BfkPortal.Persistence", "BfkPortal.Persistence\BfkPortal.Persistence.csproj", "{E2791BAD-591F-4AB6-9D48-0F8CD69715EA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BfkPortal.Import", "BfkPortal.Import\BfkPortal.Import.csproj", "{C5EA48A1-5D99-424E-8E2F-46E7BF14F60E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BfkPortal.Web", "BfkPortal.Web\BfkPortal.Web.csproj", "{CE64BBB7-7587-4ABE-91CA-347E4025A148}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BfkPortal.Web", "BfkPortal.Web\BfkPortal.Web.csproj", "{CE64BBB7-7587-4ABE-91CA-347E4025A148}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{77C4977F-EA70-4640-B20F-C7E825E70FD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{77C4977F-EA70-4640-B20F-C7E825E70FD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{77C4977F-EA70-4640-B20F-C7E825E70FD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{77C4977F-EA70-4640-B20F-C7E825E70FD8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{09D36866-6A07-4ECF-A96C-A28EE76D1DAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{09D36866-6A07-4ECF-A96C-A28EE76D1DAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09D36866-6A07-4ECF-A96C-A28EE76D1DAE}.Release|Any CPU.ActiveCfg = Release|Any CPU

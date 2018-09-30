@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using BfkPortal.Models.Enums;
+using BfkPortal.Core.Models.Enums;
 
 namespace BfkPortal.Web.ViewModels
 {

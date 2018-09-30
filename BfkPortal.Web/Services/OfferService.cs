@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BfkPortal.Core.Models;
-using BfkPortal.Models.Enums;
+using BfkPortal.Core.Models.Enums;
 using BfkPortal.Web.Contracts;
 using BfkPortal.Web.ViewModels;
 using BfkPortal.Web.ViewModels.DataTransferObjects;
@@ -21,7 +21,7 @@ namespace BfkPortal.Web.Services
         {
             var entity = new Offer
             {
-                Status = viewModel.Status ?? OfferStatus.Pending,
+                Status = viewModel.Status.Value,
                 Sender = await UnitOfWork.Users.FindAsync(viewModel.SenderId.Value),
                 Receiver = await UnitOfWork.Users.FindAsync(viewModel.ReceiverId.Value),
                 SenderAppointment = await UnitOfWork.Appointments.FindAsync(viewModel.SenderAppointmentId.Value),

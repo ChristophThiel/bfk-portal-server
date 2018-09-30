@@ -36,11 +36,12 @@ namespace BfkPortal.Web.Services
             var password = hasher.HashPassword(entity, viewModel.Password);
             entity.Password = password;
 
-            foreach (var roleId in viewModel.Entitlements)
+            foreach (var roleName in viewModel.Entitlements)
             {
-                var role = await UnitOfWork.Roles.FindAsync(roleId);
+                var role = UnitOfWork.Roles.All()
+                    .FirstOrDefault(r => r.Name == roleName);
                 if (role == null)
-                    ModelState.AddModelError("Role Id", $"A role with the id {roleId} does not exist!");
+                    ModelState.AddModelError("Role", $"A role with the name {roleName} does not exist!");
                 else
                     entity.Entitlements.Add(new Entitlement
                     {
