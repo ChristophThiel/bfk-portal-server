@@ -254,6 +254,19 @@ namespace BfkPortal.Import
                     User = users[3]
                 });
                 unitOfWork.SaveChangesAsync().Wait();
+
+                var offers = new[]
+                {
+                    new Offer
+                    {
+                        Sender = users[2],
+                        Receiver = users[2],
+                        SenderAppointment = appointments[0],
+                        ReceiverAppointment = appointments[0]
+                    }
+                };
+                unitOfWork.Offers.AddRange(offers);
+                unitOfWork.SaveChangesAsync().Wait();
             }
         }
     }

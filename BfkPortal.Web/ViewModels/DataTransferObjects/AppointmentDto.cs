@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using BfkPortal.Core.Models;
 using BfkPortal.Core.Models.Enums;
 
@@ -28,6 +31,10 @@ namespace BfkPortal.Web.ViewModels.DataTransferObjects
 
         public bool IsVisible { get; set; }
 
+        public IEnumerable<object> Participations { get; set; }
+
+        public UserDto Owner { get; set; }
+
         public AppointmentDto(Appointment a)
         {
             Id = a.Id;
@@ -41,6 +48,12 @@ namespace BfkPortal.Web.ViewModels.DataTransferObjects
             ShowParticipants = a.ShowParticipants.Value;
             Deadline = a.Deadline;
             IsVisible = a.IsVisible;
+            if (AreParticipantsOrganisations)
+                Participations = a.Participations.Select(p => new OrganisationDto(p.Organisation));
+            else
+                Participations = a.Participations.Select(p => new UserDto(p.User));
+            if (a.Owner != null)
+                Owner = new UserDto(a.Owner);
         }
     }
 }

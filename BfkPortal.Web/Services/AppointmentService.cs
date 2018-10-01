@@ -15,8 +15,41 @@ namespace BfkPortal.Web.Services
     {
         public AppointmentService(ModelStateDictionary modelState) : base(modelState) { }
 
-        public override IEnumerable<AppointmentDto> All() =>
-            UnitOfWork.Appointments.All().Select(a => new AppointmentDto(a));
+        public override IEnumerable<AppointmentDto> All()
+        {
+            var appointments = UnitOfWork.Appointments.All();
+            foreach (var appointment in appointments)
+            {
+                UnitOfWork.Appointments.LoadCollectionAsync(appointment, nameof(appointment.Participations)).Wait();
+                foreach (var participation in appointment.Participations)
+                {
+                    if (appointment.AreParticipantsOrganisations.Value)
+                        UnitOfWork.Participations.LoadReferenceAsync(participation, nameof(participation.Organisation)).Wait();
+                    else
+                    {
+                        UnitOfWork.Participations.LoadReferenceAsync(participation, nameof(participation.User));
+                        UnitOfWork.Users.LoadCollectionAsync(participation.User,
+                            nameof(participation.User.Entitlements)).Wait();
+                        foreach (var entitlement in participation.User.Entitlements)
+                            UnitOfWork.Entitlements.LoadReferenceAsync(entitlement, nameof(entitlement.Role));
+                        UnitOfWork.Users.LoadCollectionAsync(participation.User,
+                            nameof(participation.User.Memberships)).Wait();
+                        foreach (var membership in participation.User.Memberships)
+                            UnitOfWork.Memberships.LoadReferenceAsync(membership, nameof(membership.Organisation));
+                    }
+                }
+                UnitOfWork.Appointments.LoadReferenceAsync(appointment, nameof(appointment.Owner)).Wait();
+                if (appointment.Owner == null)
+                    continue;
+                UnitOfWork.Users.LoadCollectionAsync(appointment.Owner, nameof(appointment.Owner.Entitlements)).Wait();
+                foreach (var entitlement in appointment.Owner.Entitlements)
+                    UnitOfWork.Entitlements.LoadReferenceAsync(entitlement, nameof(entitlement.Role));
+                UnitOfWork.Users.LoadCollectionAsync(appointment.Owner, nameof(appointment.Owner.Memberships)).Wait();
+                foreach (var membership in appointment.Owner.Memberships)
+                    UnitOfWork.Memberships.LoadReferenceAsync(membership, nameof(membership.Organisation));
+            }
+            return appointments.Select(a => new AppointmentDto(a));
+        }
 
         public override async Task<Appointment> CastViewModelToModel(AppointmentViewModel viewModel)
         {

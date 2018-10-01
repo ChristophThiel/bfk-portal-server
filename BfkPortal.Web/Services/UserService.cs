@@ -13,8 +13,22 @@ namespace BfkPortal.Web.Services
     public class UserService : GenericService<User, UserViewModel, UserDto>, IUserService
     {
         public UserService(ModelStateDictionary modelState) : base(modelState) { }
-        
-        public override IEnumerable<UserDto> All() => UnitOfWork.Users.All().Select(u => new UserDto(u));
+
+        public override IEnumerable<UserDto> All()
+        {
+            var users = UnitOfWork.Users.All();
+            foreach (var user in users)
+            {
+                UnitOfWork.Users.LoadCollectionAsync(user, nameof(user.Entitlements));
+                foreach (var entitlement in user.Entitlements)
+                    UnitOfWork.Entitlements.LoadReferenceAsync(entitlement, nameof(entitlement.Role));
+                UnitOfWork.Users.LoadCollectionAsync(user, nameof(user.Memberships));
+                foreach (var membership in user.Memberships)
+                    UnitOfWork.Memberships.LoadReferenceAsync(membership, nameof(membership.Organisation));
+            }
+
+            return users.Select(u => new UserDto(u));
+        }
 
         public override async Task<User> CastViewModelToModel(UserViewModel viewModel)
         {
