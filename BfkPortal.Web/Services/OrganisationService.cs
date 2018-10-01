@@ -23,7 +23,7 @@ namespace BfkPortal.Web.Services
                 IsDeleted = viewModel.IsDeleted ?? false
             };
 
-            foreach (var membershipId in viewModel.Memerships)
+            foreach (var membershipId in viewModel.Memberships)
             {
                 var user = await UnitOfWork.Users.FindAsync(membershipId);
                 if (user == null)
@@ -50,6 +50,17 @@ namespace BfkPortal.Web.Services
             }
 
             return entity;
+        }
+
+        public override async Task Remove(int id)
+        {
+            var entity = await UnitOfWork.Organisations.FindAsync(id);
+            if (entity == null)
+                ModelState.AddModelError("Organisation Id", $"An organistation with the id {id} does not exist!");
+
+            entity.IsDeleted = true;
+            UnitOfWork.Organisations.Update(entity);
+            await UnitOfWork.SaveChangesAsync();
         }
     }
 }

@@ -12,7 +12,7 @@ namespace BfkPortal.Web.ViewModels
         public bool? IsDeleted { get; set; }
 
         [Required]
-        public IEnumerable<int> Memerships { get; set; }
+        public IEnumerable<int> Memberships { get; set; }
 
         [Required]
         public IEnumerable<int> Participations { get; set; }
