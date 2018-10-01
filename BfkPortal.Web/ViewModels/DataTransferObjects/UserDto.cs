@@ -16,9 +16,9 @@ namespace BfkPortal.Web.ViewModels.DataTransferObjects
 
         public bool IsDeleted { get; set; }
 
-        public IEnumerable<string> Roles { get; set; }
+        public IEnumerable<string> Entitlements { get; set; }
 
-        public IEnumerable<OrganisationDto> Organisations { get; set; }
+        public IEnumerable<OrganisationDto> Memberships { get; set; }
 
         public UserDto(User u)
         {
@@ -27,8 +27,8 @@ namespace BfkPortal.Web.ViewModels.DataTransferObjects
             Lastname = u.Lastname;
             Email = u.Email;
             IsDeleted = u.IsDeleted;
-            Roles = u.Entitlements?.Select(e => e.Role.Name);
-            Organisations = u.Memberships?.Select(m => new OrganisationDto(m.Organisation));
+            Entitlements = u.Entitlements?.Select(e => e.Role.Name);
+            Memberships = u.Memberships?.Select(m => new OrganisationDto(m.Organisation));
         }
     }
 }
