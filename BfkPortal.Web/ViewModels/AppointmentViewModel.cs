@@ -32,7 +32,7 @@ namespace BfkPortal.Web.ViewModels
         [Required]
         public bool? ShowParticipants { get; set; }
 
-        [Required(AllowEmptyStrings = true), NullableIso8601]
+        [NullableIso8601]
         public string Deadline { get; set; }
 
         [Required]
