@@ -98,5 +98,33 @@ namespace BfkPortal.Web.Services
         }
 
         public IEnumerable<string> Status() => Enum.GetNames(typeof(OfferStatus));
+
+        public async Task ReplyAsync(int offerId, OfferStatus status)
+        {
+            if (status == OfferStatus.Pending)
+                return;
+
+            var offer = await UnitOfWork.Offers.FindAsync(offerId);
+            if (offer == null)
+            {
+                ModelState.AddModelError("Offer Id", "An offer with this id does not exist!");
+                return;
+            }
+
+            if (status == OfferStatus.Declined)
+                UnitOfWork.Offers.Remove(offer);
+            else
+            {
+                await UnitOfWork.Offers.LoadReferenceAsync(offer, nameof(offer.Sender));
+                await UnitOfWork.Offers.LoadReferenceAsync(offer, nameof(offer.Receiver));
+                await UnitOfWork.Offers.LoadReferenceAsync(offer, nameof(offer.SenderAppointment));
+                await UnitOfWork.Offers.LoadReferenceAsync(offer, nameof(offer.ReceiverAppointment));
+
+                offer.SenderAppointment.Owner = offer.Receiver;
+                offer.ReceiverAppointment.Owner = offer.Sender;
+            }
+
+            await UnitOfWork.SaveChangesAsync();
+        }
     }
 }

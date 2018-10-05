@@ -12,6 +12,8 @@ namespace BfkPortal.Web.Contracts
 
         Task ParticipateAsync(int appointmentId, int particpantId);
 
+        Task UnparticipateAsync(int appointmentId, int participantId);
+
         Task<bool> DutyToMarketplaceAsync(int appointmentId, int ownerId);
     }
 }

@@ -170,6 +170,33 @@ namespace BfkPortal.Web.Services
             }
         }
 
+        public async Task UnparticipateAsync(int appointmentId, int participantId)
+        {
+            var appointment = await UnitOfWork.Appointments.FindAsync(appointmentId);
+            if (appointment == null)
+                ModelState.AddModelError("Appointment Id", "An appointment with this id does not exist!");
+
+            await UnitOfWork.Appointments.LoadCollectionAsync(appointment, nameof(appointment.Participations));
+
+            Func<int, bool> expression;
+            if (appointment.AreParticipantsOrganisations.Value)
+                expression = (organisationId) => organisationId == participantId;
+            else
+                expression = (userId) => userId == participantId;
+
+            var participant = appointment.Participations.FirstOrDefault(p =>
+                expression(appointment.AreParticipantsOrganisations.Value
+                    ? p.OrganisationId.Value
+                    : p.UserId.Value));
+
+            if (participant != null)
+                appointment.Participations.Remove(participant);
+            else 
+                ModelState.AddModelError("Participant Id", "You are not a participant of this appointment!");
+
+            await UnitOfWork.SaveChangesAsync();
+        }
+
         public async Task<bool> DutyToMarketplaceAsync(int appointmentId, int ownerId)
         {
             var appointment = await UnitOfWork.Appointments.FindAsync(appointmentId);

@@ -50,7 +50,7 @@ namespace BfkPortal.Web.Controllers
             await _service.Update(body);
 
             if (!_service.ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequest(_service.ModelState);
 
             return Ok();
         }
@@ -60,5 +60,19 @@ namespace BfkPortal.Web.Controllers
 
         [HttpGet("[action]")]
         public IActionResult Status() => Ok(_service.Status());
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Reply([FromBody] OfferReplyViewModel body)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            await _service.ReplyAsync(body.OfferId.Value, body.Status.Value);
+
+            if (!_service.ModelState.IsValid)
+                return BadRequest(_service.ModelState);
+
+            return Ok();
+        } 
     }
 }

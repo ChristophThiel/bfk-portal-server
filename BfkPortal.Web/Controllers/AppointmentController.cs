@@ -74,6 +74,19 @@ namespace BfkPortal.Web.Controllers
             return Ok();
         }
 
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Unparticipate([FromBody] ParticipateViewModel body)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            await _service.UnparticipateAsync(body.AppointmentId.Value, body.ParticipantId.Value);
+            if (!_service.ModelState.IsValid)
+                return BadRequest(_service.ModelState);
+
+            return Ok();
+        }
+
         [HttpPost("offer")]
         public async Task<IActionResult> Offer([FromBody] AppointmentToMarketplaceViewModel body)
         {
