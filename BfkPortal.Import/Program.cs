@@ -233,7 +233,22 @@ namespace BfkPortal.Import
                         IsVisible = true,
                         Owner = unitOfWork.Users.FindAsync(2).Result,
                         Participations = new List<Participation>()
-                    }
+                    },
+                    new Appointment
+                    {
+                        Title = "Nachtdienst",
+                        Description = "",
+                        From = new DateTime(2018, 10, 27, 18, 0, 0),
+                        To =  new DateTime(2018, 10, 28, 6, 0, 0),
+                        Type = AppointmentTypes.Dienst,
+                        AreParticipantsOrganisations = false,
+                        MaxParticipants = 0,
+                        ShowParticipants = false,
+                        Deadline = null,
+                        IsVisible = true,
+                        Owner = unitOfWork.Users.FindAsync(4).Result,
+                        Participations = new List<Participation>()
+                    },
                 };
                 unitOfWork.Appointments.AddRange(appointments);
                 unitOfWork.SaveChangesAsync().Wait();
@@ -259,9 +274,9 @@ namespace BfkPortal.Import
                 {
                     new Offer
                     {
-                        Sender = users[2],
+                        Sender = users[3],
                         Receiver = users[2],
-                        SenderAppointment = appointments[0],
+                        SenderAppointment = appointments[4],
                         ReceiverAppointment = appointments[0]
                     }
                 };
