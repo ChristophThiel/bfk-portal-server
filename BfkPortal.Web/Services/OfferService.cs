@@ -15,6 +15,8 @@ namespace BfkPortal.Web.Services
     {
         public OfferService(ModelStateDictionary modelState) : base(modelState) { }
 
+        #region Override Methods
+
         public override IEnumerable<OfferDto> All()
         {
             var offers = UnitOfWork.Offers.All();
@@ -56,11 +58,13 @@ namespace BfkPortal.Web.Services
                 foreach (var entitlement in offer.Sender.Entitlements)
                     UnitOfWork.Entitlements.LoadReferenceAsync(entitlement, nameof(entitlement.Role));
                 UnitOfWork.Users.LoadCollectionAsync(offer.Sender,
-                    nameof(offer.Sender.Entitlements));
+                    nameof(offer.Sender.Memberships));
                 foreach (var membership in offer.Sender.Memberships)
                     UnitOfWork.Memberships.LoadReferenceAsync(membership, nameof(membership.Organisation));
 
                 UnitOfWork.Offers.LoadReferenceAsync(offer, nameof(offer.SenderAppointment));
+                UnitOfWork.Appointments.LoadCollectionAsync(offer.SenderAppointment,
+                    nameof(offer.SenderAppointment.Participations));
                 foreach (var participation in offer.SenderAppointment.Participations)
                 {
                     if (offer.SenderAppointment.AreParticipantsOrganisations.Value)
@@ -96,6 +100,8 @@ namespace BfkPortal.Web.Services
 
             return entity;
         }
+
+        #endregion
 
         public IEnumerable<string> Status() => Enum.GetNames(typeof(OfferStatus));
 
