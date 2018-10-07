@@ -3,13 +3,12 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using BfkPortal.Core.Models;
 using BfkPortal.Persistence;
 using BfkPortal.Persistence.Contracts;
 using BfkPortal.Web.Contracts;
 using BfkPortal.Web.Security;
+using BfkPortal.Web.ViewModels.DataTransferObjects;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -17,56 +16,50 @@ namespace BfkPortal.Web.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
-        public IConfiguration Configuration { get; }
+        private readonly IConfiguration _configuration;
 
-        public IUnitOfWork UnitOfWork { get; }
+        private readonly IUnitOfWork _unitOfWork;
 
-        public ModelStateDictionary ModelState { get; }
-
-        public AuthenticationService(IConfiguration configuration, ModelStateDictionary modelState)
+        public AuthenticationService(IConfiguration configuration)
         {
-            UnitOfWork = new UnitOfWork();
-            Configuration = configuration;
-            ModelState = modelState;
+            _configuration = configuration;
+            _unitOfWork = new UnitOfWork();
         }
 
         public async Task<string> CreateJsonWebTokenAsync(int id)
         {
-            var validUser = await UnitOfWork.Users.FindAsync(id);
+            var validUser = await _unitOfWork.Users.FindAsync(id);
 
             var claims = new[] { new Claim(ClaimTypes.Sid, validUser.Id.ToString()), new Claim(ClaimTypes.Email, validUser.Email) };
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Key"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Key"]));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
-            var token = new JwtSecurityToken(Configuration["Issuer"], Configuration["Issuer"], claims, null, null, credentials);
+            var token = new JwtSecurityToken(_configuration["Issuer"], _configuration["Issuer"], claims, null, null, credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public async Task<int> VerifyPassword(string email, string password)
+        public Task<UserDto> FindByCredentialsAsync(string email, string password)
         {
-            var possibleUsers = UnitOfWork.Users.All()
+
+        }
+
+        public bool VerifyPassword(string email, string password)
+        {
+            var possibleUsers = _unitOfWork.Users.All()
                 .Where(u => u.Email == email)
                 .ToList();
 
             if (!possibleUsers.Any())
-            {
-                ModelState.AddModelError("Email or Password", "Email or Password invalid!");
-                return -1;
-            }
+                return false;
             
             var hasher = new Pbkdf2PasswordHasher();
             foreach (var user in possibleUsers)
             {
-                await UnitOfWork.Users.LoadCollectionAsync(user, nameof(user.Entitlements));
-                foreach (var entitlement in user.Entitlements)
-                    await UnitOfWork.Entitlements.LoadReferenceAsync(entitlement, nameof(entitlement.Role));
-
                 if (hasher.VerifyHashedPassword(user, user.Password, password) == PasswordVerificationResult.Success)
-                    return user.Id;
+                    return true;
             }
 
-            ModelState.AddModelError("Email or Password", "Email or Password invalid!");
-            return -1;
+            return false;
         }
     }
 }

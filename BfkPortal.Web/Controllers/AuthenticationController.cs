@@ -17,7 +17,7 @@ namespace BfkPortal.Web.Controllers
 
         public AuthenticationController(IConfiguration configuration)
         {
-            _service = new AuthenticationService(configuration, ModelState);
+            _service = new AuthenticationService(configuration);
         }
 
         [AllowAnonymous]
@@ -26,22 +26,27 @@ namespace BfkPortal.Web.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
-            var userId = await _service.VerifyPassword(body.Email, body.Password);
-            if (!_service.ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var user = await _service.UnitOfWork.Users.FindAsync(userId);
-            await _service.UnitOfWork.Users.LoadCollectionAsync(user, nameof(user.Memberships));
-            foreach (var membership in user.Memberships)
-                await _service.UnitOfWork.Memberships.LoadReferenceAsync(membership, nameof(membership.Organisation));
-            var result = new
+            
+            var result = _service.VerifyPassword(body.Email, body.Password);
+            if (!result)
+                ModelState.AddModelError("Email or Password", "Invalid email or password");
+            else
             {
-                Token = await _service.CreateJsonWebTokenAsync(userId),
-                User = new UserDto(await _service.UnitOfWork.Users.FindAsync(userId))
-            };
+                var user = await _service.FindByCredentialsAsync(body.Email, body.Password);
 
-            return Ok(result);
+                /*await _service.UnitOfWork.Users.LoadCollectionAsync(user, nameof(user.Memberships));
+                foreach (var membership in user.Memberships)
+                    await _service.UnitOfWork.Memberships.LoadReferenceAsync(membership, nameof(membership.Organisation));
+                var result = new
+                {
+                    Token = await _service.CreateJsonWebTokenAsync(userId),
+                    User = new UserDto(await _service.UnitOfWork.Users.FindAsync(userId))
+                };
+
+                return Ok(result);*/
+            }
+
+            return BadRequest(ModelState);
         }
     }
 }
