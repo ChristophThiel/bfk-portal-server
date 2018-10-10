@@ -18,9 +18,9 @@ namespace BfkPortal.Web.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Add()//[FromBody] AppointmentViewModel model)
+        public async Task<IActionResult> Add([FromBody] AppointmentViewModel model)
         {
-            var id = await _service.Add(new AppointmentViewModel());
+            var id = await _service.Add(model);
 
             if (!_service.ModelState.IsValid)
                 return BadRequest(_service.ModelState);

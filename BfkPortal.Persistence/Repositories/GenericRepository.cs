@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BfkPortal.Persistence.Contracts;
 using Microsoft.EntityFrameworkCore;
@@ -7,41 +8,38 @@ namespace BfkPortal.Persistence.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        internal DbContext Context;
-        internal DbSet<T> Set;
+        private DbContext _context;
 
         public GenericRepository(DbContext context)
         {
-            Context = context;
-            Set = context.Set<T>();
+            _context = context;
         }
 
-        public void Add(T entity) => Set.Add(entity);
+        public void Add(T entity) => _context.Add(entity);
 
-        public void AddRange(IEnumerable<T> entities) => Set.AddRange(entities);
+        public void AddRange(IEnumerable<T> entities) => _context.AddRange(entities);
 
-        public void Remove(T entity) => Set.Remove(entity);
+        public void Remove(T entity) => _context.Remove(entity);
 
-        public void RemoveRange(IEnumerable<T> entities) => Set.RemoveRange(entities);
+        public void RemoveRange(IEnumerable<T> entities) => _context.RemoveRange(entities);
 
-        public void Update(T entity) => Set.Update(entity);
+        public void Update(T entity) => _context.Update(entity);
 
-        public void UpdateRange(IEnumerable<T> entities) => Set.UpdateRange(entities);
+        public void UpdateRange(IEnumerable<T> entities) => _context.UpdateRange(entities);
 
-        public async Task<T> FindAsync(int id) => await Set.FindAsync(id);
-
-        public Task<T> FindAsync(params object[] values)
+        public async Task<T> FindAsync(int id)
         {
-            Set.Single
+            await _context.Set<T>().LoadAsync();
+            var entity = await _context.FindAsync<T>(id);
+            return entity;
         }
 
-        public async Task LoadCollectionAsync(T entity, string propertyName) => 
+        /* public async Task LoadCollectionAsync(T entity, string propertyName) => 
             await Context.Entry(entity).Collection(propertyName).LoadAsync();
 
         public async Task LoadReferenceAsync(T entity, string propertyName) =>
-            await Context.Entry(entity).Reference(propertyName).LoadAsync();
+            await Context.Entry(entity).Reference(propertyName).LoadAsync(); */
 
-        public IEnumerable<T> All() => Set;
-
+        public IEnumerable<T> All() => _context.Set<T>().ToList();
     }
 }

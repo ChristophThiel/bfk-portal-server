@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using BfkPortal.Web.ViewModels.DataTransferObjects;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using BfkPortal.Core.Models;
-using BfkPortal.Web.ViewModels;
-using BfkPortal.Web.ViewModels.DataTransferObjects;
 
 namespace BfkPortal.Web.Contracts
 {
-    public interface IAppointmentService : IGenericService<Appointment, AppointmentViewModel, AppointmentDto>
+    public interface IAppointmentService
     {
+        IEnumerable<AppointmentDto> All();
+
         IEnumerable<string> Types();
 
         Task ParticipateAsync(int appointmentId, int particpantId);

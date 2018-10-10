@@ -2,8 +2,6 @@
 using BfkPortal.Core.Models;
 using BfkPortal.Persistence;
 using BfkPortal.Persistence.Contracts;
-using BfkPortal.Web.Contracts;
-using BfkPortal.Web.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -45,15 +43,10 @@ namespace BfkPortal.Web
             });
             
             services.AddScoped<IUnitOfWork, UnitOfWork>(serviceProvider => new UnitOfWork());
-            services.AddScoped<IAuthenticationService, AuthenticationService>();
 
             services.AddMvc();
         }
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> 67720e303e90566ebd6d2443b2ff54162017eee8
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())

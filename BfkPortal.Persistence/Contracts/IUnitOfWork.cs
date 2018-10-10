@@ -23,7 +23,5 @@ namespace BfkPortal.Persistence.Contracts
         Task DeleteDatabaseAsync();
 
         Task CreatDatabaseAsync();
-
-        IGenericRepository<TEntity> GetRepository<TEntity>();
     }
 }

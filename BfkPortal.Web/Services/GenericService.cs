@@ -8,15 +8,38 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace BfkPortal.Web.Services
 {
-    public abstract class GenericService<TModel, TViewModel, TModelDto> : IGenericService<TModel, TViewModel, TModelDto>
-        where TModel : IEntityObject where TViewModel : IEntityViewModel
+    public abstract class GenericService<TViewModel, TModelDto> : IGenericService<TViewModel, TModelDto>
+        where TViewModel : IEntityViewModel
     {
-        private readonly IGenericRepository<TModel> _repository;
-
         public IUnitOfWork UnitOfWork { get; }
 
-        public ModelStateDictionary ModelState { get; }
+        public Task<int> AddAsync(TViewModel viewModel)
+        {
+            throw new System.NotImplementedException();
+        }
 
+        public IEnumerable<TModelDto> All()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<TModelDto> FindAsync()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task RemoveAsync(int id)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task UpdateAsync(TViewModel viewModel)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /*public IUnitOfWork UnitOfWork { get; }
+        
         protected GenericService(ModelStateDictionary modelState)
         {
             ModelState = modelState;
@@ -59,5 +82,25 @@ namespace BfkPortal.Web.Services
             _repository.Update(entity);
             await UnitOfWork.SaveChangesAsync();
         }
+
+        public Task<int> AddAsync(TViewModel viewModel)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task RemoveAsync(int id)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task UpdateAsync(TViewModel viewModel)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<TModelDto> FindAsync()
+        {
+            throw new System.NotImplementedException();
+        }*/
     }
 }

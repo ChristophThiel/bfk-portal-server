@@ -8,7 +8,7 @@ namespace BfkPortal.Persistence
 {
     public class UnitOfWork : IUnitOfWork
     {
-        internal ApplicationDbContext Context;
+        private ApplicationDbContext _context;
 
         public IGenericRepository<Appointment> Appointments { get; }
 
@@ -24,20 +24,20 @@ namespace BfkPortal.Persistence
 
         public UnitOfWork()
         {
-            Context = new ApplicationDbContext();
-            Appointments = new GenericRepository<Appointment>(Context);
-            Offers = new GenericRepository<Offer>(Context);
-            Organisations = new GenericRepository<Organisation>(Context);
-            Users = new GenericRepository<User>(Context);
-            Memberships = new GenericRepository<Membership>(Context);
-            Participations = new GenericRepository<Participation>(Context);
+            _context = new ApplicationDbContext();
+            Appointments = new GenericRepository<Appointment>(_context);
+            Offers = new GenericRepository<Offer>(_context);
+            Organisations = new GenericRepository<Organisation>(_context);
+            Users = new GenericRepository<User>(_context);
+            Memberships = new GenericRepository<Membership>(_context);
+            Participations = new GenericRepository<Participation>(_context);
         }
 
         public async Task SaveChangesAsync()
         {
             try
             {
-                await Context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
             catch (Exception e)
             {
@@ -48,21 +48,10 @@ namespace BfkPortal.Persistence
             }
         }
 
-        public async Task DeleteDatabaseAsync() => await Context.Database.EnsureDeletedAsync();
+        public async Task DeleteDatabaseAsync() => await _context.Database.EnsureDeletedAsync();
 
-        public async Task CreatDatabaseAsync() => await Context.Database.EnsureCreatedAsync();
+        public async Task CreatDatabaseAsync() => await _context.Database.EnsureCreatedAsync();
 
-        public IGenericRepository<TEntity> GetRepository<TEntity>()
-        {
-            foreach (var property in GetType().GetProperties())
-            {
-                if (property.PropertyType == typeof(IGenericRepository<TEntity>))
-                    return property.GetValue(this) as IGenericRepository<TEntity>;
-            }
-
-            return null;
-        }
-
-        public void Dispose() => Context.Dispose();
+        public void Dispose() => _context.Dispose();
     }
 }

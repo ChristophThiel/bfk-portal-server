@@ -1,23 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using BfkPortal.Core.Contracts;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+using BfkPortal.Persistence.Contracts;
 
 namespace BfkPortal.Web.Contracts
 {
-    public interface IGenericService<TModel, in TViewModel, out TModelDto> 
-        where TModel : IEntityObject where TViewModel : IEntityViewModel
+    public interface IGenericService<in TViewModel, TModelDto> 
+        where TViewModel : IEntityViewModel
     {
-        ModelStateDictionary ModelState { get; }
+        IUnitOfWork UnitOfWork { get; }
 
-        Task<int> Add(TViewModel viewModel);
+        Task<int> AddAsync(TViewModel viewModel);
 
-        Task Remove(int id);
+        Task RemoveAsync(int id);
 
-        Task Update(TViewModel viewModel);
+        Task UpdateAsync(TViewModel viewModel);
+
+        Task<TModelDto> FindAsync();
 
         IEnumerable<TModelDto> All();
-
-        Task<TModel> CastViewModelToModel(TViewModel viewModel);
     }
 }
