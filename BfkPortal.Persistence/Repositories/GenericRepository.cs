@@ -30,6 +30,11 @@ namespace BfkPortal.Persistence.Repositories
 
         public async Task<T> FindAsync(int id) => await Set.FindAsync(id);
 
+        public Task<T> FindAsync(params object[] values)
+        {
+            Set.Single
+        }
+
         public async Task LoadCollectionAsync(T entity, string propertyName) => 
             await Context.Entry(entity).Collection(propertyName).LoadAsync();
 
@@ -37,5 +42,6 @@ namespace BfkPortal.Persistence.Repositories
             await Context.Entry(entity).Reference(propertyName).LoadAsync();
 
         public IEnumerable<T> All() => Set;
+
     }
 }

@@ -24,8 +24,12 @@ namespace BfkPortal.Web.Controllers
 
         public AuthenticationController(IConfiguration configuration, UserManager<User> userManager)
         {
+<<<<<<< HEAD
             _configuration = configuration;
             _userManager = userManager;
+=======
+            _service = new AuthenticationService(configuration);
+>>>>>>> 67720e303e90566ebd6d2443b2ff54162017eee8
         }
 
         [Authorize(Roles = "AdminBfk, AdminBwst")]
@@ -33,6 +37,7 @@ namespace BfkPortal.Web.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Register([FromBody] UserViewModel model)
         {
+<<<<<<< HEAD
             var user = new User
             {
                 UserName = model.Email,
@@ -104,6 +109,31 @@ namespace BfkPortal.Web.Controllers
             var token = new JwtSecurityToken(_configuration["Issuer"], _configuration["Issuer"], claims,
                 signingCredentials: creds);
             return new JwtSecurityTokenHandler().WriteToken(token);
+=======
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            var result = _service.VerifyPassword(body.Email, body.Password);
+            if (!result)
+                ModelState.AddModelError("Email or Password", "Invalid email or password");
+            else
+            {
+                var user = await _service.FindByCredentialsAsync(body.Email, body.Password);
+
+                /*await _service.UnitOfWork.Users.LoadCollectionAsync(user, nameof(user.Memberships));
+                foreach (var membership in user.Memberships)
+                    await _service.UnitOfWork.Memberships.LoadReferenceAsync(membership, nameof(membership.Organisation));
+                var result = new
+                {
+                    Token = await _service.CreateJsonWebTokenAsync(userId),
+                    User = new UserDto(await _service.UnitOfWork.Users.FindAsync(userId))
+                };
+
+                return Ok(result);*/
+            }
+
+            return BadRequest(ModelState);
+>>>>>>> 67720e303e90566ebd6d2443b2ff54162017eee8
         }
     }
 }

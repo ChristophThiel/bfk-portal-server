@@ -49,7 +49,11 @@ namespace BfkPortal.Web
 
             services.AddMvc();
         }
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> 67720e303e90566ebd6d2443b2ff54162017eee8
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
