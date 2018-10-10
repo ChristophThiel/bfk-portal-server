@@ -2,7 +2,7 @@
 
 namespace BfkPortal.Web.ViewModels
 {
-    public class LogInViewModel
+    public class CredentialsViewModel
     {
         [Required, EmailAddress]
         public string Email { get; set; }

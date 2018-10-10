@@ -36,6 +36,8 @@ namespace BfkPortal.Core.Models
         [Required]
         public bool IsVisible { get; set; }
 
+        public int OwnerId { get; set; }
+
         public User Owner { get; set; }
         
         public ICollection<Participation> Participations { get; set; }

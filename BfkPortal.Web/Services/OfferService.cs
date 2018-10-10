@@ -11,9 +11,9 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace BfkPortal.Web.Services
 {
-    public class OfferService : GenericService<Offer, OfferViewModel, OfferDto>, IOfferService
+    public class OfferService // : GenericService<Offer, OfferViewModel, OfferDto>, IOfferService
     {
-        public OfferService(ModelStateDictionary modelState) : base(modelState) { }
+        /* public OfferService(ModelStateDictionary modelState) : base(modelState) { }
 
         #region Override Methods
 
@@ -131,6 +131,6 @@ namespace BfkPortal.Web.Services
             }
 
             await UnitOfWork.SaveChangesAsync();
-        }
+        }*/
     }
 }

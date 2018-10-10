@@ -6,23 +6,21 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BfkPortal.Web.Controllers
 {
+    [ApiController]
     [Route("api/[controller]")]
     public class AppointmentController : ControllerBase
     {
         private readonly IAppointmentService _service;
 
-        public AppointmentController()
+        public AppointmentController(IAppointmentService service)
         {
-            _service = new AppointmentService(ModelState);
+            _service = service;
         }
 
-        [HttpPost("add")]
-        public async Task<IActionResult> Add([FromBody] AppointmentViewModel body)
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Add()//[FromBody] AppointmentViewModel model)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var id = await _service.Add(body);
+            var id = await _service.Add(new AppointmentViewModel());
 
             if (!_service.ModelState.IsValid)
                 return BadRequest(_service.ModelState);
@@ -30,7 +28,7 @@ namespace BfkPortal.Web.Controllers
             return Ok(new {id});
         }
 
-        [HttpGet("delete/{appointmentId:int}")]
+        /*[HttpGet("delete/{appointmentId:int}")]
         public async Task<IActionResult> Delete(int appointmentId)
         {
             await _service.Remove(appointmentId);
@@ -101,6 +99,6 @@ namespace BfkPortal.Web.Controllers
                 return Unauthorized();
 
             return Ok();
-        }
+        } */
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 namespace BfkPortal.Web.Contracts
 {
     public interface IGenericService<TModel, in TViewModel, out TModelDto> 
-        where TModel : IEntityObject where TViewModel : IBaseViewModel
+        where TModel : IEntityObject where TViewModel : IEntityViewModel
     {
         ModelStateDictionary ModelState { get; }
 

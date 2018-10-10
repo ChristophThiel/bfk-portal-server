@@ -18,12 +18,12 @@ namespace BfkPortal.Web.ViewModels.DataTransferObjects
 
         public OfferDto(Offer o)
         {
-            Id = o.Id;
+            /* Id = o.Id;
             Status = o.Status.ToString();
             Sender = new UserDto(o.Sender);
             SenderAppointment = new AppointmentDto(o.SenderAppointment);
             Receiver = new UserDto(o.Receiver);
-            ReceiverAppointment = new AppointmentDto(o.ReceiverAppointment);
+            ReceiverAppointment = new AppointmentDto(o.ReceiverAppointment); */
         }
     }
 }

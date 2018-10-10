@@ -13,7 +13,7 @@ namespace BfkPortal.Web.Controllers
 
         public OfferController()
         {
-            _service = new OfferService(ModelState);
+            // _service = new OfferService(ModelState);
         }
 
         [HttpPost("[action]")]

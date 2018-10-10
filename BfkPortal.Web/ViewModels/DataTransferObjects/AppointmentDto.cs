@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using BfkPortal.Core.Models;
-using BfkPortal.Core.Models.Enums;
 
 namespace BfkPortal.Web.ViewModels.DataTransferObjects
 {
@@ -37,7 +35,7 @@ namespace BfkPortal.Web.ViewModels.DataTransferObjects
 
         public AppointmentDto(Appointment a)
         {
-            Id = a.Id;
+            /* Id = a.Id;
             Title = a.Title;
             Description = a.Description;
             From = a.From.Value;
@@ -53,7 +51,7 @@ namespace BfkPortal.Web.ViewModels.DataTransferObjects
             else
                 Participations = a.Participations.Select(p => new UserDto(p.User));
             if (a.Owner != null)
-                Owner = new UserDto(a.Owner);
+                Owner = new UserDto(a.Owner); */
         }
     }
 }

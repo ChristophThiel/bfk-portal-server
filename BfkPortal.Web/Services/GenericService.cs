@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 namespace BfkPortal.Web.Services
 {
     public abstract class GenericService<TModel, TViewModel, TModelDto> : IGenericService<TModel, TViewModel, TModelDto>
-        where TModel : IEntityObject where TViewModel : IBaseViewModel
+        where TModel : IEntityObject where TViewModel : IEntityViewModel
     {
         private readonly IGenericRepository<TModel> _repository;
 

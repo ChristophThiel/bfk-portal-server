@@ -1,10 +1,13 @@
 ﻿using System.Text;
+using BfkPortal.Core.Models;
 using BfkPortal.Persistence;
 using BfkPortal.Persistence.Contracts;
+using BfkPortal.Web.Contracts;
+using BfkPortal.Web.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -19,12 +22,14 @@ namespace BfkPortal.Web
         {
             Configuration = configuration;
         }
-
-
-        // This method gets called by the runtime. Use this method to add services to the container.
+        
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IUnitOfWork, UnitOfWork>(serviceProvider => new UnitOfWork());
+            services.AddDbContext<ApplicationDbContext>();
+            services.AddDefaultIdentity<User>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
             {
@@ -38,10 +43,13 @@ namespace BfkPortal.Web
                     RequireExpirationTime = false
                 };
             });
+            
+            services.AddScoped<IUnitOfWork, UnitOfWork>(serviceProvider => new UnitOfWork());
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
+
             services.AddMvc();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -51,8 +59,6 @@ namespace BfkPortal.Web
             
             app.UseAuthentication();
             app.UseMvc();
-
-            app.Run(async (context) => { await context.Response.WriteAsync("Page not found!"); });
         }
     }
 }

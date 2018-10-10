@@ -12,11 +12,7 @@ namespace BfkPortal.Persistence.Contracts
 
         IGenericRepository<Organisation> Organisations { get; }
 
-        IGenericRepository<Role> Roles { get; }
-
         IGenericRepository<User> Users { get; }
-
-        IGenericRepository<Entitlement> Entitlements { get; }
 
         IGenericRepository<Membership> Memberships { get; }
 

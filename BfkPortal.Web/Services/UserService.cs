@@ -10,9 +10,9 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace BfkPortal.Web.Services
 {
-    public class UserService : GenericService<User, UserViewModel, UserDto>, IUserService
+    public class UserService //: GenericService<User, UserViewModel, UserDto>, IUserService
     {
-        public UserService(ModelStateDictionary modelState) : base(modelState) { }
+        /*public UserService(ModelStateDictionary modelState) : base(modelState) { }
 
         public override IEnumerable<UserDto> All()
         {
@@ -94,6 +94,6 @@ namespace BfkPortal.Web.Services
             }
 
             await UnitOfWork.SaveChangesAsync();
-        }
+        }*/
     }
 }

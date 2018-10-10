@@ -11,9 +11,9 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace BfkPortal.Web.Services
 {
-    public class AppointmentService : GenericService<Appointment, AppointmentViewModel, AppointmentDto>, IAppointmentService
+    public class AppointmentService //: GenericService<Appointment, AppointmentViewModel, AppointmentDto>, IAppointmentService
     {
-        public AppointmentService(ModelStateDictionary modelState) : base(modelState) { }
+        /* public AppointmentService(ModelStateDictionary modelState) : base(modelState) { }
 
         public override IEnumerable<AppointmentDto> All()
         {
@@ -215,6 +215,6 @@ namespace BfkPortal.Web.Services
             UnitOfWork.Appointments.Update(appointment);
             await UnitOfWork.SaveChangesAsync();
             return true;
-        }
+        } */
     }
 }

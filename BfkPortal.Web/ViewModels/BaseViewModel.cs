@@ -2,7 +2,7 @@
 
 namespace BfkPortal.Web.ViewModels
 {
-    public class BaseViewModel : IBaseViewModel
+    public class BaseViewModel : IEntityViewModel
     {
         public int Id { get; set; }
     }

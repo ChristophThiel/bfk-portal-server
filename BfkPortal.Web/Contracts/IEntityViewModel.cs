@@ -1,6 +1,6 @@
 ﻿namespace BfkPortal.Web.Contracts
 {
-    public interface IBaseViewModel
+    public interface IEntityViewModel
     {
         int Id { get; set; }
     }

@@ -5,7 +5,7 @@ using BfkPortal.Web.ViewModels.DataTransferObjects;
 
 namespace BfkPortal.Web.Contracts
 {
-    public interface IUserService : IGenericService<User, UserViewModel, UserDto>
+    public interface IUserService //: IGenericService<User, UserViewModel, UserDto>
     {
         IEnumerable<string> Roles();
     }

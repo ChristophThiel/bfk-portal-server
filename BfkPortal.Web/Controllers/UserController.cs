@@ -13,13 +13,14 @@ namespace BfkPortal.Web.Controllers
 
         public UserController()
         {
-            _service = new UserService(ModelState);
+            // _service = new UserService(ModelState);
         }
         
         [HttpPost("[action]")]
         public async Task<IActionResult> Add([FromBody] UserViewModel body)
         {
-            if (!ModelState.IsValid)
+            return BadRequest();
+            /* if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             var id = await _service.Add(body);
@@ -27,24 +28,25 @@ namespace BfkPortal.Web.Controllers
             if (!_service.ModelState.IsValid)
                 return BadRequest(_service.ModelState);
 
-            return Ok(new {id});
+            return Ok(new {id}); */
         }
 
         [HttpGet("[action]/{userId:int}")]
         public async Task<IActionResult> Delete(int userId)
         {
-            await _service.Remove(userId);
+            /*await _service.Remove(userId);
 
             if (!_service.ModelState.IsValid)
                 return BadRequest(_service.ModelState);
 
-            return Ok();
+            return Ok();*/
+            return BadRequest();
         }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> Update([FromBody] UserViewModel body)
         {
-            if (!ModelState.IsValid)
+            /*if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             await _service.Update(body);
@@ -52,11 +54,12 @@ namespace BfkPortal.Web.Controllers
             if (!_service.ModelState.IsValid)
                 return BadRequest(_service.ModelState);
 
-            return Ok();
+            return Ok();*/
+            return BadRequest();
         }
 
-        [HttpGet("[action]")]
-        public IActionResult All() => Ok(_service.All());
+        //[HttpGet("[action]")]
+        //public IActionResult All() => Ok(_service.All());
 
         [HttpGet("[action]")]
         public IActionResult Roles() => Ok(_service.Roles());

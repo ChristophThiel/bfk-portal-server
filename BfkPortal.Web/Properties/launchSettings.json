@@ -18,12 +18,12 @@
     },
     "BfkPortal.Web": {
       "commandName": "Project",
-      "launchBrowser": true,
-      "launchUrl": "api/values",
+      "launchBrowser": false,
+      "launchUrl": "",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:53896/"
+      "applicationUrl": "http://localhost:4000/"
     }
   }
 }

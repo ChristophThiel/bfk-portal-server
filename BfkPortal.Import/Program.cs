@@ -18,7 +18,7 @@ namespace BfkPortal.Import
                 Console.WriteLine("Erstellen der Datenbank ...");
                 unitOfWork.CreatDatabaseAsync().Wait();
 
-                foreach (var role in Enum.GetNames(typeof(Roles)))
+                /*foreach (var role in Enum.GetNames(typeof(Roles)))
                 {
                     unitOfWork.Roles.Add(new Role
                     {
@@ -281,7 +281,7 @@ namespace BfkPortal.Import
                     }
                 };
                 unitOfWork.Offers.AddRange(offers);
-                unitOfWork.SaveChangesAsync().Wait();
+                unitOfWork.SaveChangesAsync().Wait();*/
             }
         }
     }
