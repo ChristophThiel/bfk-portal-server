@@ -1,21 +1,29 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using BfkPortal.Core.Contracts;
-using BfkPortal.Persistence;
+using BfkPortal.Core.Models;
 using BfkPortal.Persistence.Contracts;
 using BfkPortal.Web.Contracts;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Identity;
 
 namespace BfkPortal.Web.Services
 {
-    public abstract class GenericService<TViewModel, TModelDto> : IGenericService<TViewModel, TModelDto>
-        where TViewModel : IEntityViewModel
+    public abstract class GenericService<TModel, TViewModel, TModelDto> : IGenericService<TModel, TViewModel, TModelDto>
+        where TModel : IEntityObject where TViewModel : IEntityViewModel
     {
         public IUnitOfWork UnitOfWork { get; }
 
+        public IConverter<TViewModel, TModel> ViewModelToModelConverter { get; set; }
+
+        public GenericService(IUnitOfWork unitOfWork, IConverter<TViewModel, TModel> viewModelToModelConverter)
+        {
+            UnitOfWork = unitOfWork;
+            ViewModelToModelConverter = viewModelToModelConverter;
+        }
+
         public Task<int> AddAsync(TViewModel viewModel)
         {
-            throw new System.NotImplementedException();
+            var entity = await ViewModelToModelConverter.Convert(viewModel);
         }
 
         public IEnumerable<TModelDto> All()

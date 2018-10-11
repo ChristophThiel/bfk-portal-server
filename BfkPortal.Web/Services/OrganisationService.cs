@@ -9,9 +9,9 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace BfkPortal.Web.Services
 {
-    public class OrganisationService : GenericService<Organisation, OrganisationViewModel, OrganisationDto>, IOrganisationService
+    public class OrganisationService //: GenericService<Organisation, OrganisationViewModel, OrganisationDto>, IOrganisationService
     {
-        public OrganisationService(ModelStateDictionary modelState) : base(modelState) { }
+        /* public OrganisationService(ModelStateDictionary modelState) : base(modelState) { }
 
         public override IEnumerable<OrganisationDto> All() => UnitOfWork.Organisations.All().Select(o => new OrganisationDto(o));
 
@@ -61,6 +61,6 @@ namespace BfkPortal.Web.Services
             entity.IsDeleted = true;
             UnitOfWork.Organisations.Update(entity);
             await UnitOfWork.SaveChangesAsync();
-        }
+        }*/
     }
 }

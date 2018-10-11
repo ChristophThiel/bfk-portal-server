@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace BfkPortal.Core.Models
 {
-    public class User : IdentityUser
+    public class User : IdentityUser<int>
     {
         [Required]
         public string Firstname { get; set; }

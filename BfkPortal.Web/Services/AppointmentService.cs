@@ -3,16 +3,59 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BfkPortal.Core.Models;
-using BfkPortal.Core.Models.Enums;
+using BfkPortal.Persistence.Contracts;
 using BfkPortal.Web.Contracts;
 using BfkPortal.Web.ViewModels;
 using BfkPortal.Web.ViewModels.DataTransferObjects;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace BfkPortal.Web.Services
 {
-    public class AppointmentService //: GenericService<Appointment, AppointmentViewModel, AppointmentDto>, IAppointmentService
+    public class AppointmentService : IAppointmentService
     {
+        public IUnitOfWork UnitOfWork { get; }
+
+        public IConverter<AppointmentViewModel, Appointment> ViewModelToModelConverter { get; }
+
+        public IConverter<Appointment, AppointmentDto> ModelToDtoConverter { get; }
+
+        public AppointmentService(IUnitOfWork unitOfWork,
+            IConverter<AppointmentViewModel, Appointment> viewModelToModelConverter,
+            IConverter<Appointment, AppointmentDto> modelToDtoConverter)
+        {
+            UnitOfWork = unitOfWork;
+            ViewModelToModelConverter = viewModelToModelConverter;
+            ModelToDtoConverter = modelToDtoConverter;
+        }
+
+        public async Task<int> AddAsync(AppointmentViewModel viewModel)
+        {
+            var model = await ViewModelToModelConverter.Convert(viewModel);
+            UnitOfWork.Appointments.Add(model);
+
+            return model.Id;
+        }
+
+        public IEnumerable<AppointmentDto> All()
+        {
+            return UnitOfWork.Appointments.All().Select(a => ModelToDtoConverter.Convert(a).Result);
+        }
+
+        public async Task<AppointmentDto> FindAsync(int id)
+        {
+            return await ModelToDtoConverter.Convert(await UnitOfWork.Appointments.FindAsync(id));
+        }
+
+        public async Task RemoveAsync(int id)
+        {
+            UnitOfWork.Appointments.Remove(await UnitOfWork.Appointments.FindAsync(id));
+        }
+
+        public async Task UpdateAsync(AppointmentViewModel viewModel)
+        {
+            var model = await ViewModelToModelConverter.Convert(viewModel);
+            UnitOfWork.Appointments.Update(model);
+        }
+
         /* public AppointmentService(ModelStateDictionary modelState) : base(modelState) { }
 
         public override IEnumerable<AppointmentDto> All()

@@ -2,6 +2,9 @@
 using BfkPortal.Core.Models;
 using BfkPortal.Persistence;
 using BfkPortal.Persistence.Contracts;
+using BfkPortal.Web.Contracts;
+using BfkPortal.Web.Services.Converters;
+using BfkPortal.Web.ViewModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -43,6 +46,7 @@ namespace BfkPortal.Web
             });
             
             services.AddScoped<IUnitOfWork, UnitOfWork>(serviceProvider => new UnitOfWork());
+            services.AddScoped<IConverter<UserViewModel, User>, UserViewModelToUserConverter>();
 
             services.AddMvc();
         }

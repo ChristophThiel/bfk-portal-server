@@ -1,11 +1,16 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Threading.Tasks;
+using BfkPortal.Core.Models.Enums;
 using BfkPortal.Web.Contracts;
 using BfkPortal.Web.Services;
 using BfkPortal.Web.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BfkPortal.Web.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class AppointmentController : ControllerBase
@@ -17,15 +22,85 @@ namespace BfkPortal.Web.Controllers
             _service = service;
         }
 
+        [Authorize(Roles = "UserBFK, AdminBFK, AdminBwst")]
         [HttpPost("[action]")]
-        public async Task<IActionResult> Add([FromBody] AppointmentViewModel model)
+        public async Task<IActionResult> Add([FromBody] AppointmentViewModel viewModel)
         {
-            var id = await _service.Add(model);
+            try
+            {
+                var id = await _service.AddAsync(viewModel);
+                return Ok(new { id });
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
 
-            if (!_service.ModelState.IsValid)
-                return BadRequest(_service.ModelState);
+        [Authorize(Roles = "UserBFK, AdminBFK, AdminBwst")]
+        [HttpGet("[action]/{id:int}")]
+        public async Task<IActionResult> Delete([FromHeader] int id)
+        {
+            try
+            {
+                var email = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Email).Value;
+                
 
-            return Ok(new {id});
+                await _service.RemoveAsync(id);
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Update([FromBody] AppointmentViewModel viewModel)
+        {
+            try
+            {
+                await _service.UpdateAsync(viewModel);
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("[action]/{id:int}")]
+        public async Task<IActionResult> Find([FromHeader] int id)
+        {
+            try
+            {
+                var dto = await _service.FindAsync(id);
+                return Ok(dto);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("[action]")]
+        public IActionResult All()
+        {
+            try
+            {
+                var appointmenDtos = _service.All();
+                return Ok(appointmenDtos);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("[action]")]
+        public IActionResult Types()
+        {
+            return Enum.GetNames(AppointmentTypes);
         }
 
         /*[HttpGet("delete/{appointmentId:int}")]
