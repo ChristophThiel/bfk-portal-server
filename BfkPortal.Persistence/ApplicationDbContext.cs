@@ -1,13 +1,12 @@
 ﻿using System;
 using System.IO;
 using BfkPortal.Core.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BfkPortal.Persistence
 {
-    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
+    public class ApplicationDbContext : IdentityDbContext<User, Role, int>
     {
         public DbSet<Appointment> Appointments { get; set; }
 

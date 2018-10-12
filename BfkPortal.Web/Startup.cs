@@ -3,12 +3,13 @@ using BfkPortal.Core.Models;
 using BfkPortal.Persistence;
 using BfkPortal.Persistence.Contracts;
 using BfkPortal.Web.Contracts;
+using BfkPortal.Web.Services;
 using BfkPortal.Web.Services.Converters;
 using BfkPortal.Web.ViewModels;
+using BfkPortal.Web.ViewModels.DataTransferObjects;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -28,7 +29,7 @@ namespace BfkPortal.Web
         {
             services.AddDbContext<ApplicationDbContext>();
             services.AddDefaultIdentity<User>()
-                .AddRoles<IdentityRole>()
+                .AddRoles<Role>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -47,6 +48,8 @@ namespace BfkPortal.Web
             
             services.AddScoped<IUnitOfWork, UnitOfWork>(serviceProvider => new UnitOfWork());
             services.AddScoped<IConverter<UserViewModel, User>, UserViewModelToUserConverter>();
+            services.AddScoped<IConverter<User, UserDto>, UserToUserDtoConverter>();
+            services.AddScoped<IAppointmentService, AppointmentService>();
 
             services.AddMvc();
         }

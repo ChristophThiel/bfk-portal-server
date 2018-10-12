@@ -2,16 +2,65 @@
 using System.Linq;
 using System.Threading.Tasks;
 using BfkPortal.Core.Models;
+using BfkPortal.Persistence.Contracts;
 using BfkPortal.Web.Contracts;
-using BfkPortal.Web.Security;
 using BfkPortal.Web.ViewModels;
 using BfkPortal.Web.ViewModels.DataTransferObjects;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Identity;
 
 namespace BfkPortal.Web.Services
 {
-    public class UserService //: GenericService<User, UserViewModel, UserDto>, IUserService
+    public class UserService : IUserService
     {
+        public UserManager<User> UserManager { get; set; }
+
+        public IUnitOfWork UnitOfWork { get; }
+
+        public IConverter<UserViewModel, User> ViewModelToModelConverter { get; }
+
+        public IConverter<User, UserDto> ModelToDtoConverter { get; }
+
+        public UserService(UserManager<User> userManager, IUnitOfWork unitOfWork,
+            IConverter<UserViewModel, User> viewModelToModelConverter, IConverter<User, UserDto> modelToDtoConverter)
+        {
+            UserManager = userManager;
+            UnitOfWork = unitOfWork;
+            ViewModelToModelConverter = viewModelToModelConverter;
+            ModelToDtoConverter = modelToDtoConverter;
+        }
+
+        public async Task<int> AddAsync(UserViewModel viewModel)
+        {
+            var model = await ViewModelToModelConverter.Convert(viewModel);
+            await UserManager.CreateAsync(model);
+
+            return model.Id;
+        }
+
+        public IEnumerable<UserDto> All()
+        {
+            return UserManager.Users.AsEnumerable()
+                .Select(u => ModelToDtoConverter.Convert(u).Result);
+        }
+
+        public async Task<UserDto> FindAsync(int id)
+        {
+            return await ModelToDtoConverter.Convert(await UserManager.FindByIdAsync(id.ToString()));
+        }
+        
+        public async Task RemoveAsync(int id)
+        {
+            var user = await UserManager.FindByIdAsync(id.ToString());
+            user.IsDeleted = true;
+            await UserManager.UpdateAsync(user);
+        }
+
+        public async Task UpdateAsync(UserViewModel viewModel)
+        {
+            var user = await ViewModelToModelConverter.Convert(viewModel);
+            await UserManager.UpdateAsync(user);
+        }
+
         /*public UserService(ModelStateDictionary modelState) : base(modelState) { }
 
         public override IEnumerable<UserDto> All()

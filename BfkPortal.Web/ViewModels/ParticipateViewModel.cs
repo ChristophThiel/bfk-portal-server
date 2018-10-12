@@ -2,7 +2,7 @@
 
 namespace BfkPortal.Web.ViewModels
 {
-    public class ParticipateViewModel
+    public class ParticipationViewModel
     {
         [Required]
         public int? AppointmentId { get; set; }

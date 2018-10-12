@@ -12,7 +12,15 @@ namespace BfkPortal.Web.Services.Converters
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<User> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<Role> _roleManager;
+
+        public UserViewModelToUserConverter(IUnitOfWork unitOfWork, UserManager<User> userManager,
+            RoleManager<Role> roleManager)
+        {
+            _unitOfWork = unitOfWork;
+            _userManager = userManager;
+            _roleManager = roleManager;
+        }
 
         public async Task<User> Convert(UserViewModel source)
         {

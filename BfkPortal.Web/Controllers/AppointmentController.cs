@@ -1,11 +1,12 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
+using BfkPortal.Core.Models;
 using BfkPortal.Core.Models.Enums;
 using BfkPortal.Web.Contracts;
-using BfkPortal.Web.Services;
 using BfkPortal.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BfkPortal.Web.Controllers
@@ -39,12 +40,16 @@ namespace BfkPortal.Web.Controllers
 
         [Authorize(Roles = "UserBFK, AdminBFK, AdminBwst")]
         [HttpGet("[action]/{id:int}")]
-        public async Task<IActionResult> Delete([FromHeader] int id)
+        public async Task<IActionResult> Delete([FromHeader] int id, [FromServices] IAuthorizeService authorizationService)
         {
             try
             {
                 var email = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Email).Value;
-                
+                if (!(await authorizationService.IsAdminBfk(email)) && !(await authorizationService.IsAdminBwst(email)))
+                {
+                    if (!(await authorizationService.IsOwner(id, email)))
+                        return Unauthorized();
+                }
 
                 await _service.RemoveAsync(id);
                 return Ok();
@@ -55,11 +60,19 @@ namespace BfkPortal.Web.Controllers
             }
         }
 
+        [Authorize(Roles = "UserBFK, AdminBFK, AdminBwst")]
         [HttpPost("[action]")]
-        public async Task<IActionResult> Update([FromBody] AppointmentViewModel viewModel)
+        public async Task<IActionResult> Update([FromBody] AppointmentViewModel viewModel, [FromServices] IAuthorizeService authorizationService)
         {
             try
             {
+                var email = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Email).Value;
+                if (!(await authorizationService.IsAdminBfk(email)) && !(await authorizationService.IsAdminBwst(email)))
+                {
+                    if (!(await authorizationService.IsOwner(viewModel.Id, email)))
+                        return Unauthorized();
+                }
+
                 await _service.UpdateAsync(viewModel);
                 return Ok();
             }
@@ -100,7 +113,44 @@ namespace BfkPortal.Web.Controllers
         [HttpGet("[action]")]
         public IActionResult Types()
         {
-            return Enum.GetNames(AppointmentTypes);
+            return Ok(Enum.GetNames(typeof(AppointmentTypes)));
+        }
+
+        [Authorize(Roles = "UserBfk, AdminBfk, AdminBwst")]
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Participate([FromBody] ParticipationViewModel viewModel, [FromServices] UserManager<User> userManager)
+        {
+            try
+            {
+                var email = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Email).Value;
+                var user = await userManager.FindByEmailAsync(email);
+
+                await _service.ParticipateAsync(viewModel.AppointmentId.Value, viewModel.ParticipantId.Value);
+
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Unparticipate([FromBody] ParticipationViewModel viewModel, [FromServices] UserManager<User> userManager)
+        {
+            try
+            {
+                var email = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Email).Value;
+                var user = await userManager.FindByEmailAsync(email);
+
+                await _service.ParticipateAsync(viewModel.AppointmentId.Value, viewModel.ParticipantId.Value);
+
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         /*[HttpGet("delete/{appointmentId:int}")]

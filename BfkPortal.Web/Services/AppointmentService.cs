@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BfkPortal.Core.Models;
@@ -32,6 +31,8 @@ namespace BfkPortal.Web.Services
             var model = await ViewModelToModelConverter.Convert(viewModel);
             UnitOfWork.Appointments.Add(model);
 
+            await UnitOfWork.SaveChangesAsync();
+
             return model.Id;
         }
 
@@ -48,12 +49,46 @@ namespace BfkPortal.Web.Services
         public async Task RemoveAsync(int id)
         {
             UnitOfWork.Appointments.Remove(await UnitOfWork.Appointments.FindAsync(id));
+
+            await UnitOfWork.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(AppointmentViewModel viewModel)
         {
             var model = await ViewModelToModelConverter.Convert(viewModel);
             UnitOfWork.Appointments.Update(model);
+
+            await UnitOfWork.SaveChangesAsync();
+        }
+
+        public async Task ParticipateAsync(int appointmentId, int particpantId)
+        {
+            var appointment = await UnitOfWork.Appointments.FindAsync(appointmentId);
+            if (appointment.AreParticipantsOrganisations.Value)
+            {
+                var organisation = await UnitOfWork.Organisations.FindAsync(particpantId);
+                appointment.Participations.Add(new Participation
+                {
+                    Appointment = appointment,
+                    Organisation = organisation
+                });
+            }
+            else
+            {
+                var user = await UnitOfWork.Users.FindAsync(particpantId);
+                appointment.Participations.Add(new Participation
+                {
+                    Appointment = appointment,
+                    User = user
+                });
+            }
+
+            await UnitOfWork.SaveChangesAsync();
+        }
+
+        public Task UnparticipateAsync(int appointmentId, int participantId)
+        {
+            throw new System.NotImplementedException();
         }
 
         /* public AppointmentService(ModelStateDictionary modelState) : base(modelState) { }

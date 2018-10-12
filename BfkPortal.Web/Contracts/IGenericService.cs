@@ -6,7 +6,7 @@ using BfkPortal.Persistence.Contracts;
 namespace BfkPortal.Web.Contracts
 {
     public interface IGenericService<TModel, TViewModel, TModelDto> 
-        where TModel : IEntityObject where TViewModel : IEntityViewModel
+        where TModel : class where TViewModel : IEntityViewModel
     {
         IUnitOfWork UnitOfWork { get; }
 

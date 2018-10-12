@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using BfkPortal.Web.Contracts;
-using BfkPortal.Web.Services;
 using BfkPortal.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,11 +8,11 @@ namespace BfkPortal.Web.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly IUserService _service;
+        /*private readonly IUserService _service;
 
-        public UserController()
+        public UserController(IUserService service)
         {
-            // _service = new UserService(ModelState);
+            _service = service;
         }
         
         [HttpPost("[action]")]
@@ -28,7 +27,7 @@ namespace BfkPortal.Web.Controllers
             if (!_service.ModelState.IsValid)
                 return BadRequest(_service.ModelState);
 
-            return Ok(new {id}); */
+            return Ok(new {id}); 
         }
 
         [HttpGet("[action]/{userId:int}")]
@@ -39,7 +38,7 @@ namespace BfkPortal.Web.Controllers
             if (!_service.ModelState.IsValid)
                 return BadRequest(_service.ModelState);
 
-            return Ok();*/
+            return Ok();
             return BadRequest();
         }
 
@@ -54,7 +53,7 @@ namespace BfkPortal.Web.Controllers
             if (!_service.ModelState.IsValid)
                 return BadRequest(_service.ModelState);
 
-            return Ok();*/
+            return Ok();
             return BadRequest();
         }
 
@@ -62,6 +61,6 @@ namespace BfkPortal.Web.Controllers
         //public IActionResult All() => Ok(_service.All());
 
         [HttpGet("[action]")]
-        public IActionResult Roles() => Ok(_service.Roles());
+        public IActionResult Roles() => Ok(_service.Roles());*/
     }
 }

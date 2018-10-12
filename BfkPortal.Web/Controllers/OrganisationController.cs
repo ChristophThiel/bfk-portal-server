@@ -9,7 +9,7 @@ namespace BfkPortal.Web.Controllers
     [Route("api/[controller]")]
     public class OrganisationController : ControllerBase
     {
-        private readonly IOrganisationService _service;
+        /*private readonly IOrganisationService _service;
 
         public OrganisationController()
         {
@@ -55,6 +55,6 @@ namespace BfkPortal.Web.Controllers
         }
 
         [HttpGet("all")]
-        public IActionResult All() => Ok(_service.All());
+        public IActionResult All() => Ok(_service.All());*/
     }
 }
