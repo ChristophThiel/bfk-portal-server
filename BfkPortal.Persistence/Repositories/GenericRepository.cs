@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BfkPortal.Core.Models;
 using BfkPortal.Persistence.Contracts;
 using Microsoft.EntityFrameworkCore;
 
 namespace BfkPortal.Persistence.Repositories
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : class
+    public class GenericRepository<T> : IGenericRepository<T> where T : EntityObject
     {
         private DbContext _context;
 
@@ -29,8 +30,15 @@ namespace BfkPortal.Persistence.Repositories
 
         public async Task<T> FindAsync(int id)
         {
-            await _context.Set<T>().LoadAsync();
-            var entity = await _context.FindAsync<T>(id);
+            var includes = typeof(T).GetProperties()
+                .Where(p => p.GetType() == typeof(EntityObject))
+                .Select(p => p.Name);
+            var query = _context.Set<T>().AsQueryable();
+            foreach (var include in properties)
+                query.Include(include)
+            //var entity = await _context.FindAsync<T>(id);
+            var entity = query.Fi
+            await query.SingleOrDefaultAsync();
             return entity;
         }
 

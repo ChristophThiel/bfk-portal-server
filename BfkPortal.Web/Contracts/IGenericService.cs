@@ -18,7 +18,7 @@ namespace BfkPortal.Web.Contracts
 
         Task RemoveAsync(int id);
 
-        Task UpdateAsync(TViewModel viewModel);
+        Task<int> UpdateAsync(TViewModel viewModel);
 
         Task<TModelDto> FindAsync(int id);
 

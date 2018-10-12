@@ -44,7 +44,8 @@ namespace BfkPortal.Web.Controllers
                 Lastname = model.Lastname,
                 Email = model.Email,
                 IsDeleted = model.IsDeleted ?? false,
-                Participations = new List<Participation>()
+                Participations = new List<Participation>(),
+                Memberships = new List<Membership>()
             };
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result != IdentityResult.Success)
@@ -64,9 +65,10 @@ namespace BfkPortal.Web.Controllers
 
         [AllowAnonymous]
         [HttpPost("[action]")]
-        public async Task<IActionResult> LogIn([FromBody] CredentialsViewModel model)
+        public async Task<IActionResult> LogIn([FromBody] CredentialsViewModel model, [FromServices] IUnitOfWork unitOfWork)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
+            // var test = await unitOfWork.Users.FindAsync(user.Id);
             if (user == null)
                 return BadRequest(Constants.InvalidEmailOrPassword);
 

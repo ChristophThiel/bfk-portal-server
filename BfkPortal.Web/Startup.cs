@@ -52,6 +52,10 @@ namespace BfkPortal.Web
             services.AddScoped<IConverter<User, UserDto>, UserToUserDtoConverter>();
             services.AddScoped<IConverter<OrganisationViewModel, Organisation>, OrganisationViewModelToOrganisationConverter>();
             services.AddScoped<IConverter<Organisation, OrganisationDto>, OrganisationToOrganisationDtoConverter>();
+            services.AddScoped<IConverter<AppointmentViewModel, Appointment>, AppointmentViewModelToAppointmentConverter>();
+            services.AddScoped<IConverter<Appointment, AppointmentDto>, AppointmentToAppointmentDtoConverter>();
+            services.AddScoped<IConverter<OfferViewModel, Offer>, OfferViewModelToOfferConverter>();
+            services.AddScoped<IConverter<Offer, OfferDto>, OfferToOfferDtoConverter>();
 
             services.AddScoped<IAppointmentService, AppointmentService>();
 

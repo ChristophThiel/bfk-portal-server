@@ -55,10 +55,12 @@ namespace BfkPortal.Web.Services
             await UserManager.UpdateAsync(user);
         }
 
-        public async Task UpdateAsync(UserViewModel viewModel)
+        public async Task<int> UpdateAsync(UserViewModel viewModel)
         {
             var user = await ViewModelToModelConverter.Convert(viewModel);
             await UserManager.UpdateAsync(user);
+
+            return user.Id;
         }
 
         /*public UserService(ModelStateDictionary modelState) : base(modelState) { }

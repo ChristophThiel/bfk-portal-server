@@ -73,8 +73,8 @@ namespace BfkPortal.Web.Controllers
                         return Unauthorized();
                 }
 
-                await _service.UpdateAsync(viewModel);
-                return Ok();
+                var id = await _service.UpdateAsync(viewModel);
+                return Ok(new { id });
             }
             catch
             {
@@ -143,7 +143,26 @@ namespace BfkPortal.Web.Controllers
                 var email = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Email).Value;
                 var user = await userManager.FindByEmailAsync(email);
 
-                await _service.ParticipateAsync(viewModel.AppointmentId.Value, viewModel.ParticipantId.Value);
+                await _service.UnparticipateAsync(viewModel.AppointmentId.Value, viewModel.ParticipantId.Value);
+
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [Authorize(Roles = "UserBwst, AdminBwst")]
+        [HttpGet("[action]/{id:int}")]
+        public async Task<IActionResult> Offer(int id, [FromServices] UserManager<User> userManager)
+        {
+            try
+            {
+                var email = HttpContext.User.FindFirst(JwtRegisteredClaimNames.Email).Value;
+                var user = await userManager.FindByEmailAsync(email);
+
+                await _service.OfferDuty(id, user.Id);
 
                 return Ok();
             }

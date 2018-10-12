@@ -16,7 +16,7 @@ namespace BfkPortal.Persistence
 
         public IGenericRepository<Organisation> Organisations { get; }
 
-        public IGenericRepository<User> Users { get; }
+        //public IGenericRepository<User> Users { get; }
 
         public IGenericRepository<Membership> Memberships { get; }
 
@@ -28,7 +28,7 @@ namespace BfkPortal.Persistence
             Appointments = new GenericRepository<Appointment>(_context);
             Offers = new GenericRepository<Offer>(_context);
             Organisations = new GenericRepository<Organisation>(_context);
-            Users = new GenericRepository<User>(_context);
+            //Users = new GenericRepository<User>(_context);
             Memberships = new GenericRepository<Membership>(_context);
             Participations = new GenericRepository<Participation>(_context);
         }

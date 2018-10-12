@@ -13,6 +13,8 @@ namespace BfkPortal.Web.Services
     {
         public IUnitOfWork UnitOfWork { get; }
 
+
+
         public IConverter<AppointmentViewModel, Appointment> ViewModelToModelConverter { get; }
 
         public IConverter<Appointment, AppointmentDto> ModelToDtoConverter { get; }
@@ -53,17 +55,22 @@ namespace BfkPortal.Web.Services
             await UnitOfWork.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(AppointmentViewModel viewModel)
+        public async Task<int> UpdateAsync(AppointmentViewModel viewModel)
         {
             var model = await ViewModelToModelConverter.Convert(viewModel);
             UnitOfWork.Appointments.Update(model);
 
             await UnitOfWork.SaveChangesAsync();
+
+            return model.Id;
         }
 
         public async Task ParticipateAsync(int appointmentId, int particpantId)
         {
             var appointment = await UnitOfWork.Appointments.FindAsync(appointmentId);
+            if (IsParticipant(appointment, particpantId))
+                return;
+
             if (appointment.AreParticipantsOrganisations.Value)
             {
                 var organisation = await UnitOfWork.Organisations.FindAsync(particpantId);
@@ -86,9 +93,50 @@ namespace BfkPortal.Web.Services
             await UnitOfWork.SaveChangesAsync();
         }
 
-        public Task UnparticipateAsync(int appointmentId, int participantId)
+        public async Task UnparticipateAsync(int appointmentId, int participantId)
         {
-            throw new System.NotImplementedException();
+            var appointment = await UnitOfWork.Appointments.FindAsync(appointmentId);
+            if (IsParticipant(appointment, participantId))
+                return;
+        
+            foreach (var participant in appointment.Participations)
+            {
+                if (participant.OrganisationId == participantId || participant.UserId == participantId)
+                    appointment.Participations.Remove(participant);
+            }
+
+            await UnitOfWork.SaveChangesAsync();
+        }
+
+        public async Task OfferDuty(int appointmentId, int userId)
+        {
+            var appointment = await UnitOfWork.Appointments.FindAsync(appointmentId);
+
+            if (appointment.OwnerId == userId)
+            {
+                appointment.Type = Core.Models.Enums.AppointmentTypes.MarktplatzDienst;
+                UnitOfWork.Appointments.Update(appointment);
+            }
+
+            await UnitOfWork.SaveChangesAsync();
+        }
+
+        private bool IsParticipant(Appointment appointment, int participantId)
+        {
+            foreach (var participant in appointment.Participations)
+            {
+                if (appointment.AreParticipantsOrganisations.Value)
+                {
+                    if (participant.OrganisationId == participantId)
+                        return true;
+                }
+                else
+                {
+                    if (participant.UserId == participantId)
+                        return true;
+                }
+            }
+            return false;
         }
 
         /* public AppointmentService(ModelStateDictionary modelState) : base(modelState) { }

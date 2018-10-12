@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using BfkPortal.Core.Models;
 using BfkPortal.Persistence.Contracts;
@@ -14,16 +12,31 @@ namespace BfkPortal.Web.Services.Converters
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<User> _userManager;
+        private readonly IConverter<User, UserDto> _userToUserDtoConverter;
+        private readonly IConverter<Appointment, AppointmentDto> _appointmentToAppointmentDtoConverter;
 
-        public OfferToOfferDtoConverter(IUnitOfWork unitOfWork, UserManager<User> userManager)
+        public OfferToOfferDtoConverter(IUnitOfWork unitOfWork, UserManager<User> userManager, IConverter<User, UserDto> userToUserDtoConverter,
+            IConverter<Appointment, AppointmentDto> appointmentToAppointmentDtoConverter)
         {
             _unitOfWork = unitOfWork;
             _userManager = userManager;
+            _userToUserDtoConverter = userToUserDtoConverter;
+            _appointmentToAppointmentDtoConverter = appointmentToAppointmentDtoConverter;
         }
 
-        public Task<OfferDto> Convert(Offer source)
+        public async Task<OfferDto> Convert(Offer source)
         {
-            throw new NotImplementedException();
+            var destination = new OfferDto
+            {
+                Id = source.Id,
+                Status = source.Status.ToString(),
+                Sender = await _userToUserDtoConverter.Convert(await _userManager.FindByIdAsync(source.SenderId.ToString())),
+                Receiver = await _userToUserDtoConverter.Convert(await _userManager.FindByIdAsync(source.ReceiverId.ToString())),
+                SenderAppointment = await _appointmentToAppointmentDtoConverter.Convert(await _unitOfWork.Appointments.FindAsync(source.SenderAppointmentId)),
+                ReceiverAppointment = await _appointmentToAppointmentDtoConverter.Convert(await _unitOfWork.Appointments.FindAsync(source.ReceiverAppointmentId)),
+            };
+
+            return destination;
         }
     }
 }
