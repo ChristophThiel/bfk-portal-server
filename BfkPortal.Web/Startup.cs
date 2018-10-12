@@ -47,8 +47,12 @@ namespace BfkPortal.Web
             });
             
             services.AddScoped<IUnitOfWork, UnitOfWork>(serviceProvider => new UnitOfWork());
+
             services.AddScoped<IConverter<UserViewModel, User>, UserViewModelToUserConverter>();
             services.AddScoped<IConverter<User, UserDto>, UserToUserDtoConverter>();
+            services.AddScoped<IConverter<OrganisationViewModel, Organisation>, OrganisationViewModelToOrganisationConverter>();
+            services.AddScoped<IConverter<Organisation, OrganisationDto>, OrganisationToOrganisationDtoConverter>();
+
             services.AddScoped<IAppointmentService, AppointmentService>();
 
             services.AddMvc();

@@ -9,12 +9,5 @@ namespace BfkPortal.Web.ViewModels.DataTransferObjects
         public string Name { get; set; }
 
         public bool IsDeleted { get; set; }
-
-        public OrganisationDto(Organisation o)
-        {
-            Id = o.Id;
-            Name = o.Name;
-            IsDeleted = o.IsDeleted;
-        }
     }
 }
