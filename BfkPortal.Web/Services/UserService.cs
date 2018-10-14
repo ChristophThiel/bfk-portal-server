@@ -1,26 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BfkPortal.Core.Models;
-using BfkPortal.Persistence.Contracts;
-using BfkPortal.Web.Contracts;
-using BfkPortal.Web.ViewModels;
-using BfkPortal.Web.ViewModels.DataTransferObjects;
-using Microsoft.AspNetCore.Identity;
-
-namespace BfkPortal.Web.Services
+﻿namespace BfkPortal.Web.Services
 {
-    public class UserService : IUserService
+    public class UserService //: IUserService
     {
-        public UserManager<User> UserManager { get; set; }
-
-        public IUnitOfWork UnitOfWork { get; }
+        /* public IUnitOfWork UnitOfWork { get; }
 
         public IConverter<UserViewModel, User> ViewModelToModelConverter { get; }
 
         public IConverter<User, UserDto> ModelToDtoConverter { get; }
 
-        public UserService(UserManager<User> userManager, IUnitOfWork unitOfWork,
+        public UserService(IUnitOfWork unitOfWork,
             IConverter<UserViewModel, User> viewModelToModelConverter, IConverter<User, UserDto> modelToDtoConverter)
         {
             UserManager = userManager;

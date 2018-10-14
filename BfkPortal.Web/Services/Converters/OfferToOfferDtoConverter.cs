@@ -11,11 +11,10 @@ namespace BfkPortal.Web.Services.Converters
     public class OfferToOfferDtoConverter : IConverter<Offer, OfferDto>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly UserManager<User> _userManager;
         private readonly IConverter<User, UserDto> _userToUserDtoConverter;
         private readonly IConverter<Appointment, AppointmentDto> _appointmentToAppointmentDtoConverter;
 
-        public OfferToOfferDtoConverter(IUnitOfWork unitOfWork, UserManager<User> userManager, IConverter<User, UserDto> userToUserDtoConverter,
+        public OfferToOfferDtoConverter(IUnitOfWork unitOfWork, IConverter<User, UserDto> userToUserDtoConverter,
             IConverter<Appointment, AppointmentDto> appointmentToAppointmentDtoConverter)
         {
             _unitOfWork = unitOfWork;

@@ -17,12 +17,8 @@ namespace BfkPortal.Persistence.Contracts
 
         void UpdateRange(IEnumerable<T> entities);
 
-        Task<T> FindAsync(int id);
+        Task<T> FindAsync(int id, params string[] includes);
 
-        /* Task LoadCollectionAsync(T entity, string propertyName);
-
-        Task LoadReferenceAsync(T entity, string propertyName); */
-
-        IEnumerable<T> All();
+        IEnumerable<T> All(params string[] includes);
     }
 }

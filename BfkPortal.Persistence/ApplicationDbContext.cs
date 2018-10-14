@@ -1,13 +1,16 @@
 ﻿using System;
 using System.IO;
 using BfkPortal.Core.Models;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BfkPortal.Persistence
 {
-    public class ApplicationDbContext : IdentityDbContext<User, Role, int>
+    public class ApplicationDbContext : DbContext
     {
+        public DbSet<User> Users { get; set; }
+
+        public DbSet<Role> Roles { get; set; }
+
         public DbSet<Appointment> Appointments { get; set; }
 
         public DbSet<Offer> Offers { get; set; }
@@ -17,6 +20,8 @@ namespace BfkPortal.Persistence
         public DbSet<Membership> Memberships { get; set; }
 
         public DbSet<Participation> Participations { get; set; }
+
+        public DbSet<Entitlement> Entitlements { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

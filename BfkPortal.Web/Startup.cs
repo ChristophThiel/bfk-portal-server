@@ -2,12 +2,15 @@
 using BfkPortal.Core.Models;
 using BfkPortal.Persistence;
 using BfkPortal.Persistence.Contracts;
+using BfkPortal.Web.Authorization;
+using BfkPortal.Web.Authorization.Requirements;
 using BfkPortal.Web.Contracts;
 using BfkPortal.Web.Services;
 using BfkPortal.Web.Services.Converters;
 using BfkPortal.Web.ViewModels;
 using BfkPortal.Web.ViewModels.DataTransferObjects;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -28,9 +31,6 @@ namespace BfkPortal.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>();
-            services.AddDefaultIdentity<User>()
-                .AddRoles<Role>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -45,19 +45,29 @@ namespace BfkPortal.Web
                     RequireExpirationTime = false
                 };
             });
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("OwnerOfAppointment", policy => policy.Requirements.Add(new EmptyRequirement()));
+            });
             
             services.AddScoped<IUnitOfWork, UnitOfWork>(serviceProvider => new UnitOfWork());
 
+            // Converters
             services.AddScoped<IConverter<UserViewModel, User>, UserViewModelToUserConverter>();
             services.AddScoped<IConverter<User, UserDto>, UserToUserDtoConverter>();
-            services.AddScoped<IConverter<OrganisationViewModel, Organisation>, OrganisationViewModelToOrganisationConverter>();
+            // services.AddScoped<IConverter<OrganisationViewModel, Organisation>, OrganisationViewModelToOrganisationConverter>();
             services.AddScoped<IConverter<Organisation, OrganisationDto>, OrganisationToOrganisationDtoConverter>();
             services.AddScoped<IConverter<AppointmentViewModel, Appointment>, AppointmentViewModelToAppointmentConverter>();
             services.AddScoped<IConverter<Appointment, AppointmentDto>, AppointmentToAppointmentDtoConverter>();
-            services.AddScoped<IConverter<OfferViewModel, Offer>, OfferViewModelToOfferConverter>();
-            services.AddScoped<IConverter<Offer, OfferDto>, OfferToOfferDtoConverter>();
-
+            /*services.AddScoped<IConverter<OfferViewModel, Offer>, OfferViewModelToOfferConverter>();
+            services.AddScoped<IConverter<Offer, OfferDto>, OfferToOfferDtoConverter>(); */
+            
+            // Services
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IAppointmentService, AppointmentService>();
+            
+            // Policy Handlers
+            services.AddTransient<IAuthorizationHandler, OwnerOfAppointmentHandler>();
 
             services.AddMvc();
         }

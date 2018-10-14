@@ -14,15 +14,14 @@ namespace BfkPortal.Web.Security
 
         public string HashPassword(User user, string password)
         {
-            //var salt = Convert.FromBase64String(user.Salt);
+            var salt = Convert.FromBase64String(user.Salt);
 
-            /*var hash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+            var hash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
                 password,
                 salt,
                 KeyDerivationPrf.HMACSHA1,
                 Iterations, HashLength));
-            return hash;*/
-            return "";
+            return hash;
         }
 
         public PasswordVerificationResult VerifyHashedPassword(User user, string hashedPassword, string providedPassword)

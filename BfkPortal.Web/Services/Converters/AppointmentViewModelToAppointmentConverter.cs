@@ -7,19 +7,16 @@ using BfkPortal.Core.Models.Enums;
 using BfkPortal.Persistence.Contracts;
 using BfkPortal.Web.Contracts;
 using BfkPortal.Web.ViewModels;
-using Microsoft.AspNetCore.Identity;
 
 namespace BfkPortal.Web.Services.Converters
 {
     public class AppointmentViewModelToAppointmentConverter : IConverter<AppointmentViewModel, Appointment>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly UserManager<User> _userManager;
 
-        public AppointmentViewModelToAppointmentConverter(IUnitOfWork unitOfWork, UserManager<User> userManager)
+        public AppointmentViewModelToAppointmentConverter(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _userManager = userManager;
         }
 
         public async Task<Appointment> Convert(AppointmentViewModel source)
@@ -39,7 +36,8 @@ namespace BfkPortal.Web.Services.Converters
             if (DateTime.TryParse(source.Deadline, null, DateTimeStyles.RoundtripKind, out var deadline))
                 destination.Deadline = deadline;
             destination.IsVisible = source.IsVisible ?? false;
-            destination.Owner = await _userManager.FindByIdAsync(source.Owner.ToString());
+            if (source.Owner.HasValue)
+                destination.Owner = await _unitOfWork.Users.FindAsync(source.Owner.Value, nameof(User.Entitlements), nameof(User.Memberships));
             destination.Participations = new List<Participation>();
 
             foreach (var participant in source.Participations)

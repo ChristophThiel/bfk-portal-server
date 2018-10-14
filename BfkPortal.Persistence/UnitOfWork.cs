@@ -9,18 +9,23 @@ namespace BfkPortal.Persistence
     public class UnitOfWork : IUnitOfWork
     {
         private ApplicationDbContext _context;
-
+        
         public IGenericRepository<Appointment> Appointments { get; }
 
         public IGenericRepository<Offer> Offers { get; }
 
         public IGenericRepository<Organisation> Organisations { get; }
 
-        //public IGenericRepository<User> Users { get; }
+        public IGenericRepository<User> Users { get; }
+
+        public IGenericRepository<Role> Roles { get; }
 
         public IGenericRepository<Membership> Memberships { get; }
 
         public IGenericRepository<Participation> Participations { get; }
+
+        public IGenericRepository<Entitlement> Entitlements { get; }
+
 
         public UnitOfWork()
         {
@@ -28,9 +33,11 @@ namespace BfkPortal.Persistence
             Appointments = new GenericRepository<Appointment>(_context);
             Offers = new GenericRepository<Offer>(_context);
             Organisations = new GenericRepository<Organisation>(_context);
-            //Users = new GenericRepository<User>(_context);
+            Users = new GenericRepository<User>(_context);
+            Roles = new GenericRepository<Role>(_context);
             Memberships = new GenericRepository<Membership>(_context);
             Participations = new GenericRepository<Participation>(_context);
+            Entitlements = new GenericRepository<Entitlement>(_context);
         }
 
         public async Task SaveChangesAsync()

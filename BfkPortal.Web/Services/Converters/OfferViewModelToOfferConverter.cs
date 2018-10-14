@@ -14,9 +14,8 @@ namespace BfkPortal.Web.Services.Converters
     public class OfferViewModelToOfferConverter : IConverter<OfferViewModel, Offer>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly UserManager<User> _userManager;
 
-        public OfferViewModelToOfferConverter(IUnitOfWork unitOfWork, UserManager<User> userManager)
+        public OfferViewModelToOfferConverter(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
             _userManager = userManager;

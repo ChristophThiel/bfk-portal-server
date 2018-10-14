@@ -5,6 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Services\Converters\OfferToOfferDtoConverter.cs" />
+    <Compile Remove="Services\Converters\OfferViewModelToOfferConverter.cs" />
+    <Compile Remove="Services\Converters\OrganisationViewModelToOrganisationConverter.cs" />
     <Compile Remove="Services\GenericService.cs" />
   </ItemGroup>
 
@@ -13,7 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.4" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.5" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 
   <ItemGroup>
