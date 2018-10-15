@@ -26,10 +26,18 @@ namespace BfkPortal.Web.Services.Converters
             {
                 Id = source.Id,
                 Status = source.Status.ToString(),
-                Sender = await _userToUserDtoConverter.Convert(await _unitOfWork.Users.FindAsync(source.SenderId)),
-                Receiver = await _userToUserDtoConverter.Convert(await _unitOfWork.Users.FindAsync(source.ReceiverId)),
-                SenderAppointment = await _appointmentToAppointmentDtoConverter.Convert(await _unitOfWork.Appointments.FindAsync(source.SenderAppointmentId)),
-                ReceiverAppointment = await _appointmentToAppointmentDtoConverter.Convert(await _unitOfWork.Appointments.FindAsync(source.ReceiverAppointmentId)),
+                Sender = await _userToUserDtoConverter
+                    .Convert(await _unitOfWork.Users
+                        .FindAsync(source.SenderId, nameof(User.Entitlements), nameof(User.Memberships))),
+                Receiver = await _userToUserDtoConverter
+                    .Convert(await _unitOfWork.Users
+                        .FindAsync(source.ReceiverId, nameof(User.Entitlements), nameof(User.Memberships))),
+                SenderAppointment = await _appointmentToAppointmentDtoConverter
+                    .Convert(await _unitOfWork.Appointments
+                        .FindAsync(source.SenderAppointmentId, nameof(Appointment.Participations), nameof(Appointment.Owner))),
+                ReceiverAppointment = await _appointmentToAppointmentDtoConverter
+                    .Convert(await _unitOfWork.Appointments
+                        .FindAsync(source.ReceiverAppointmentId, nameof(Appointment.Participations), nameof(Appointment.Owner))),
             };
 
             return destination;

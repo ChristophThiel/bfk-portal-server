@@ -17,9 +17,12 @@ namespace BfkPortal.Web.Services
         private readonly IConverter<OfferViewModel, Offer> _viewModelToModelConverter;
         private readonly IConverter<Offer, OfferDto> _modelToDtoConverter;
 
-        public OfferService(IUnitOfWork unitOfWork)
+        public OfferService(IUnitOfWork unitOfWork, IConverter<OfferViewModel, Offer> viewModelToModel,
+            IConverter<Offer, OfferDto> modelToDtoConverter)
         {
             _unitOfWork = unitOfWork;
+            _viewModelToModelConverter = viewModelToModel;
+            _modelToDtoConverter = modelToDtoConverter;
         }
 
         public async Task<int> AddAsync(OfferViewModel viewModel)

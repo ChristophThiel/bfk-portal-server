@@ -17,5 +17,8 @@
         // Policy
         public const string OwnerOfAppointmentPolicy = "OwnerOfAppointment";
         public const string FreeAppointmentPolicy = "FreeAppointment";
+
+        // File System
+        public const string FileStorageFolderName = "Files";
     }
 }

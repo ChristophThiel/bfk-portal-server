@@ -68,6 +68,13 @@ namespace BfkPortal.Web.Services
             if (IsParticipant(appointment, particpantId))
                 throw new Exception();
 
+            if (!appointment.MaxParticipants.HasValue)
+                throw new Exception();
+            else if (appointment.Participations.Count() == appointment.MaxParticipants)
+                throw new Exception();
+            else if (appointment.Deadline.HasValue && appointment.Deadline >= DateTime.Now)
+                throw new Exception();
+
             if (appointment.AreParticipantsOrganisations.Value)
             {
                 var organisation = await _unitOfWork.Organisations.FindAsync(particpantId);

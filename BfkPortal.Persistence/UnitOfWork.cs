@@ -20,12 +20,15 @@ namespace BfkPortal.Persistence
 
         public IGenericRepository<Role> Roles { get; }
 
+        public IGenericRepository<File> Files { get; }
+
         public IGenericRepository<Membership> Memberships { get; }
 
         public IGenericRepository<Participation> Participations { get; }
 
         public IGenericRepository<Entitlement> Entitlements { get; }
 
+        public IGenericRepository<Possession> Possessions { get; }
 
         public UnitOfWork()
         {
@@ -35,9 +38,11 @@ namespace BfkPortal.Persistence
             Organisations = new GenericRepository<Organisation>(_context);
             Users = new GenericRepository<User>(_context);
             Roles = new GenericRepository<Role>(_context);
+            Files = new GenericRepository<File>(_context);
             Memberships = new GenericRepository<Membership>(_context);
             Participations = new GenericRepository<Participation>(_context);
             Entitlements = new GenericRepository<Entitlement>(_context);
+            Possessions = new GenericRepository<Possession>(_context);
         }
 
         public async Task SaveChangesAsync()

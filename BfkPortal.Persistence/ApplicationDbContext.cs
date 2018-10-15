@@ -17,11 +17,15 @@ namespace BfkPortal.Persistence
 
         public DbSet<Organisation> Organisations { get; set; }
 
+        public DbSet<Core.Models.File> Files { get; set; }
+
         public DbSet<Membership> Memberships { get; set; }
 
         public DbSet<Participation> Participations { get; set; }
 
         public DbSet<Entitlement> Entitlements { get; set; }
+
+        public DbSet<Possession> Possessions { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

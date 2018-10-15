@@ -5,6 +5,7 @@ using BfkPortal.Persistence.Contracts;
 using BfkPortal.Web.Contracts;
 using BfkPortal.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BfkPortal.Web.Controllers
@@ -89,6 +90,14 @@ namespace BfkPortal.Web.Controllers
             unitOfWork.Organisations.Add(new Organisation
             {
                 Name = "Feuerwehr Marchtrenk",
+                IsDeleted = false,
+                Memberships = new List<Membership>(),
+                Participations = new List<Participation>()
+            });
+
+            unitOfWork.Organisations.Add(new Organisation
+            {
+                Name = "Feuerwehr Kappern",
                 IsDeleted = false,
                 Memberships = new List<Membership>(),
                 Participations = new List<Participation>()

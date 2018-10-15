@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -23,9 +24,12 @@ namespace BfkPortal.Web
     {
         public IConfiguration Configuration { get; }
 
-        public Startup(IConfiguration configuration)
+        public IHostingEnvironment Hosting { get; set; }
+
+        public Startup(IConfiguration configuration, IHostingEnvironment hosting)
         {
             Configuration = configuration;
+            Hosting = hosting;
         }
         
         public void ConfigureServices(IServiceCollection services)
@@ -68,12 +72,13 @@ namespace BfkPortal.Web
             services.AddScoped<IAppointmentService, AppointmentService>();
             services.AddScoped<IOfferService, OfferService>();
             services.AddScoped<IOrganisationService, OrganisationService>();
+            services.AddScoped<IFileService, FileService>();
             
             // Policy Handlers
             services.AddTransient<IAuthorizationHandler, OwnerOfAppointmentHandler>();
             services.AddTransient<IAuthorizationHandler, FreeAppointmentHandler>();
 
-            services.AddMvc();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

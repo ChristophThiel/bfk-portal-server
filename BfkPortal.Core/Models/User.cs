@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using BfkPortal.Core.Contracts;
-using Microsoft.AspNetCore.Identity;
 
 namespace BfkPortal.Core.Models
 {
@@ -30,6 +28,8 @@ namespace BfkPortal.Core.Models
         public ICollection<Participation> Participations { get; set; }
 
         public ICollection<Entitlement> Entitlements { get; set; }
+
+        public ICollection<Possession> Possessions { get; set; }
     }
 
     /* [Required]
