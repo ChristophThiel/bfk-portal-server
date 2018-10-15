@@ -1,10 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BfkPortal.Core.Models;
 using BfkPortal.Persistence.Contracts;
 using BfkPortal.Web.Contracts;
 using BfkPortal.Web.ViewModels.DataTransferObjects;
-using Microsoft.AspNetCore.Identity;
 
 namespace BfkPortal.Web.Services.Converters
 {
@@ -18,7 +16,6 @@ namespace BfkPortal.Web.Services.Converters
             IConverter<Appointment, AppointmentDto> appointmentToAppointmentDtoConverter)
         {
             _unitOfWork = unitOfWork;
-            _userManager = userManager;
             _userToUserDtoConverter = userToUserDtoConverter;
             _appointmentToAppointmentDtoConverter = appointmentToAppointmentDtoConverter;
         }
@@ -29,8 +26,8 @@ namespace BfkPortal.Web.Services.Converters
             {
                 Id = source.Id,
                 Status = source.Status.ToString(),
-                Sender = await _userToUserDtoConverter.Convert(await _userManager.FindByIdAsync(source.SenderId.ToString())),
-                Receiver = await _userToUserDtoConverter.Convert(await _userManager.FindByIdAsync(source.ReceiverId.ToString())),
+                Sender = await _userToUserDtoConverter.Convert(await _unitOfWork.Users.FindAsync(source.SenderId)),
+                Receiver = await _userToUserDtoConverter.Convert(await _unitOfWork.Users.FindAsync(source.ReceiverId)),
                 SenderAppointment = await _appointmentToAppointmentDtoConverter.Convert(await _unitOfWork.Appointments.FindAsync(source.SenderAppointmentId)),
                 ReceiverAppointment = await _appointmentToAppointmentDtoConverter.Convert(await _unitOfWork.Appointments.FindAsync(source.ReceiverAppointmentId)),
             };

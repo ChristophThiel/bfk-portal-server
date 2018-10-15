@@ -28,15 +28,8 @@ namespace BfkPortal.Web.Services
         {
             var model = await _viewModelToModelConverter.Convert(viewModel);
             _unitOfWork.Appointments.Add(model);
-
-            try
-            {
-                await _unitOfWork.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                System.Console.WriteLine(e);
-            }
+            
+            await _unitOfWork.SaveChangesAsync();
             return model.Id;
         }
 

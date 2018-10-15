@@ -2,65 +2,64 @@
 using System.Linq;
 using System.Threading.Tasks;
 using BfkPortal.Core.Models;
+using BfkPortal.Persistence.Contracts;
 using BfkPortal.Web.Contracts;
 using BfkPortal.Web.ViewModels;
 using BfkPortal.Web.ViewModels.DataTransferObjects;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace BfkPortal.Web.Services
 {
-    public class OrganisationService //: GenericService<Organisation, OrganisationViewModel, OrganisationDto>, IOrganisationService
+    public class OrganisationService : IOrganisationService
     {
-        /* public OrganisationService(ModelStateDictionary modelState) : base(modelState) { }
+        private readonly IUnitOfWork _unitOfWork;
+        private IConverter<OrganisationViewModel, Organisation> _viewModelToModelConverter;
+        private IConverter<Organisation, OrganisationDto> _modelToDtoConverter;
 
-        public override IEnumerable<OrganisationDto> All() => UnitOfWork.Organisations.All().Select(o => new OrganisationDto(o));
-
-        public override async Task<Organisation> CastViewModelToModel(OrganisationViewModel viewModel)
+        public OrganisationService(IUnitOfWork unitOfWork,
+            IConverter<OrganisationViewModel, Organisation> viewModelToModelConverter,
+            IConverter<Organisation, OrganisationDto> modelToDtoConverter)
         {
-            var entity = new Organisation
-            {
-                Name = viewModel.Name,
-                IsDeleted = viewModel.IsDeleted ?? false
-            };
-
-            foreach (var membershipId in viewModel.Memberships)
-            {
-                var user = await UnitOfWork.Users.FindAsync(membershipId);
-                if (user == null)
-                    ModelState.AddModelError("User Id", "An user with this id does not exist!");
-                else
-                    entity.Memberships.Add(new Membership
-                    {
-                        Organisation = entity,
-                        User = user
-                    });
-            }
-
-            foreach (var participationsId in viewModel.Participations)
-            {
-                var appointment = await UnitOfWork.Appointments.FindAsync(participationsId);
-                if (appointment == null)
-                    ModelState.AddModelError("Appointment Id", "An appointment with this id does not exist!");
-                else
-                    entity.Participations.Add(new Participation
-                    {
-                        Appointment = appointment,
-                        Organisation = entity
-                    });
-            }
-
-            return entity;
+            _unitOfWork = unitOfWork;
+            _viewModelToModelConverter = viewModelToModelConverter;
+            _modelToDtoConverter = modelToDtoConverter;
         }
 
-        public override async Task Remove(int id)
+        public async Task<int> AddAsync(OrganisationViewModel viewModel)
         {
-            var entity = await UnitOfWork.Organisations.FindAsync(id);
-            if (entity == null)
-                ModelState.AddModelError("Organisation Id", $"An organistation with the id {id} does not exist!");
+            var model = await _viewModelToModelConverter.Convert(viewModel);
+            _unitOfWork.Organisations.Add(model);
 
-            entity.IsDeleted = true;
-            UnitOfWork.Organisations.Update(entity);
-            await UnitOfWork.SaveChangesAsync();
-        }*/
+            await _unitOfWork.SaveChangesAsync();
+            return model.Id;
+        }
+
+        public IEnumerable<OrganisationDto> All()
+        {
+            var organisations = _unitOfWork.Organisations.All()
+                .Select(o => _modelToDtoConverter.Convert(o).Result);
+            return organisations;
+        }
+
+        public async Task<OrganisationDto> FindAsync(int id)
+        {
+            return await _modelToDtoConverter.Convert(await _unitOfWork.Organisations.FindAsync(id));
+        }
+
+        public async Task RemoveAsync(int id)
+        {
+            _unitOfWork.Organisations.Remove(await _unitOfWork.Organisations.FindAsync(id));
+
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task<int> UpdateAsync(OrganisationViewModel viewModel)
+        {
+            var model = await _viewModelToModelConverter.Convert(viewModel);
+            _unitOfWork.Organisations.Update(model);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return model.Id;
+        }
     }
 }

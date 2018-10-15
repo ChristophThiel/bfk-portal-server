@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BfkPortal.Core.Models;
 using BfkPortal.Core.Models.Enums;
 using BfkPortal.Persistence.Contracts;
 using BfkPortal.Web.Contracts;
 using BfkPortal.Web.ViewModels;
-using Microsoft.AspNetCore.Identity;
 
 namespace BfkPortal.Web.Services.Converters
 {
@@ -18,7 +14,6 @@ namespace BfkPortal.Web.Services.Converters
         public OfferViewModelToOfferConverter(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _userManager = userManager;
         }
 
         public async Task<Offer> Convert(OfferViewModel source)
@@ -28,8 +23,8 @@ namespace BfkPortal.Web.Services.Converters
                 destination = new Offer();
 
             destination.Status = source.Status ?? OfferStatus.Pending;
-            destination.Sender = await _userManager.FindByIdAsync(source.SenderId.ToString());
-            destination.Receiver = await _userManager.FindByIdAsync(source.ReceiverId.ToString());
+            destination.Sender = await _unitOfWork.Users.FindAsync(source.SenderId.Value);
+            destination.Receiver = await _unitOfWork.Users.FindAsync(source.ReceiverId.Value);
             destination.SenderAppointment = await _unitOfWork.Appointments.FindAsync(source.SenderAppointmentId.Value);
             destination.ReceiverAppointment = await _unitOfWork.Appointments.FindAsync(source.ReceiverAppointmentId.Value);
 

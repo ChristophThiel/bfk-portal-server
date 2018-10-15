@@ -5,9 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Services\Converters\OfferToOfferDtoConverter.cs" />
-    <Compile Remove="Services\Converters\OfferViewModelToOfferConverter.cs" />
-    <Compile Remove="Services\Converters\OrganisationViewModelToOrganisationConverter.cs" />
     <Compile Remove="Services\GenericService.cs" />
   </ItemGroup>
 

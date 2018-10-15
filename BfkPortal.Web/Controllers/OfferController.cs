@@ -1,78 +1,122 @@
 ﻿using BfkPortal.Web.Contracts;
 using BfkPortal.Web.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace BfkPortal.Web.Controllers
 {
+    [Authorize]
+    [ApiController]
     [Route("api/[controller]")]
     public class OfferController : ControllerBase
     {
         private readonly IOfferService _service;
 
-        public OfferController()
+        public OfferController(IOfferService service)
         {
-            // _service = new OfferService(ModelState);
+            _service = service;
         }
 
+        [Authorize(Roles = "UserBwst, AdminBwst")]
         [HttpPost("[action]")]
-        public async Task<IActionResult> Add([FromBody] OfferViewModel body)
+        public async Task<IActionResult> Add([FromBody] OfferViewModel viewModel)
         {
-            /*if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            try
+            {
+                var id = await _service.AddAsync(viewModel);
+                return Ok(id);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
 
-            var id = await _service.Add(body);
+        [Authorize(Roles = "UserBwst, AdminBwst")]
+        [HttpGet("[action]/{offerId:int}")]
+        public async Task<IActionResult> Delete([FromHeader] int offerId)
+        {
+            try
+            {
+                await _service.RemoveAsync(offerId);
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
 
-            if (!_service.ModelState.IsValid)
-                return BadRequest(_service.ModelState);
-
-            return Ok(new {id});*/
-            return BadRequest();
+        [Authorize(Roles = "AdminBwst")]
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Update([FromBody] OfferViewModel viewModel)
+        {
+            try
+            {
+                await _service.UpdateAsync(viewModel);
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         [HttpGet("[action]/{offerId:int}")]
-        public async Task<IActionResult> Delete(int offerId)
+        public async Task<IActionResult> Find([FromHeader] int offerId)
         {
-            /*await _service.Remove(offerId);
-
-            if (!_service.ModelState.IsValid)
-                return BadRequest(_service.ModelState);*/
-
-            return Ok();
+            try
+            {
+                var dto = await _service.FindAsync(offerId);
+                return Ok(dto);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
-
-        [HttpPost("[action]")]
-        public async Task<IActionResult> Update([FromBody] OfferViewModel body)
-        {
-            /*if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            await _service.Update(body);
-
-            if (!_service.ModelState.IsValid)
-                return BadRequest(_service.ModelState);*/
-
-            return Ok();
-        }
-
-        /*[HttpGet("[action]")]
-        public IActionResult All() => Ok(_service.All());
 
         [HttpGet("[action]")]
-        public IActionResult Status() => Ok(_service.Status());
-
-        [HttpPost("[action]")]
-        public async Task<IActionResult> Reply([FromBody] OfferReplyViewModel body)
+        public IActionResult All()
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            try
+            {
+                var offerDtos = _service.All();
+                return Ok(offerDtos);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
 
-            await _service.ReplyAsync(body.OfferId.Value, body.Status.Value);
+        [HttpGet("[action]")]
+        public IActionResult Status()
+        {
+            try
+            {
+                return Ok(_service.Status());
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
 
-            if (!_service.ModelState.IsValid)
-                return BadRequest(_service.ModelState);
-
-            return Ok();
-        } */
+        [Authorize(Roles = "UserBwst, AdminBwst")]
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Reply([FromBody] OfferReplyViewModel viewModel)
+        {
+            try
+            {
+                await _service.ReplyAsync(viewModel.OfferId.Value, viewModel.Status.Value);
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
 }

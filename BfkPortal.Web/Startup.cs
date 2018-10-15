@@ -56,16 +56,18 @@ namespace BfkPortal.Web
             // Converters
             services.AddScoped<IConverter<UserViewModel, User>, UserViewModelToUserConverter>();
             services.AddScoped<IConverter<User, UserDto>, UserToUserDtoConverter>();
-            // services.AddScoped<IConverter<OrganisationViewModel, Organisation>, OrganisationViewModelToOrganisationConverter>();
+            services.AddScoped<IConverter<OrganisationViewModel, Organisation>, OrganisationViewModelToOrganisationConverter>();
             services.AddScoped<IConverter<Organisation, OrganisationDto>, OrganisationToOrganisationDtoConverter>();
             services.AddScoped<IConverter<AppointmentViewModel, Appointment>, AppointmentViewModelToAppointmentConverter>();
             services.AddScoped<IConverter<Appointment, AppointmentDto>, AppointmentToAppointmentDtoConverter>();
-            /*services.AddScoped<IConverter<OfferViewModel, Offer>, OfferViewModelToOfferConverter>();
-            services.AddScoped<IConverter<Offer, OfferDto>, OfferToOfferDtoConverter>(); */
+            services.AddScoped<IConverter<OfferViewModel, Offer>, OfferViewModelToOfferConverter>();
+            services.AddScoped<IConverter<Offer, OfferDto>, OfferToOfferDtoConverter>();
             
             // Services
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IAppointmentService, AppointmentService>();
+            services.AddScoped<IOfferService, OfferService>();
+            services.AddScoped<IOrganisationService, OrganisationService>();
             
             // Policy Handlers
             services.AddTransient<IAuthorizationHandler, OwnerOfAppointmentHandler>();
