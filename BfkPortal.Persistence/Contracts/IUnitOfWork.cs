@@ -30,6 +30,6 @@ namespace BfkPortal.Persistence.Contracts
 
         Task DeleteDatabaseAsync();
 
-        Task CreatDatabaseAsync();
+        Task CreateDatabaseAsync();
     }
 }

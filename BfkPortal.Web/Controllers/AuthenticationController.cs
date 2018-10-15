@@ -5,7 +5,6 @@ using BfkPortal.Persistence.Contracts;
 using BfkPortal.Web.Contracts;
 using BfkPortal.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BfkPortal.Web.Controllers
@@ -64,7 +63,7 @@ namespace BfkPortal.Web.Controllers
         public async Task<IActionResult> Initialize([FromServices] IUnitOfWork unitOfWork)
         {
             await unitOfWork.DeleteDatabaseAsync();
-            await unitOfWork.CreatDatabaseAsync();
+            await unitOfWork.CreateDatabaseAsync();
 
             unitOfWork.Roles.Add(new Role
             {

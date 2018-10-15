@@ -62,7 +62,7 @@ namespace BfkPortal.Persistence
 
         public async Task DeleteDatabaseAsync() => await _context.Database.EnsureDeletedAsync();
 
-        public async Task CreatDatabaseAsync() => await _context.Database.EnsureCreatedAsync();
+        public async Task CreateDatabaseAsync() => await _context.Database.EnsureCreatedAsync();
 
         public void Dispose() => _context.Dispose();
     }

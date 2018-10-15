@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BfkPortal.Core.Contracts;
 using BfkPortal.Core.Models;
 using BfkPortal.Persistence.Contracts;
 using Microsoft.EntityFrameworkCore;
