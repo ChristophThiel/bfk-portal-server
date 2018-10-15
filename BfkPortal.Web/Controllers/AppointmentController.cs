@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using BfkPortal.Core.Models.Enums;
 using BfkPortal.Web.Contracts;
@@ -36,7 +38,7 @@ namespace BfkPortal.Web.Controllers
         }
 
         [Authorize(Roles = "UserBfk, AdminBfk, AdminBwst")]
-        [Authorize(Policy = "OwnerOfAppointment")]
+        [Authorize(Policy = Constants.OwnerOfAppointmentPolicy)]
         [HttpGet("[action]/{appointmentId:int}")]
         public async Task<IActionResult> Delete([FromHeader] int appointmentId)
         {
@@ -52,7 +54,7 @@ namespace BfkPortal.Web.Controllers
         }
 
         [Authorize(Roles = "UserBfk, AdminBfk, AdminBwst")]
-        [Authorize(Policy = "OwnerOfAppointment")]
+        [Authorize(Policy = Constants.OwnerOfAppointmentPolicy)]
         [HttpPost("[action]")]
         public async Task<IActionResult> Update([FromBody] AppointmentViewModel viewModel)
         {
@@ -133,13 +135,30 @@ namespace BfkPortal.Web.Controllers
         }
 
         [Authorize(Roles = "UserBwst, AdminBwst")]
-        [Authorize(Policy = "OwnerOfAppointment")]
+        [Authorize(Policy = Constants.OwnerOfAppointmentPolicy)]
         [HttpGet("[action]/{appointmentId:int}")]
         public async Task<IActionResult> Offer([FromHeader] int appointmentId)
         {
             try
             {
                 await _service.OfferDuty(appointmentId);
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [Authorize(Roles = "UserBwst, AdminBwst")]
+        [Authorize(Policy = Constants.FreeAppointmentPolicy)]
+        [HttpGet("[action]/{appointmentId:int}")]
+        public async Task<IActionResult> Take([FromHeader] int appointmentId)
+        {
+            try
+            {
+                var email = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
+                await _service.TakeDuty(appointmentId, email);
                 return Ok();
             }
             catch

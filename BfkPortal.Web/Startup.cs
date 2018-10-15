@@ -47,7 +47,8 @@ namespace BfkPortal.Web
             });
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("OwnerOfAppointment", policy => policy.Requirements.Add(new EmptyRequirement()));
+                options.AddPolicy(Constants.OwnerOfAppointmentPolicy, policy => policy.Requirements.Add(new OwnerOfAppointmentRequirement()));
+                options.AddPolicy(Constants.FreeAppointmentPolicy, policy => policy.Requirements.Add(new FreeAppointmentRequirement()));
             });
             
             services.AddScoped<IUnitOfWork, UnitOfWork>(serviceProvider => new UnitOfWork());
@@ -68,6 +69,7 @@ namespace BfkPortal.Web
             
             // Policy Handlers
             services.AddTransient<IAuthorizationHandler, OwnerOfAppointmentHandler>();
+            services.AddTransient<IAuthorizationHandler, FreeAppointmentHandler>();
 
             services.AddMvc();
         }

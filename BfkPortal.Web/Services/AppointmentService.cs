@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BfkPortal.Core.Models;
+using BfkPortal.Core.Models.Enums;
 using BfkPortal.Persistence.Contracts;
 using BfkPortal.Web.Contracts;
 using BfkPortal.Web.ViewModels;
@@ -139,6 +140,20 @@ namespace BfkPortal.Web.Services
                 }
             }
             return false;
+        }
+
+        public async Task TakeDuty(int appointmentId, string email)
+        {
+            var appointment = await _unitOfWork.Appointments.FindAsync(appointmentId, nameof(Appointment.Owner),
+                nameof(Appointment.Participations));
+
+            var user = _unitOfWork.Users.All()
+                .SingleOrDefault(u => u.Email == email);
+            appointment.Owner = user;
+            appointment.Type = AppointmentTypes.Dienst;
+            _unitOfWork.Appointments.Update(appointment);
+
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

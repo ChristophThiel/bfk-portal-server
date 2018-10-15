@@ -12,5 +12,7 @@ namespace BfkPortal.Web.Contracts
         Task UnparticipateAsync(int appointmentId, int participantId);
 
         Task OfferDuty(int appointmentId);
+
+        Task TakeDuty(int appointmentId, string email);
     }
 }

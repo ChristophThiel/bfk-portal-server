@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace BfkPortal.Web.Authorization
 {
-    public class OwnerOfAppointmentHandler : AuthorizationHandler<EmptyRequirement>
+    public class OwnerOfAppointmentHandler : AuthorizationHandler<OwnerOfAppointmentRequirement>
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -23,7 +23,7 @@ namespace BfkPortal.Web.Authorization
             _unitOfWork = unitOfWork;
         }
 
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, EmptyRequirement requirement)
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, OwnerOfAppointmentRequirement requirement)
         {
             if (context.Resource is AuthorizationFilterContext mvcContext)
             {
@@ -36,12 +36,11 @@ namespace BfkPortal.Web.Authorization
                     context.Succeed(requirement);
                     return Task.CompletedTask;
                 }
-
-                var test2 = mvcContext.HttpContext.Request.Headers.Select(h => h);
+                
                 int appointmentId;
                 if (mvcContext.HttpContext.Request.Method == Constants.Get)
                 {
-                    if (mvcContext.HttpContext.Request.Headers.TryGetValue(Constants.AppointmentId, out var id))
+                    if (mvcContext.RouteData.Values.TryGetValue(Constants.AppointmentId, out var id))
                         appointmentId = Convert.ToInt32(id);
                     else
                         return Task.CompletedTask;

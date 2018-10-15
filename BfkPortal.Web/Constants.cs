@@ -13,5 +13,9 @@
 
         // Id Names
         public const string AppointmentId = "appointmentId";
+
+        // Policy
+        public const string OwnerOfAppointmentPolicy = "OwnerOfAppointment";
+        public const string FreeAppointmentPolicy = "FreeAppointment";
     }
 }

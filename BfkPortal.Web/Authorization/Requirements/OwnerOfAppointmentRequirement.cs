@@ -2,7 +2,7 @@
 
 namespace BfkPortal.Web.Authorization.Requirements
 {
-    public class EmptyRequirement : IAuthorizationRequirement
+    public class OwnerOfAppointmentRequirement : IAuthorizationRequirement
     {
 
     }
