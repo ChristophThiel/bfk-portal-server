@@ -53,7 +53,7 @@ namespace BfkPortal.PersistenceTest
                 unitOfWork.SaveChangesAsync().Wait();
 
                 var result = unitOfWork.Roles.All();
-                Assert.Equal(3, result.Count());
+                Assert.Equal(2, result.Count());
                 Assert.Equal("UserBwst", result.First().Name);
             }
         }
