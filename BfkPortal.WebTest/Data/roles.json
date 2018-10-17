@@ -1,0 +1,17 @@
+[
+    {
+        "name": "UserBfk"
+    },
+    {
+        "name": "AdminBfk"
+    },
+    {
+        "name": "UserBwst"
+    },
+    {
+        "name": "ObserverBwst"
+    },
+    {
+        "name": "AdminBwst"
+    }
+]

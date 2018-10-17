@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BfkPortal.Core.Models;
@@ -40,7 +41,9 @@ namespace BfkPortal.Web.Services.Converters
                 });
             }
 
-            foreach (var membershipId in source.Memberships)
+            // var memberships = source.Memberships.Select(m => _unitOfWork.Organisations.All().Single(o => o.Id == m).Id);
+            var memberships = source.Memberships.Where(m => _unitOfWork.Organisations.All().Select(o => o.Id).Contains(m));
+            foreach (var membershipId in memberships)
             {
                 destination.Memberships.Add(new Membership
                 {

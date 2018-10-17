@@ -1,0 +1,180 @@
+[
+    // Valid
+    {
+        "title": "Nachtdienst",
+        "description": "",
+        "from": "2018-10-15T18:00:00",
+        "to": "2018-10-16T06:00:00",
+        "type": "Dienst",
+        "areParticipantsOrganisations": false,
+        "maxParticipants": 0,
+        "showParticipants": false,
+        "deadline": null,
+        "isVisible": true,
+        "owner": 1, // Christoph Thiel
+        "participations": []
+    },
+    // Valid
+    {
+        "title": "Nachtdienst",
+        "description": "",
+        "from": "2018-10-16T18:00:00",
+        "to": "2018-10-17T06:00:00",
+        "type": "Dienst",
+        "areParticipantsOrganisations": false,
+        "maxParticipants": 0,
+        "showParticipants": false,
+        "deadline": null,
+        "isVisible": true,
+        "owner": 2, // Alexander Koblmüller
+        "participations": []
+    },
+    // Valid
+    {
+        "title": "Nachtdienst",
+        "description": "",
+        "from": "2018-10-17T18:00:00",
+        "to": "2018-10-18T06:00:00",
+        "type": "Dienst",
+        "areParticipantsOrganisations": false,
+        "maxParticipants": 0,
+        "showParticipants": false,
+        "deadline": null,
+        "isVisible": true,
+        "owner": 3, // Christoph Zimprich
+        "participations": []
+    },
+    // Valid
+    {
+        "title": "Freier Dienst",
+        "description": "Weihnachten",
+        "from": "2018-12-24T18:00:00",
+        "to": "2018-12-25T06:00:00",
+        "type": "FreierDienst",
+        "areParticipantsOrganisations": false,
+        "maxParticipants": 0,
+        "showParticipants": false,
+        "deadline": "2018-12-23T23:59:00",
+        "isVisible": true,
+        "owner": null,
+        "participations": []
+    },
+    // Valid
+    {
+        "title": "Freier Dienst",
+        "description": "Erster Weihnachtstag",
+        "from": "2018-12-25T18:00:00",
+        "to": "2018-12-26T06:00:00",
+        "type": "FreierDienst",
+        "areParticipantsOrganisations": false,
+        "maxParticipants": 0,
+        "showParticipants": false,
+        "deadline": "2018-12-24T23:59:00",
+        "isVisible": true,
+        "owner": null,
+        "participations": []
+    },
+    // Valid
+    {
+        "title": "Angebotener Dienst",
+        "description": "",
+        "from": "2018-11-11T18:00:00",
+        "to": "2018-11-12T06:00:00",
+        "type": "MarktplatzDienst",
+        "areParticipantsOrganisations": false,
+        "maxParticipants": 0,
+        "showParticipants": false,
+        "deadline": null,
+        "isVisible": true,
+        "owner": 1, // Christoph Thiel
+        "participations": []
+    },
+    // Valid
+    {
+        "title": "Nassbewerb",
+        "description": "Holzhausen",
+        "from": "2019-05-13T08:00:00",
+        "to": "2019-05-13T19:00:00",
+        "type": "Bewerb",
+        "areParticipantsOrganisations": true,
+        "maxParticipants": 40,
+        "showParticipants": false,
+        "deadline": "2018-05-01T23:59:00",
+        "isVisible": true,
+        "owner": 4, // Christian Eichinger
+        "participations": [
+            5, // Thomas Fraungruber
+            6, // Sieghard Bauer
+            7 // Roland Wasserbauer
+        ]
+    },
+    // Valid
+    {
+        "title": "Vollversammlung",
+        "description": "Marchtrenk",
+        "from": "2019-03-25T16:00:00",
+        "to": "2019-03-25T20:00:00",
+        "type": "Vollversammlung",
+        "areParticipantsOrganisations": false,
+        "maxParticipants": 20,
+        "showParticipants": false,
+        "deadline": "2018-05-01T23:59:00",
+        "isVisible": true,
+        "owner": 5, // Thomas Fraungruber
+        "participations": [
+            6, // Sieghard Bauer
+            7 // Roland Wasserbauer
+        ]
+    },
+    // Valid
+    {
+        "title": "Vollversammlung",
+        "description": "Kappern",
+        "from": "2019-04-25T16:00:00",
+        "to": "2019-04-25T20:00:00",
+        "type": "Bewerb",
+        "areParticipantsOrganisations": false,
+        "maxParticipants": 20,
+        "showParticipants": false,
+        "deadline": "2018-05-01T23:59:00",
+        "isVisible": true,
+        "owner": 6, // Sieghard Bauer
+        "participations": [
+            5, // Thomas Fraungruber
+            7 // Roland Wasserbauer
+        ]
+    },
+    // Invalid
+    {
+        "title": "Nachtdienst",
+        "description": "",
+        "from": "asdf",
+        "to": "asdf",
+        "type": "Dienst",
+        "areParticipantsOrganisations": false,
+        "maxParticipants": 0,
+        "showParticipants": false,
+        "deadline": null,
+        "isVisible": true,
+        "owner": 3, // Christoph Zimprich
+        "participations": []
+    },
+    // Invalid
+    {
+        "title": "Vollversammlung",
+        "description": "Holzhausen",
+        "from": "2019-03-25T16:00:00",
+        "to": "2018-03-25T20:00:00",
+        "type": "Vollversammlung",
+        "areParticipantsOrganisations": false,
+        "maxParticipants": 20,
+        "showParticipants": false,
+        "deadline": "2018-05-01T23:59:00",
+        "isVisible": true,
+        "owner": 5, // Thomas Fraungruber
+        "participations": [
+            6, // Sieghard Bauer
+            7 // Roland Wasserbauer
+        ]
+    }
+]

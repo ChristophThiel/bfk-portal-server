@@ -1,0 +1,26 @@
+[
+    // Valid
+    {
+        "status": "Pending",
+        "senderAppointmentId": 1,
+        "receiverAppointmentId": 2,
+        "senderId": 1,
+        "receiverId": 2
+    },
+    // Valid
+    {
+        "status": "Declined",
+        "senderAppointmentId": 3,
+        "receiverAppointmentId": 2,
+        "senderId": 3,
+        "receiverId": 2
+    },
+    // Invalid
+    {
+        "status": "Accepted",
+        "senderAppointmentId": 99,
+        "receiverAppointmentId": 2,
+        "senderId": 1,
+        "receiverId": 2
+    }
+]

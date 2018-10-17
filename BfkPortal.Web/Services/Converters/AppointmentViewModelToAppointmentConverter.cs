@@ -29,7 +29,9 @@ namespace BfkPortal.Web.Services.Converters
             destination.Description = source.Description;
             destination.From = DateTime.Parse(source.From, null, DateTimeStyles.RoundtripKind);
             destination.To = DateTime.Parse(source.To, null, DateTimeStyles.RoundtripKind);
-            destination.Type = source.Type ?? AppointmentTypes.Übung;
+            if (destination.From > destination.To)
+                throw new Exception();
+            destination.Type = source.Type ?? AppointmentTypes.Vollversammlung;
             destination.AreParticipantsOrganisations = source.AreParticipantsOrganisations ?? false;
             destination.MaxParticipants = source.MaxParticipants ?? 0;
             destination.ShowParticipants = source.ShowParticipants ?? false;

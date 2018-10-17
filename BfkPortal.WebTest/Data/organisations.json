@@ -1,0 +1,38 @@
+[
+    {
+        "name": "Feuerwehr Marchtrenk",
+        "isDeleted": false,
+        "memberships": [],
+        "participations":  [] 
+    },
+    {
+        "name": "AFK",
+        "isDeleted": false,
+        "memberships": [],
+        "participations": []
+    },
+    {
+        "name": "Feuerwehr Holzhausen",
+        "isDeleted": false,
+        "memberships": [],
+        "participations": []
+    },
+    {
+        "name": "BFK",
+        "isDeleted": false,
+        "memberships": [],
+        "participations": []
+    },
+    {
+        "name": "Feuerwehr Kappern",
+        "isDeleted": false,
+        "memberships": [],
+        "participations": []
+    },
+    {
+        "name": "Feuerwehr Weiﬂkirchen an der Traun",
+        "isDeleted": false,
+        "memberships": [],
+        "participations": []
+    }
+]

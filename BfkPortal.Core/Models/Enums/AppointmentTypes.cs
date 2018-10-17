@@ -5,10 +5,7 @@
         Dienst = 0,
         FreierDienst,
         MarktplatzDienst,
-        Übung,
         Bewerb,
-        Vollversammlung,
-        Weiterbildung,
-        Lehrgang
+        Vollversammlung
     }
 }

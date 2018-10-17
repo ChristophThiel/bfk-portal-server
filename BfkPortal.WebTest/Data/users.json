@@ -1,0 +1,135 @@
+[
+    // Valid
+    {
+        "firstname": "Christoph",
+        "lastname": "Thiel",
+        "email": "christoph.thiel@liwest.at",
+        "password": "christoph",
+        "isDeleted": false,
+        "entitlements": [
+            "UserBwst"
+        ],
+        "memberships": [
+            1 // Feuerwehr Marchtrenk
+        ]
+    },
+    // Valid
+    {
+        "firstname": "Alexander",
+        "lastname": "Koblmüller",
+        "email": "alexander.koblmueller@gmail.com",
+        "password": "alexander",
+        "isDeleted": false,
+        "entitlements": [
+            "UserBwst"
+        ],
+        "memberships": [
+            1 // Feuerwehr Marchtrenk
+        ]
+    },
+    // Valid
+    {
+        "firstname": "Christoph",
+        "lastname": "Zimprich",
+        "email": "christoph.zimprich@gmail.com",
+        "password": "christoph",
+        "isDeleted": false,
+        "entitlements": [
+            "UserBwst",
+            "AdminBfk",
+            "AdminBwst"
+        ],
+        "memberships": [
+            1, // Feuerwehr Marchtrenk
+            2 // AFK
+        ]
+    },
+    // Valid
+    {
+        "firstname": "Christian",
+        "lastname": "Eichinger",
+        "email": "christian.eichinger@gmail.com",
+        "password": "christian",
+        "isDeleted": false,
+        "entitlements": [
+            "UserBfk",
+            "AdminBfk"
+        ],
+        "memberships": [
+            3, // Feuerwehr Holzhausen
+            4 // BFK
+        ]
+    },
+    // Valid
+    {
+        "firstname": "Thomas",
+        "lastname": "Fraungruber",
+        "email": "thomas.fraungruber@gmail.com",
+        "password": "thomas",
+        "isDeleted": false,
+        "entitlements": [
+            "UserBfk"
+        ],
+        "memberships": [
+            1 // Feuerwehr Marchtrenk
+        ]
+    },
+    // Valid
+    {
+        "firstname": "Sieghard",
+        "lastname": "Bauer",
+        "email": "sieghard.bauer@gmail.com",
+        "password": "sieghard",
+        "isDeleted": false,
+        "entitlements": [
+            "UserBfk"
+        ],
+        "memberships": [
+            5 // Feuerwehr Kappern
+        ]
+    },
+    // Valid
+    {
+        "firstname": "Roland",
+        "lastname": "Wasserbauer",
+        "email": "roland.wasserbauer@gmail.com",
+        "password": "roland",
+        "isDeleted": false,
+        "entitlements": [
+            "UserBfk",
+            "AdminBfk"
+        ],
+        "memberships": [
+            6, // Feuerwehr Weißkirchen an der Traun
+            3 // AFK
+        ]
+    },
+    // Valid, but without organisations
+    {
+        "firstname": "Martin",
+        "lastname": "Niederl",
+        "email": "martin.niederl@gmail.com",
+        "password": "---",
+        "isDeleted": false,
+        "entitlements": [
+            "UserBfk"
+        ],
+        "memberships": [
+            99 // Invalid Organisation
+        ]
+    },
+    // Invalid
+    {
+        "firstname": "Matthias",
+        "lastname": "Herzog",
+        "email": "@gmail.com",
+        "password": "---",
+        "isDeleted": true,
+        "entitlements": [
+            "UserAmk"
+        ],
+        "memberships": [
+            1 // Feuerwehr Marchtrenk
+        ]
+    }
+]
