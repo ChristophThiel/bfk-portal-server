@@ -36,7 +36,9 @@ namespace BfkPortal.Web.Services
         public IEnumerable<AppointmentDto> All()
         {
             var appointments = _unitOfWork.Appointments.All(nameof(Appointment.Participations), nameof(Appointment.Owner));
-            return appointments.Select(a => _modelToDtoConverter.Convert(a).Result);
+            foreach (var appointment in appointments)
+                yield return _modelToDtoConverter.Convert(appointment).Result;
+            //return appointments.Select(a => _modelToDtoConverter.Convert(a).Result);
         }
 
         public async Task<AppointmentDto> FindAsync(int id)

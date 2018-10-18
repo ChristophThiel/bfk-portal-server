@@ -20,7 +20,7 @@ namespace BfkPortal.Web.Services
 
         public IEnumerable<UserDto> All()
         {
-            return _unitOfWork.Users.All().Select(u => _modelToDtoConverter.Convert(u).Result);
+            return _unitOfWork.Users.All(nameof(User.Entitlements), nameof(User.Memberships)).Select(u => _modelToDtoConverter.Convert(u).Result);
         }
 
         public IEnumerable<string> Roles()
