@@ -67,15 +67,12 @@ namespace BfkPortal.Web.Services
             var appointment = await _unitOfWork.Appointments.FindAsync(appointmentId, nameof(Appointment.Participations));
             if (IsParticipant(appointment, particpantId))
                 throw new Exception();
-
-            if (!appointment.MaxParticipants.HasValue)
-                throw new Exception();
             else if (appointment.Participations.Count() == appointment.MaxParticipants)
                 throw new Exception();
             else if (appointment.Deadline.HasValue && appointment.Deadline >= DateTime.Now)
                 throw new Exception();
 
-            if (appointment.AreParticipantsOrganisations.Value)
+            if (appointment.AreParticipantsOrganisations)
             {
                 var organisation = await _unitOfWork.Organisations.FindAsync(particpantId);
                 appointment.Participations.Add(new Participation
@@ -128,7 +125,7 @@ namespace BfkPortal.Web.Services
                 appointment.Participations = new List<Participation>();
             foreach (var participant in appointment.Participations)
             {
-                if (appointment.AreParticipantsOrganisations.Value)
+                if (appointment.AreParticipantsOrganisations)
                 {
                     if (participant.OrganisationId == participantId)
                         return true;

@@ -28,6 +28,8 @@ namespace BfkPortal.Web.Controllers
         {
             try
             {
+                if (viewModel.From > viewModel.To)
+                    return BadRequest();
                 var id = await _service.AddAsync(viewModel);
                 return Ok(new { id });
             }

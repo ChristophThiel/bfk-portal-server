@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using BfkPortal.Core.Models;
 using BfkPortal.Persistence.Contracts;
@@ -20,18 +18,23 @@ namespace BfkPortal.Web.Services.Converters
 
         public async Task<User> Convert(UserViewModel source)
         {
-            User destination = await _unitOfWork.Users.FindAsync(source.Id);
-            if (destination == null)
+            User destination;
+            if (source.Id.HasValue)
+                destination = await _unitOfWork.Users.FindAsync(source.Id.Value) ?? new User();
+            else
                 destination = new User();
 
             destination.Firstname = source.Firstname;
             destination.Lastname = source.Lastname;
             destination.Email = source.Email;
-            destination.IsDeleted = source.IsDeleted.Value;
-            destination.Entitlements = new List<Entitlement>();
-            destination.Memberships = new List<Membership>();
 
-            var roles = source.Entitlements.Select(e => _unitOfWork.Roles.All().Single(r => r.Name == e));
+            // Password not needed
+
+            destination.IsDeleted = source.IsDeleted ?? false;
+
+            var roles = source.Entitlements
+                .Select(e => _unitOfWork.Roles.All().SingleOrDefault(r => r.Name == e))
+                .Where(r => r != null);
             foreach (var role in roles)
             {
                 destination.Entitlements.Add(new Entitlement
@@ -41,14 +44,15 @@ namespace BfkPortal.Web.Services.Converters
                 });
             }
 
-            // var memberships = source.Memberships.Select(m => _unitOfWork.Organisations.All().Single(o => o.Id == m).Id);
-            var memberships = source.Memberships.Where(m => _unitOfWork.Organisations.All().Select(o => o.Id).Contains(m));
-            foreach (var membershipId in memberships)
+            var organisations = source.Memberships
+                .Select(m => _unitOfWork.Organisations.FindAsync(m).Result)
+                .Where(o => o != null);
+            foreach (var organisation in organisations)
             {
                 destination.Memberships.Add(new Membership
                 {
                     User = destination,
-                    Organisation = await _unitOfWork.Organisations.FindAsync(membershipId)
+                    Organisation = organisation
                 });
             }
 

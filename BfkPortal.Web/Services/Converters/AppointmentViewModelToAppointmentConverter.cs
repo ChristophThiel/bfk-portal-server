@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using BfkPortal.Core.Models;
 using BfkPortal.Core.Models.Enums;
@@ -36,37 +37,31 @@ namespace BfkPortal.Web.Services.Converters
 
             destination.AreParticipantsOrganisations = source.AreParticipantsOrganisations ?? false;
             destination.MaxParticipants = source.MaxParticipants ?? 0;
-            destination.
-
-            /* var destination = await _unitOfWork.Appointments.FindAsync(source.Id);
-            if (destination == null)
-                destination = new Appointment();
-
-            destination.Title = source.Title;
-            destination.Description = source.Description;
-            destination.From = DateTime.Parse(source.From, null, DateTimeStyles.RoundtripKind);
-            destination.To = DateTime.Parse(source.To, null, DateTimeStyles.RoundtripKind);
-            if (destination.From > destination.To)
-                throw new Exception();
-            destination.Type = source.Type ?? AppointmentTypes.Vollversammlung;
-            destination.AreParticipantsOrganisations = source.AreParticipantsOrganisations ?? false;
-            destination.MaxParticipants = source.MaxParticipants ?? 0;
             destination.ShowParticipants = source.ShowParticipants ?? false;
-            if (DateTime.TryParse(source.Deadline, null, DateTimeStyles.RoundtripKind, out var deadline))
-                destination.Deadline = deadline;
-            destination.IsVisible = source.IsVisible ?? false;
-            if (source.Owner.HasValue)
-                destination.Owner = await _unitOfWork.Users.FindAsync(source.Owner.Value, nameof(User.Entitlements), nameof(User.Memberships));
-            destination.Participations = new List<Participation>();
+            destination.Deadline = source.Deadline;
+            destination.IsVisible = source.IsVisible ?? true;
 
-            foreach (var participant in source.Participations)
+            if (source.Owner.HasValue)
+                destination.Owner = await _unitOfWork.Users.FindAsync(source.Owner.Value);
+
+            if (source.Participations == null)
+                return destination;
+            else if (source.Participations.Count() == 0)
+                return destination;
+
+            IEnumerable<EntityObject> participants;
+            if (destination.AreParticipantsOrganisations)
+                participants = source.Participations.Select(id => _unitOfWork.Organisations.FindAsync(id).Result);
+
+            destination.Participations = new List<Participation>();
+            foreach (var id in source.Participations)
             {
-                if (destination.AreParticipantsOrganisations.Value)
+                if (destination.AreParticipantsOrganisations)
                 {
                     destination.Participations.Add(new Participation
                     {
                         Appointment = destination,
-                        Organisation = await _unitOfWork.Organisations.FindAsync(participant)
+                        Organisation = await _unitOfWork.Organisations.FindAsync(id)
                     });
                 }
                 else
@@ -74,12 +69,12 @@ namespace BfkPortal.Web.Services.Converters
                     destination.Participations.Add(new Participation
                     {
                         Appointment = destination,
-                        User = await _unitOfWork.Users.FindAsync(participant)
+                        User = await _unitOfWork.Users.FindAsync(id)
                     });
                 }
             }
 
-            return destination; */
+            return destination;
         }
     }
 }

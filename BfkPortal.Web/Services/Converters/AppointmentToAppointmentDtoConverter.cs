@@ -27,13 +27,13 @@ namespace BfkPortal.Web.Services.Converters
                 Id = source.Id,
                 Title = source.Title,
                 Description = source.Description,
-                From = source.From.Value,
-                To = source.To.Value,
-                Type = source.Type.Value.ToString(),
-                AreParticipantsOrganisations = source.AreParticipantsOrganisations.Value,
+                From = source.From,
+                To = source.To,
+                Type = source.Type.ToString(),
+                AreParticipantsOrganisations = source.AreParticipantsOrganisations,
                 Deadline = source.Deadline,
                 IsVisible = source.IsVisible,
-                MaxParticipants = source.MaxParticipants.Value
+                MaxParticipants = source.MaxParticipants
             };
             if (source.OwnerId.HasValue)
                 destination.Owner = await _userToUserDtoConverter.Convert(

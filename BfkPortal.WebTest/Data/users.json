@@ -118,7 +118,7 @@
             99 // Invalid Organisation
         ]
     },
-    // Invalid
+    // Valid, but without roles
     {
         "firstname": "Matthias",
         "lastname": "Herzog",

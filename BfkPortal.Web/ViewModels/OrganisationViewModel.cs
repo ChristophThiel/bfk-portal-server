@@ -11,7 +11,5 @@ namespace BfkPortal.Web.ViewModels
         public bool? IsDeleted { get; set; }
         
         public IEnumerable<int> Memberships { get; set; }
-        
-        public IEnumerable<int> Participations { get; set; }
     }
 }

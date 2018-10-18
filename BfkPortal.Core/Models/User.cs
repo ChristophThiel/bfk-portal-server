@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace BfkPortal.Core.Models
@@ -30,6 +31,14 @@ namespace BfkPortal.Core.Models
         public ICollection<Entitlement> Entitlements { get; set; }
 
         public ICollection<Possession> Possessions { get; set; }
+
+        public User()
+        {
+            Memberships = new Collection<Membership>();
+            Participations = new Collection<Participation>();
+            Entitlements = new Collection<Entitlement>();
+            Possessions = new Collection<Possession>();
+        }
     }
 
     /* [Required]

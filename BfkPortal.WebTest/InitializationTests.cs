@@ -12,6 +12,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Converters;
 
 namespace BfkPortal.WebTest
 {
@@ -74,38 +75,32 @@ namespace BfkPortal.WebTest
             var users = JsonConvert.DeserializeObject<IEnumerable<UserViewModel>>(userJson);
 
             var controller = CreateAuthenticationController();
-            for (var i = 0; i < users.Count() - 2; i++)
+            for (var i = 0; i < users.Count(); i++)
             {
                 var user = users.ElementAt(i);
                 var result = controller.Register(user).Result;
                 Assert.IsType<OkResult>(result);
             }
-            for (var i = users.Count() - 1; i < users.Count(); i++)
-            {
-                var user = users.ElementAt(i);
-                var result = controller.Register(user).Result;
-                Assert.IsType<BadRequestResult>(result);
-            }
 
             using (var unitOfWork = new UnitOfWork())
             {
-                Assert.Equal(7, unitOfWork.Users.All().Count());
+                Assert.Equal(9, unitOfWork.Users.All().Count());
             }
         }
         
         private void InitializeAppointments()
         {
             var appointmentJson = System.IO.File.ReadAllText(Path.Combine(Current, "Data", "appointments.json"));
-            var appointments = JsonConvert.DeserializeObject<IEnumerable<AppointmentViewModel>>(appointmentJson);
+            var appointments = JsonConvert.DeserializeObject<IEnumerable<AppointmentViewModel>>(appointmentJson, new IsoDateTimeConverter());
 
             var controller = CreateAppointmentController();
-            for (var i = 0; i < appointments.Count() - 2; i++)
+            for (var i = 0; i < appointments.Count() - 1; i++)
             {
                 var appointment = appointments.ElementAt(i);
                 var result = controller.Add(appointment).Result;
                 Assert.IsType<OkObjectResult>(result);
             }
-            for (var i = appointments.Count() - 2; i < appointments.Count(); i++)
+            for (var i = appointments.Count() - 1; i < appointments.Count(); i++)
             {
                 var appointment = appointments.ElementAt(i);
                 var result = controller.Add(appointment).Result;
@@ -124,10 +119,14 @@ namespace BfkPortal.WebTest
             var offers = JsonConvert.DeserializeObject<IEnumerable<OfferViewModel>>(offerJson);
 
             var controller = CreateOfferController();
-            foreach (var offer in offers)
+            for (var i = 0; i < offers.Count(); i++)
             {
+                var offer = offers.ElementAt(i);
                 var result = controller.Add(offer).Result;
-                Assert.IsType<OkObjectResult>(result);
+                if (i == offers.Count() - 1)
+                    Assert.IsType<BadRequestResult>(result);
+                else
+                    Assert.IsType<OkObjectResult>(result);
             }
         }
 

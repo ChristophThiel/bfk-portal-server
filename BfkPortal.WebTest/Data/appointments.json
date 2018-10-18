@@ -146,21 +146,6 @@
     },
     // Invalid
     {
-        "title": "Nachtdienst",
-        "description": "",
-        "from": "asdf",
-        "to": "asdf",
-        "type": "Dienst",
-        "areParticipantsOrganisations": false,
-        "maxParticipants": 0,
-        "showParticipants": false,
-        "deadline": null,
-        "isVisible": true,
-        "owner": 3, // Christoph Zimprich
-        "participations": []
-    },
-    // Invalid
-    {
         "title": "Vollversammlung",
         "description": "Holzhausen",
         "from": "2019-03-25T16:00:00",

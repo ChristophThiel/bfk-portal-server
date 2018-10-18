@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using BfkPortal.Core.Models;
 using BfkPortal.Persistence.Contracts;
 using BfkPortal.Web.Contracts;
@@ -17,30 +18,24 @@ namespace BfkPortal.Web.Services.Converters
 
         public async Task<Organisation> Convert(OrganisationViewModel source)
         {
-            var destination = await _unitOfWork.Organisations.FindAsync(source.Id);
-            if (destination == null)
+            Organisation destination;
+            if (source.Id.HasValue)
+                destination = await _unitOfWork.Organisations.FindAsync(source.Id.Value) ?? new Organisation();
+            else
                 destination = new Organisation();
 
             destination.Name = source.Name;
             destination.IsDeleted = source.IsDeleted ?? false;
 
-            foreach (var userId in source.Memberships)
+            var users = source.Memberships
+                .Select(m => _unitOfWork.Users.FindAsync(m).Result)
+                .Where(u => u != null);
+            foreach (var user in users)
             {
-                var user = await _unitOfWork.Users.FindAsync(userId);
                 destination.Memberships.Add(new Membership
                 {
                     Organisation = destination,
                     User = user
-                });
-            }
-
-            foreach (var appointmentId in source.Participations)
-            {
-                var appointment = await _unitOfWork.Appointments.FindAsync(appointmentId);
-                destination.Participations.Add(new Participation
-                {
-                    Organisation = destination,
-                    Appointment = appointment
                 });
             }
 

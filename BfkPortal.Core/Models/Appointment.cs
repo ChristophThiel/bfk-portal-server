@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using BfkPortal.Core.Models.Enums;
 
@@ -34,5 +35,10 @@ namespace BfkPortal.Core.Models
         public User Owner { get; set; }
         
         public ICollection<Participation> Participations { get; set; }
+
+        public Appointment()
+        {
+            Participations = new Collection<Participation>();
+        }
     }
 }

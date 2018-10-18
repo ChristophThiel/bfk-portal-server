@@ -53,7 +53,7 @@ namespace BfkPortal.Web.Authorization
                         try
                         {
                             var viewModel = JsonConvert.DeserializeObject<AppointmentViewModel>(json);
-                            appointmentId = viewModel.Id;
+                            appointmentId = viewModel.Id.Value;
                         }
                         catch
                         {

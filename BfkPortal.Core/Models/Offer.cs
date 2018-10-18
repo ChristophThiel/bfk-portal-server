@@ -5,7 +5,6 @@ namespace BfkPortal.Core.Models
 {
     public class Offer : EntityObject
     {
-        [Required]
         public OfferStatus Status { get; set; }
 
         public int SenderAppointmentId { get; set; }
