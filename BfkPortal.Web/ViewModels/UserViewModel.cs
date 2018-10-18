@@ -16,14 +16,11 @@ namespace BfkPortal.Web.ViewModels
 
         [Required]
         public string Password { get; set; }
-
-        [Required]
+        
         public bool? IsDeleted { get; set; }
-
-        [Required]
+        
         public IEnumerable<string> Entitlements { get; set; }
-
-        [Required]
+        
         public IEnumerable<int> Memberships { get; set; }
     }
 }

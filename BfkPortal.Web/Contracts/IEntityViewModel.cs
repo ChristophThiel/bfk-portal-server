@@ -2,6 +2,6 @@
 {
     public interface IEntityViewModel
     {
-        int Id { get; set; }
+        int? Id { get; set; }
     }
 }

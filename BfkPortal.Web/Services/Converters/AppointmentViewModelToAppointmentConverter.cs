@@ -21,7 +21,24 @@ namespace BfkPortal.Web.Services.Converters
 
         public async Task<Appointment> Convert(AppointmentViewModel source)
         {
-            var destination = await _unitOfWork.Appointments.FindAsync(source.Id);
+            Appointment destination;
+            if (source.Id.HasValue)
+                destination = await _unitOfWork.Appointments.FindAsync(source.Id.Value) ?? new Appointment();
+            else
+                destination = new Appointment();
+            destination.Title = source.Title;
+            destination.Description = source.Description;
+
+            // Nullable but required
+            destination.From = source.From.Value;
+            destination.To = source.To.Value;
+            destination.Type = source.Type.Value;
+
+            destination.AreParticipantsOrganisations = source.AreParticipantsOrganisations ?? false;
+            destination.MaxParticipants = source.MaxParticipants ?? 0;
+            destination.
+
+            /* var destination = await _unitOfWork.Appointments.FindAsync(source.Id);
             if (destination == null)
                 destination = new Appointment();
 
@@ -62,7 +79,7 @@ namespace BfkPortal.Web.Services.Converters
                 }
             }
 
-            return destination;
+            return destination; */
         }
     }
 }

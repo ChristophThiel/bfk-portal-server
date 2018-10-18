@@ -7,14 +7,11 @@ namespace BfkPortal.Web.ViewModels
     {
         [Required]
         public string Name { get; set; }
-
-        [Required]
+        
         public bool? IsDeleted { get; set; }
-
-        [Required]
+        
         public IEnumerable<int> Memberships { get; set; }
-
-        [Required]
+        
         public IEnumerable<int> Participations { get; set; }
     }
 }
