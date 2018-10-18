@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using BfkPortal.Core.Models;
-using BfkPortal.Persistence.Contracts;
+﻿using System.Threading.Tasks;
 using BfkPortal.Web.Contracts;
 using BfkPortal.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -22,7 +19,6 @@ namespace BfkPortal.Web.Controllers
         }
 
         [Authorize(Roles = "AdminBfk, AdminBwst")]
-        [AllowAnonymous]
         [HttpPost("[action]")]
         public async Task<IActionResult> Register([FromBody] UserViewModel model)
         {
@@ -55,56 +51,6 @@ namespace BfkPortal.Web.Controllers
             {
                 return BadRequest();
             }
-        }
-
-        // TODO DELETE
-        [AllowAnonymous]
-        [HttpGet]
-        public async Task<IActionResult> Initialize([FromServices] IUnitOfWork unitOfWork)
-        {
-            await unitOfWork.DeleteDatabaseAsync();
-            await unitOfWork.CreateDatabaseAsync();
-
-            unitOfWork.Roles.Add(new Role
-            {
-                Name = "UserBfk"
-            });
-            unitOfWork.Roles.Add(new Role
-            {
-                Name = "AdminBfk"
-            });
-            unitOfWork.Roles.Add(new Role
-            {
-                Name = "UserBwst"
-            });
-            unitOfWork.Roles.Add(new Role
-            {
-                Name = "ObserverBwst"
-            });
-            unitOfWork.Roles.Add(new Role
-            {
-                Name = "AdminBwst"
-            });
-
-            unitOfWork.Organisations.Add(new Organisation
-            {
-                Name = "Feuerwehr Marchtrenk",
-                IsDeleted = false,
-                Memberships = new List<Membership>(),
-                Participations = new List<Participation>()
-            });
-
-            unitOfWork.Organisations.Add(new Organisation
-            {
-                Name = "Feuerwehr Kappern",
-                IsDeleted = false,
-                Memberships = new List<Membership>(),
-                Participations = new List<Participation>()
-            });
-
-            await unitOfWork.SaveChangesAsync();
-
-            return Ok();
         }
     }
 }

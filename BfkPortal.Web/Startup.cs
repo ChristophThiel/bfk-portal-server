@@ -36,6 +36,13 @@ namespace BfkPortal.Web
         {
             services.AddDbContext<ApplicationDbContext>();
 
+            services.AddCors(o => o.AddPolicy("Cors", builder =>
+            {
+                builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            }));
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
             {
@@ -73,6 +80,7 @@ namespace BfkPortal.Web
             services.AddScoped<IOfferService, OfferService>();
             services.AddScoped<IOrganisationService, OrganisationService>();
             services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IUserService, UserService>();
             
             // Policy Handlers
             services.AddTransient<IAuthorizationHandler, OwnerOfAppointmentHandler>();
@@ -87,7 +95,9 @@ namespace BfkPortal.Web
             {
                 app.UseDeveloperExceptionPage();
             }
-            
+
+            app.UseCors("Cors");
+
             app.UseAuthentication();
             app.UseMvc();
         }
