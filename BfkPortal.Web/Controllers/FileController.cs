@@ -38,7 +38,7 @@ namespace BfkPortal.Web.Controllers
 
         [Authorize(Roles = "AdminBfk, AdminBwst")]
         [HttpGet("[action]/{fileId:int}")]
-        public async Task<IActionResult> Delete([FromHeader] int fileId)
+        public async Task<IActionResult> Delete(int fileId)
         {
             try
             {

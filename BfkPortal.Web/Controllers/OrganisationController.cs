@@ -64,7 +64,7 @@ namespace BfkPortal.Web.Controllers
         }
 
         [HttpGet("[action]/{organisationId:int}")]
-        public async Task<IActionResult> Find([FromHeader] int organisationId)
+        public async Task<IActionResult> Find(int organisationId)
         {
             try
             {

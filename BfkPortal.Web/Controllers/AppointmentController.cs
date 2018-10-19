@@ -42,7 +42,7 @@ namespace BfkPortal.Web.Controllers
         [Authorize(Roles = "UserBfk, AdminBfk, AdminBwst")]
         [Authorize(Policy = Constants.OwnerOfAppointmentPolicy)]
         [HttpGet("[action]/{appointmentId:int}")]
-        public async Task<IActionResult> Delete([FromHeader] int appointmentId)
+        public async Task<IActionResult> Delete(int appointmentId)
         {
             try
             {
@@ -72,7 +72,7 @@ namespace BfkPortal.Web.Controllers
         }
 
         [HttpGet("[action]/{appointmentId:int}")]
-        public async Task<IActionResult> Find([FromHeader] int appointmentId)
+        public async Task<IActionResult> Find(int appointmentId)
         {
             try
             {
@@ -139,7 +139,7 @@ namespace BfkPortal.Web.Controllers
         [Authorize(Roles = "UserBwst, AdminBwst")]
         [Authorize(Policy = Constants.OwnerOfAppointmentPolicy)]
         [HttpGet("[action]/{appointmentId:int}")]
-        public async Task<IActionResult> Offer([FromHeader] int appointmentId)
+        public async Task<IActionResult> Offer(int appointmentId)
         {
             try
             {
@@ -155,7 +155,7 @@ namespace BfkPortal.Web.Controllers
         [Authorize(Roles = "UserBwst, AdminBwst")]
         [Authorize(Policy = Constants.FreeAppointmentPolicy)]
         [HttpGet("[action]/{appointmentId:int}")]
-        public async Task<IActionResult> Take([FromHeader] int appointmentId)
+        public async Task<IActionResult> Take(int appointmentId)
         {
             try
             {

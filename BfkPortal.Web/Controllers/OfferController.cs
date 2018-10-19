@@ -35,7 +35,7 @@ namespace BfkPortal.Web.Controllers
 
         [Authorize(Roles = "UserBwst, AdminBwst")]
         [HttpGet("[action]/{offerId:int}")]
-        public async Task<IActionResult> Delete([FromHeader] int offerId)
+        public async Task<IActionResult> Delete(int offerId)
         {
             try
             {
@@ -64,7 +64,7 @@ namespace BfkPortal.Web.Controllers
         }
 
         [HttpGet("[action]/{offerId:int}")]
-        public async Task<IActionResult> Find([FromHeader] int offerId)
+        public async Task<IActionResult> Find(int offerId)
         {
             try
             {
