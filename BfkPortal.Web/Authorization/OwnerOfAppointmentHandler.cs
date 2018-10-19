@@ -3,6 +3,7 @@ using BfkPortal.Persistence.Contracts;
 using BfkPortal.Web.Authorization.Requirements;
 using BfkPortal.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
 using System;
@@ -27,6 +28,7 @@ namespace BfkPortal.Web.Authorization
         {
             if (context.Resource is AuthorizationFilterContext mvcContext)
             {
+                mvcContext.HttpContext.Request.EnableRewind();
                 var email = mvcContext.HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
                 var user = _unitOfWork.Users.All(nameof(User.Entitlements))
                     .SingleOrDefault(u => u.Email == email);
@@ -47,9 +49,10 @@ namespace BfkPortal.Web.Authorization
                 }
                 else
                 {
-                    using (var reader = new StreamReader(mvcContext.HttpContext.Request.Body, Encoding.UTF8, true))
+                    using (var stream = new MemoryStream())
                     {
-                        var json = reader.ReadToEnd();
+                        mvcContext.HttpContext.Request.Body.CopyTo(stream);
+                        var json = Encoding.UTF8.GetString(stream.ToArray());
                         try
                         {
                             var viewModel = JsonConvert.DeserializeObject<AppointmentViewModel>(json);
@@ -60,6 +63,7 @@ namespace BfkPortal.Web.Authorization
                             return Task.CompletedTask;
                         }
                     }
+                    mvcContext.HttpContext.Request.Body.Position = 0;
                 }
 
                 var appointment = _unitOfWork.Appointments.FindAsync(appointmentId).Result;

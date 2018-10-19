@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BfkPortal.Core.Models;
-using BfkPortal.Core.Models.Enums;
 using BfkPortal.Persistence.Contracts;
 using BfkPortal.Web.Contracts;
 using BfkPortal.Web.ViewModels;
@@ -24,7 +21,10 @@ namespace BfkPortal.Web.Services.Converters
         {
             Appointment destination;
             if (source.Id.HasValue)
+            {
                 destination = await _unitOfWork.Appointments.FindAsync(source.Id.Value) ?? new Appointment();
+                _unitOfWork.Participations.RemoveRange(_unitOfWork.Participations.All().Where(p => p.AppointmentId == source.Id.Value));
+            }
             else
                 destination = new Appointment();
             destination.Title = source.Title;
@@ -52,8 +52,8 @@ namespace BfkPortal.Web.Services.Converters
             IEnumerable<EntityObject> participants;
             if (destination.AreParticipantsOrganisations)
                 participants = source.Participations.Select(id => _unitOfWork.Organisations.FindAsync(id).Result);
-
-            destination.Participations = new List<Participation>();
+            
+            destination.Participations.Clear();
             foreach (var id in source.Participations)
             {
                 if (destination.AreParticipantsOrganisations)
