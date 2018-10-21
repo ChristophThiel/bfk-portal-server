@@ -81,6 +81,7 @@ namespace BfkPortal.Web
             services.AddScoped<IOrganisationService, OrganisationService>();
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IEmailService, EmailService>();
             
             // Policy Handlers
             services.AddTransient<IAuthorizationHandler, OwnerOfAppointmentHandler>();
