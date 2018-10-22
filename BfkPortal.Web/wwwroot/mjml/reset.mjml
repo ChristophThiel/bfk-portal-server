@@ -1,0 +1,53 @@
+<mjml>
+  <mj-body>
+    <mj-section background-color="#e9241d">
+      <mj-column>
+        <mj-text font-style="bold" font-size="30px" font-family="Roboto" align="center" color="white" padding="0">
+          BFK - Portal
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section>
+      <mj-column width="600px">
+        <mj-text align="center" color="#e9241d" font-size="40px" font-family="Roboto">
+          Passwort zurücksetzen
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section>
+      <mj-column width="400px">
+        <mj-text font-style="bold" font-size="24px" font-family="Roboto">
+          Hallo Christoph,
+        </mj-text>
+        <mj-text font-size="18px" font-family="Roboto">
+          Das <b>Passwort</b> für deinen Account wurde zurückgesetzt.
+        </mj-text>
+
+        <mj-text font-size="18px" font-family="Roboto">
+          Dein neues Passwort lautet:
+        </mj-text>
+
+        <mj-text font-style="bold" font-size="22px" font-family="Roboto" align="center">
+          ELEMENOP
+        </mj-text>
+
+        <mj-text font-size="18px" align="center" font-family="Roboto">
+          Falls du diese Zurücksetzung nicht beantragt hast, melde dies unverzüglich einem Administrator!
+        </mj-text>
+
+        <mj-text></mj-text>
+
+        <mj-button background-color="#e9241d" href="#" font-size="18px">
+          Zum Portal
+        </mj-button>
+
+        <mj-text></mj-text>
+
+
+      </mj-column>
+    </mj-section>
+
+  </mj-body>
+</mjml>

@@ -71,6 +71,10 @@ namespace BfkPortal.Web.Services
                 throw new Exception();
             else if (appointment.Deadline.HasValue && appointment.Deadline >= DateTime.Now)
                 throw new Exception();
+            else if (appointment.Type == AppointmentTypes.Dienst ||
+                     appointment.Type == AppointmentTypes.FreierDienst ||
+                     appointment.Type == AppointmentTypes.MarktplatzDienst)
+                throw new Exception();
 
             if (appointment.AreParticipantsOrganisations)
             {
@@ -113,7 +117,7 @@ namespace BfkPortal.Web.Services
         public async Task OfferDuty(int appointmentId)
         {
             var appointment = await _unitOfWork.Appointments.FindAsync(appointmentId);
-            appointment.Type = Core.Models.Enums.AppointmentTypes.MarktplatzDienst;
+            appointment.Type = AppointmentTypes.MarktplatzDienst;
             _unitOfWork.Appointments.Update(appointment);
 
             await _unitOfWork.SaveChangesAsync();

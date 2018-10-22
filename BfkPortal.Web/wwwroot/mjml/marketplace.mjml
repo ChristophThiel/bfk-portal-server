@@ -1,0 +1,47 @@
+<mjml>
+  <mj-body>
+    <mj-section background-color="#e9241d">
+      <mj-column>
+        <mj-text font-style="bold" font-size="30px" font-family="Roboto" align="center" color="white" padding="0">
+          BFK - Portal
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section>
+      <mj-column width="600px">
+        <mj-text align="center" color="#e9241d" font-size="40px" font-family="Roboto">
+          Neues Angebot
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section>
+      <mj-column width="400px">
+        <mj-text font-style="bold" font-size="24px" font-family="Roboto">
+          Hallo Christoph,
+        </mj-text>
+        <mj-text font-size="18px" font-family="Roboto">
+          <b>Christoph Zimprich</b> möchte seinen Termin vom <b>22. Oktober 2018</b> gerne tauschen.
+        </mj-text>
+
+        <mj-text font-size="18px" font-family="Roboto" align="center">
+          Sein <a href="#" style="color: #e9241d; text-decoration: none; font-weight: bold">Angebot</a> ist nun am Marktplatz erhältlich.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section>
+      <mj-column>
+        <mj-button width="70%" background-color="#e9241d" href="#" font-size="18px">
+          Tauschen
+        </mj-button>
+      </mj-column>
+      <mj-column>
+        <mj-button width="70%" background-color="#e9241d" href="#" font-size="18px">
+          Übernehmen
+        </mj-button>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

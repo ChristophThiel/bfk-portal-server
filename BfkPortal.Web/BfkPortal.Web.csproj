@@ -9,10 +9,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.5" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
@@ -24,6 +20,10 @@
   <ItemGroup>
     <ProjectReference Include="..\BfkPortal.Core\BfkPortal.Core.csproj" />
     <ProjectReference Include="..\BfkPortal.Persistence\BfkPortal.Persistence.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\html\" />
   </ItemGroup>
 
 </Project>
