@@ -69,6 +69,9 @@ namespace BfkPortal.Web.Services
                 receiverAppointment.Owner = offer.Sender;
                 senderAppointment.Owner = offer.Receiver;
 
+                _unitOfWork.Appointments.Update(receiverAppointment);
+                _unitOfWork.Appointments.Update(senderAppointment);
+
                 _unitOfWork.Offers.Remove(offer);
 
                 await _unitOfWork.SaveChangesAsync();
