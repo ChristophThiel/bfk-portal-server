@@ -24,7 +24,7 @@ namespace BfkPortal.Web.Services
             _modelToDtoConverter = modelToDtoConverter;
         }
 
-        public async Task<int> AddAsync(OrganisationViewModel viewModel)
+        public async Task<int> Add(OrganisationViewModel viewModel)
         {
             var model = await _viewModelToModelConverter.Convert(viewModel);
             _unitOfWork.Organisations.Add(model);
@@ -40,19 +40,19 @@ namespace BfkPortal.Web.Services
             return organisations;
         }
 
-        public async Task<OrganisationDto> FindAsync(int id)
+        public async Task<OrganisationDto> Find(int id)
         {
             return await _modelToDtoConverter.Convert(await _unitOfWork.Organisations.FindAsync(id));
         }
 
-        public async Task RemoveAsync(int id)
+        public async Task Remove(int id)
         {
             _unitOfWork.Organisations.Remove(await _unitOfWork.Organisations.FindAsync(id));
 
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<int> UpdateAsync(OrganisationViewModel viewModel)
+        public async Task<int> Update(OrganisationViewModel viewModel)
         {
             var model = await _viewModelToModelConverter.Convert(viewModel);
             _unitOfWork.Organisations.Update(model);

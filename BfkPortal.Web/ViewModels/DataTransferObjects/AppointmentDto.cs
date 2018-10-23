@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using BfkPortal.Core.Models;
 
 namespace BfkPortal.Web.ViewModels.DataTransferObjects
 {
-    public class AppointmentDto
+    public class AppointmentDto : EntityDto
     {
-        public int Id { get; set; }
-
         public string Title { get; set; }
 
         public string Description { get; set; }

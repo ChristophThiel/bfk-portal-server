@@ -35,28 +35,12 @@ namespace BfkPortal.Web.Services
         public async Task<UserDto> LogIn(CredentialsViewModel viewModel)
         {
             var user = _unitOfWork.Users.All(nameof(User.Entitlements), nameof(User.Memberships))
-                .SingleOrDefault(u => u.Email == viewModel.Email);
-            if (user == null)
-                throw new Exception();
+                .SingleOrDefault(u => u.Email == viewModel.Email) ?? throw new NullReferenceException();
 
             var hasher = new Pbkdf2PasswordHasher();
             if (hasher.VerifyHashedPassword(user, user.Password, viewModel.Password) == PasswordVerificationResult.Failed)
-                throw new Exception();
+                throw new Exception(Constants.InvalidCredentialsExceptionMessage);
             return await _userToUserDtoConverter.Convert(user);
-        }
-
-        public async Task Register(UserViewModel viewModel)
-        {
-            var user = await _userViewModelToUserConverter.Convert(viewModel);
-            if (_unitOfWork.Users.All().Any(u => u.Email == user.Email))
-                throw new Exception();
-
-            var hasher = new Pbkdf2PasswordHasher();
-            user.Salt = hasher.GenerateSalt();
-            user.Password = hasher.HashPassword(user, viewModel.Password);
-
-            _unitOfWork.Users.Add(user);
-            await _unitOfWork.SaveChangesAsync();
         }
 
         public object GenerateJsonWebToken(UserDto user)
@@ -78,6 +62,20 @@ namespace BfkPortal.Web.Services
             var token = new JwtSecurityToken(_configuration["Issuer"], _configuration["Issuer"], claims,
                 signingCredentials: creds);
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public async Task Register(UserViewModel viewModel)
+        {
+            var user = await _userViewModelToUserConverter.Convert(viewModel);
+            if (_unitOfWork.Users.All().Any(u => u.Email == user.Email))
+                throw new Exception(Constants.EmailAlreadyUsedExceptionMessage);
+
+            var hasher = new Pbkdf2PasswordHasher();
+            user.Salt = hasher.GenerateSalt();
+            user.Password = hasher.HashPassword(user, viewModel.Password);
+
+            _unitOfWork.Users.Add(user);
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

@@ -2,10 +2,8 @@
 
 namespace BfkPortal.Web.ViewModels.DataTransferObjects
 {
-    public class UserDto
+    public class UserDto : EntityDto
     {
-        public int Id { get; set; }
-
         public string Firstname { get; set; }
 
         public string Lastname { get; set; }

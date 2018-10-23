@@ -5,6 +5,7 @@ using BfkPortal.Persistence.Contracts;
 using BfkPortal.Web.Authorization;
 using BfkPortal.Web.Authorization.Requirements;
 using BfkPortal.Web.Contracts;
+using BfkPortal.Web.Middleware;
 using BfkPortal.Web.Services;
 using BfkPortal.Web.Services.Converters;
 using BfkPortal.Web.ViewModels;
@@ -60,6 +61,7 @@ namespace BfkPortal.Web
             {
                 options.AddPolicy(Constants.OwnerOfAppointmentPolicy, policy => policy.Requirements.Add(new OwnerOfAppointmentRequirement()));
                 options.AddPolicy(Constants.FreeAppointmentPolicy, policy => policy.Requirements.Add(new FreeAppointmentRequirement()));
+                options.AddPolicy(Constants.UserOfSameRoleGroupPolicy, policy => policy.Requirements.Add(new UserOfSameRoleGroupRequirement()));
             });
             
             services.AddScoped<IUnitOfWork, UnitOfWork>(serviceProvider => new UnitOfWork());
@@ -86,6 +88,7 @@ namespace BfkPortal.Web
             // Policy Handlers
             services.AddTransient<IAuthorizationHandler, OwnerOfAppointmentHandler>();
             services.AddTransient<IAuthorizationHandler, FreeAppointmentHandler>();
+            services.AddTransient<IAuthorizationHandler, UserOfSameRoleGroupHandler>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -98,6 +101,8 @@ namespace BfkPortal.Web
             }
 
             app.UseCors("Cors");
+
+            app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseAuthentication();
             app.UseMvc();

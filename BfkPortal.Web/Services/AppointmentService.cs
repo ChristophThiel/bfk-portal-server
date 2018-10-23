@@ -24,7 +24,7 @@ namespace BfkPortal.Web.Services
             _modelToDtoConverter = modelToDtoConverter;
         }
 
-        public async Task<int> AddAsync(AppointmentViewModel viewModel)
+        public async Task<int> Add(AppointmentViewModel viewModel)
         {
             var model = await _viewModelToModelConverter.Convert(viewModel);
             _unitOfWork.Appointments.Add(model);
@@ -39,42 +39,34 @@ namespace BfkPortal.Web.Services
             return appointments.Select(a => _modelToDtoConverter.Convert(a).Result);
         }
 
-        public async Task<AppointmentDto> FindAsync(int id)
+        public async Task<AppointmentDto> Find(int id)
         {
             var appointment = await _unitOfWork.Appointments.FindAsync(id, nameof(Appointment.Participations), nameof(Appointment.Owner));
             return await _modelToDtoConverter.Convert(appointment);
         }
 
-        public async Task RemoveAsync(int id)
+        public async Task OfferDuty(int appointmentId)
         {
-            _unitOfWork.Appointments.Remove(await _unitOfWork.Appointments.FindAsync(id));
+            var appointment = await _unitOfWork.Appointments.FindAsync(appointmentId);
+            appointment.Type = AppointmentTypes.MarktplatzDienst;
+            _unitOfWork.Appointments.Update(appointment);
 
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<int> UpdateAsync(AppointmentViewModel viewModel)
-        {
-            var model = await _viewModelToModelConverter.Convert(viewModel);
-            _unitOfWork.Appointments.Update(model);
-
-            await _unitOfWork.SaveChangesAsync();
-
-            return model.Id;
-        }
-
-        public async Task ParticipateAsync(int appointmentId, int particpantId)
+        public async Task Participate(int appointmentId, int particpantId)
         {
             var appointment = await _unitOfWork.Appointments.FindAsync(appointmentId, nameof(Appointment.Participations));
             if (IsParticipant(appointment, particpantId))
-                throw new Exception();
+                throw new Exception(Constants.AlreadyParticipantExceptionMessage);
             else if (appointment.Participations.Count() == appointment.MaxParticipants)
-                throw new Exception();
+                throw new Exception(Constants.MaxPaticipantsExceptionMessage);
             else if (appointment.Deadline.HasValue && appointment.Deadline >= DateTime.Now)
-                throw new Exception();
+                throw new Exception(Constants.ExceededDeadlineExcpetionMessage);
             else if (appointment.Type == AppointmentTypes.Dienst ||
                      appointment.Type == AppointmentTypes.FreierDienst ||
                      appointment.Type == AppointmentTypes.MarktplatzDienst)
-                throw new Exception();
+                throw new Exception(Constants.UnableToParticipateExceptionMessage);
 
             if (appointment.AreParticipantsOrganisations)
             {
@@ -98,12 +90,33 @@ namespace BfkPortal.Web.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task UnparticipateAsync(int appointmentId, int participantId)
+        public async Task Remove(int id)
+        {
+            _unitOfWork.Appointments.Remove(await _unitOfWork.Appointments.FindAsync(id));
+
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task TakeDuty(int appointmentId, string email)
+        {
+            var appointment = await _unitOfWork.Appointments.FindAsync(appointmentId, nameof(Appointment.Owner),
+                nameof(Appointment.Participations));
+
+            var user = _unitOfWork.Users.All()
+                .SingleOrDefault(u => u.Email == email);
+            appointment.Owner = user;
+            appointment.Type = AppointmentTypes.Dienst;
+            _unitOfWork.Appointments.Update(appointment);
+
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task Unparticipate(int appointmentId, int participantId)
         {
             var appointment = await _unitOfWork.Appointments.FindAsync(appointmentId, nameof(Appointment.Participations));
             if (!IsParticipant(appointment, participantId))
-                throw new Exception();
-            
+                throw new Exception(Constants.AlreadyParticipantExceptionMessage);
+
             for (var i = 0; i < appointment.Participations.Count; i++)
             {
                 var participant = appointment.Participations.ElementAt(i);
@@ -114,13 +127,14 @@ namespace BfkPortal.Web.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task OfferDuty(int appointmentId)
+        public async Task<int> Update(AppointmentViewModel viewModel)
         {
-            var appointment = await _unitOfWork.Appointments.FindAsync(appointmentId);
-            appointment.Type = AppointmentTypes.MarktplatzDienst;
-            _unitOfWork.Appointments.Update(appointment);
+            var model = await _viewModelToModelConverter.Convert(viewModel);
+            _unitOfWork.Appointments.Update(model);
 
             await _unitOfWork.SaveChangesAsync();
+
+            return model.Id;
         }
 
         private bool IsParticipant(Appointment appointment, int participantId)
@@ -141,20 +155,6 @@ namespace BfkPortal.Web.Services
                 }
             }
             return false;
-        }
-
-        public async Task TakeDuty(int appointmentId, string email)
-        {
-            var appointment = await _unitOfWork.Appointments.FindAsync(appointmentId, nameof(Appointment.Owner),
-                nameof(Appointment.Participations));
-
-            var user = _unitOfWork.Users.All()
-                .SingleOrDefault(u => u.Email == email);
-            appointment.Owner = user;
-            appointment.Type = AppointmentTypes.Dienst;
-            _unitOfWork.Appointments.Update(appointment);
-
-            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

@@ -2,7 +2,5 @@
 
 namespace BfkPortal.Web.Authorization.Requirements
 {
-    public class FreeAppointmentRequirement : IAuthorizationRequirement
-    {
-    }
+    public class FreeAppointmentRequirement : IAuthorizationRequirement { }
 }

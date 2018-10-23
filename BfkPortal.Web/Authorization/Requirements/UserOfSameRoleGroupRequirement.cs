@@ -2,5 +2,5 @@
 
 namespace BfkPortal.Web.Authorization.Requirements
 {
-    public class OwnerOfAppointmentRequirement : IAuthorizationRequirement { }
+    public class UserOfSameRoleGroupRequirement : IAuthorizationRequirement { }
 }

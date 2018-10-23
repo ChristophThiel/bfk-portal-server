@@ -6,10 +6,10 @@ namespace BfkPortal.Web.Contracts
 {
     public interface IAuthenticationService
     {
-        Task Register(UserViewModel viewModel);
+        object GenerateJsonWebToken(UserDto user);
 
         Task<UserDto> LogIn(CredentialsViewModel viewModel);
 
-        object GenerateJsonWebToken(UserDto user);
+        Task Register(UserViewModel viewModel);
     }
 }

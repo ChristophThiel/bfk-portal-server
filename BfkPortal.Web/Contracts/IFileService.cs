@@ -6,11 +6,10 @@ namespace BfkPortal.Web.Contracts
 {
     public interface IFileService
     {
-        Task Upload(IFormFile file, string email);
-
-        Task Delete(int fileId, string email);
-
         IEnumerable<string> All();
 
+        Task Remove(int fileId, string email);
+
+        Task Upload(IFormFile file, string email);
     }
 }

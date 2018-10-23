@@ -28,7 +28,7 @@ namespace BfkPortal.Web.Services
                 .Select(f => f.FileName);
         }
 
-        public async Task Delete(int fileId, string email)
+        public async Task Remove(int fileId, string email)
         {
             var user = _unitOfWork.Users.All(nameof(User.Possessions), nameof(User.Entitlements))
                 .SingleOrDefault(u => u.Email == email);
@@ -62,7 +62,7 @@ namespace BfkPortal.Web.Services
             var model = new Core.Models.File
             {
                 FileName = fileName,
-                Path = Path.Combine(CreatePath(owner.Email), fileName),
+                Path = Path.Combine(_hostingEnvironment.ContentRootPath, Constants.FileStorageFolderName, owner.Email),
                 Created = now,
                 LastModified = now,
                 Owner = owner
@@ -82,7 +82,7 @@ namespace BfkPortal.Web.Services
             if (file.Length <= 0)
                 throw new Exception();
 
-            var path = CreatePath(owner.Email);
+            var path = Path.Combine(_hostingEnvironment.ContentRootPath, Constants.FileStorageFolderName, owner.Email);
             Directory.CreateDirectory(path);
 
             var fileName = string.IsNullOrEmpty(file.FileName) ? $"File {owner.Possessions.Count() + 1}" : file.FileName;
@@ -93,11 +93,6 @@ namespace BfkPortal.Web.Services
             }
 
             return fileName;
-        }
-
-        private string CreatePath(string email)
-        {
-            return Path.Combine(_hostingEnvironment.ContentRootPath, Constants.FileStorageFolderName, email);
         }
     }
 }

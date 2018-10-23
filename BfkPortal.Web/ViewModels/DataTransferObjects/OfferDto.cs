@@ -1,11 +1,7 @@
-﻿using BfkPortal.Core.Models;
-
-namespace BfkPortal.Web.ViewModels.DataTransferObjects
+﻿namespace BfkPortal.Web.ViewModels.DataTransferObjects
 {
-    public class OfferDto
+    public class OfferDto : EntityDto
     {
-        public int Id { get; set; }
-
         public string Status { get; set; }
 
         public UserDto Sender { get; set; }

@@ -5,7 +5,7 @@ using BfkPortal.Core.Models.Enums;
 
 namespace BfkPortal.Web.ViewModels
 {
-    public class AppointmentViewModel : BaseViewModel
+    public class AppointmentViewModel : EntityViewModel
     {
         [Required]
         public string Title { get; set; }

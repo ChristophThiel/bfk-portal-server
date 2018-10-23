@@ -22,73 +22,37 @@ namespace BfkPortal.Web.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Add([FromBody] OrganisationViewModel viewModel)
         {
-            try
-            {
-                var id = await _service.AddAsync(viewModel);
-                return Ok(id);
-            }
-            catch
-            {
-                return BadRequest();
-            }
+            var id = await _service.Add(viewModel);
+            return Ok(id);
+        }
+
+        [HttpGet("[action]")]
+        public IActionResult All()
+        {
+            var organisationDtos = _service.All();
+            return Ok(organisationDtos);
         }
 
         [Authorize(Roles = "AdminBfk")]
         [HttpGet("[action]/{organisationId:int}")]
         public async Task<IActionResult> Delete([FromRoute] int organisationId)
         {
-            try
-            {
-                await _service.RemoveAsync(organisationId);
-                return Ok();
-            }
-            catch
-            {
-                return BadRequest();
-            }
+            await _service.Remove(organisationId);
+            return Ok();
+        }
+
+        [HttpGet("[action]/{organisationId:int}")]
+        public async Task<IActionResult> Find(int organisationId)
+        {
+            return Ok(await _service.Find(organisationId));
         }
 
         [Authorize(Roles = "AdminBfk")]
         [HttpPost("[action]")]
         public async Task<IActionResult> Update([FromBody] OrganisationViewModel viewModel)
         {
-            try
-            {
-                var id = await _service.UpdateAsync(viewModel);
-                return Ok(id);
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
-
-        [HttpGet("[action]/{organisationId:int}")]
-        public async Task<IActionResult> Find(int organisationId)
-        {
-            try
-            {
-                return Ok(await _service.FindAsync(organisationId));
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
-
-
-        [HttpGet("[action]")]
-        public IActionResult All()
-        {
-            try
-            {
-                var organisationDtos = _service.All();
-                return Ok(organisationDtos);
-            }
-            catch
-            {
-                return BadRequest();
-            }
+            var id = await _service.Update(viewModel);
+            return Ok(id);
         }
     }
 }

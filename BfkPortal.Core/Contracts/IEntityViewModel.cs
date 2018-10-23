@@ -1,4 +1,4 @@
-﻿namespace BfkPortal.Web.Contracts
+﻿namespace BfkPortal.Core.Contracts
 {
     public interface IEntityViewModel
     {

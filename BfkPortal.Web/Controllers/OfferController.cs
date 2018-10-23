@@ -22,101 +22,52 @@ namespace BfkPortal.Web.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Add([FromBody] OfferViewModel viewModel)
         {
-            try
-            {
-                var id = await _service.AddAsync(viewModel);
-                return Ok(id);
-            }
-            catch
-            {
-                return BadRequest();
-            }
+            var id = await _service.Add(viewModel);
+            return Ok(id);
+        }
+
+        [HttpGet("[action]")]
+        public IActionResult All()
+        {
+            var offerDtos = _service.All();
+            return Ok(offerDtos);
         }
 
         [Authorize(Roles = "UserBwst, AdminBwst")]
         [HttpGet("[action]/{offerId:int}")]
         public async Task<IActionResult> Delete(int offerId)
         {
-            try
-            {
-                await _service.RemoveAsync(offerId);
-                return Ok();
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
-
-        [Authorize(Roles = "AdminBwst")]
-        [HttpPost("[action]")]
-        public async Task<IActionResult> Update([FromBody] OfferViewModel viewModel)
-        {
-            try
-            {
-                await _service.UpdateAsync(viewModel);
-                return Ok();
-            }
-            catch
-            {
-                return BadRequest();
-            }
+            await _service.Remove(offerId);
+            return Ok();
         }
 
         [HttpGet("[action]/{offerId:int}")]
         public async Task<IActionResult> Find(int offerId)
         {
-            try
-            {
-                var dto = await _service.FindAsync(offerId);
-                return Ok(dto);
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
-
-        [HttpGet("[action]")]
-        public IActionResult All()
-        {
-            try
-            {
-                var offerDtos = _service.All();
-                return Ok(offerDtos);
-            }
-            catch
-            {
-                return BadRequest();
-            }
+            var dto = await _service.Find(offerId);
+            return Ok(dto);
         }
 
         [HttpGet("[action]")]
         public IActionResult Status()
         {
-            try
-            {
-                return Ok(_service.Status());
-            }
-            catch
-            {
-                return BadRequest();
-            }
+            return Ok(_service.Status());
         }
 
         [Authorize(Roles = "UserBwst, AdminBwst")]
         [HttpPost("[action]")]
         public async Task<IActionResult> Reply([FromBody] OfferReplyViewModel viewModel)
         {
-            try
-            {
-                await _service.ReplyAsync(viewModel.OfferId.Value, viewModel.Status.Value);
-                return Ok();
-            }
-            catch
-            {
-                return BadRequest();
-            }
+            await _service.Reply(viewModel.OfferId.Value, viewModel.Status.Value);
+            return Ok();
+        }
+
+        [Authorize(Roles = "AdminBwst")]
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Update([FromBody] OfferViewModel viewModel)
+        {
+            await _service.Update(viewModel);
+            return Ok();
         }
     }
 }

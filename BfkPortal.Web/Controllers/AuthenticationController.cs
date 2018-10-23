@@ -18,39 +18,25 @@ namespace BfkPortal.Web.Controllers
             _service = service;
         }
 
-        [Authorize(Roles = "AdminBfk, AdminBwst")]
-        [HttpPost("[action]")]
-        public async Task<IActionResult> Register([FromBody] UserViewModel model)
-        {
-            try
-            {
-                await _service.Register(model);
-                return Ok();
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
-
         [AllowAnonymous]
         [HttpPost("[action]")]
         public async Task<IActionResult> LogIn([FromBody] CredentialsViewModel model)
         {
-            try
+            var user = await _service.LogIn(model);
+            var token = _service.GenerateJsonWebToken(user);
+            return Ok(new
             {
-                var user = await _service.LogIn(model);
-                var token = _service.GenerateJsonWebToken(user);
-                return Ok(new
-                {
-                    token,
-                    user
-                });
-            }
-            catch
-            {
-                return BadRequest();
-            }
+                token,
+                user
+            });
+        }
+
+        [Authorize(Roles = "AdminBfk, AdminBwst")]
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Register([FromBody] UserViewModel model)
+        {
+            await _service.Register(model);
+            return Ok();
         }
     }
 }

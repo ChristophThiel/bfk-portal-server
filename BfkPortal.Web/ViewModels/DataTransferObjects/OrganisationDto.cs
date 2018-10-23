@@ -1,11 +1,7 @@
-﻿using BfkPortal.Core.Models;
-
-namespace BfkPortal.Web.ViewModels.DataTransferObjects
+﻿namespace BfkPortal.Web.ViewModels.DataTransferObjects
 {
-    public class OrganisationDto
+    public class OrganisationDto : EntityDto
     {
-        public int Id { get; set; }
-
         public string Name { get; set; }
 
         public bool IsDeleted { get; set; }

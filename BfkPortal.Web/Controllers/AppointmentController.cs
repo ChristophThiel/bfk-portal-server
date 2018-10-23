@@ -26,17 +26,18 @@ namespace BfkPortal.Web.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Add([FromBody] AppointmentViewModel viewModel)
         {
-            try
-            {
-                if (viewModel.From > viewModel.To)
-                    return BadRequest();
-                var id = await _service.AddAsync(viewModel);
-                return Ok(new { id });
-            }
-            catch
-            {
-                return BadRequest();
-            }
+            if (viewModel.From > viewModel.To)
+                throw new Exception(Constants.InvalidTimeLineExceptionMessage);
+            var id = await _service.Add(viewModel);
+            return Ok(new { id });
+        }
+
+
+        [HttpGet("[action]")]
+        public IActionResult All()
+        {
+            var appointmenDtos = _service.All();
+            return Ok(appointmenDtos);
         }
 
         [Authorize(Roles = "UserBfk, AdminBfk, AdminBwst")]
@@ -44,15 +45,32 @@ namespace BfkPortal.Web.Controllers
         [HttpGet("[action]/{appointmentId:int}")]
         public async Task<IActionResult> Delete(int appointmentId)
         {
-            try
-            {
-                await _service.RemoveAsync(appointmentId);
-                return Ok();
-            }
-            catch
-            {
-               return BadRequest();
-            }
+            await _service.Remove(appointmentId);
+            return Ok();
+        }
+
+        [HttpGet("[action]/{appointmentId:int}")]
+        public async Task<IActionResult> Find(int appointmentId)
+        {
+            var dto = await _service.Find(appointmentId);
+            return Ok(dto);
+        }
+
+        [Authorize(Roles = "UserBwst, AdminBwst")]
+        [Authorize(Policy = Constants.OwnerOfAppointmentPolicy)]
+        [HttpGet("[action]/{appointmentId:int}")]
+        public async Task<IActionResult> Offer(int appointmentId)
+        {
+            await _service.OfferDuty(appointmentId);
+            return Ok();
+        }
+
+        [Authorize(Roles = "UserBfk, AdminBfk, AdminBwst")]
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Participate([FromBody] ParticipationViewModel viewModel)
+        {
+            await _service.Participate(viewModel.AppointmentId.Value, viewModel.ParticipantId.Value);
+            return Ok();
         }
 
         [Authorize(Roles = "UserBfk, AdminBfk, AdminBwst")]
@@ -60,43 +78,18 @@ namespace BfkPortal.Web.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Update([FromBody] AppointmentViewModel viewModel)
         {
-            try
-            {
-                var id = await _service.UpdateAsync(viewModel);
-                return Ok(new { id });
-            }
-            catch
-            {
-                return BadRequest();
-            }
+            var id = await _service.Update(viewModel);
+            return Ok(new { id });
         }
 
+        [Authorize(Roles = "UserBwst, AdminBwst")]
+        [Authorize(Policy = Constants.FreeAppointmentPolicy)]
         [HttpGet("[action]/{appointmentId:int}")]
-        public async Task<IActionResult> Find(int appointmentId)
+        public async Task<IActionResult> Take(int appointmentId)
         {
-            try
-            {
-                var dto = await _service.FindAsync(appointmentId);
-                return Ok(dto);
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
-
-        [HttpGet("[action]")]
-        public IActionResult All()
-        {
-            try
-            {
-                var appointmenDtos = _service.All();
-                return Ok(appointmenDtos);
-            }
-            catch
-            {
-                return BadRequest();
-            }
+            var email = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
+            await _service.TakeDuty(appointmentId, email);
+            return Ok();
         }
 
         [Authorize(Roles = "UserBfk, AdminBfk, AdminBwst")]
@@ -108,65 +101,10 @@ namespace BfkPortal.Web.Controllers
 
         [Authorize(Roles = "UserBfk, AdminBfk, AdminBwst")]
         [HttpPost("[action]")]
-        public async Task<IActionResult> Participate([FromBody] ParticipationViewModel viewModel)
-        {
-            try
-            {
-                await _service.ParticipateAsync(viewModel.AppointmentId.Value, viewModel.ParticipantId.Value);
-                return Ok();
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
-
-        [Authorize(Roles = "UserBfk, AdminBfk, AdminBwst")]
-        [HttpPost("[action]")]
         public async Task<IActionResult> Unparticipate([FromBody] ParticipationViewModel viewModel)
         {
-            try
-            {
-                await _service.UnparticipateAsync(viewModel.AppointmentId.Value, viewModel.ParticipantId.Value);
-                return Ok();
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
-
-        [Authorize(Roles = "UserBwst, AdminBwst")]
-        [Authorize(Policy = Constants.OwnerOfAppointmentPolicy)]
-        [HttpGet("[action]/{appointmentId:int}")]
-        public async Task<IActionResult> Offer(int appointmentId)
-        {
-            try
-            {
-                await _service.OfferDuty(appointmentId);
-                return Ok();
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
-
-        [Authorize(Roles = "UserBwst, AdminBwst")]
-        [Authorize(Policy = Constants.FreeAppointmentPolicy)]
-        [HttpGet("[action]/{appointmentId:int}")]
-        public async Task<IActionResult> Take(int appointmentId)
-        {
-            try
-            {
-                var email = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
-                await _service.TakeDuty(appointmentId, email);
-                return Ok();
-            }
-            catch
-            {
-                return BadRequest();
-            }
+            await _service.Unparticipate(viewModel.AppointmentId.Value, viewModel.ParticipantId.Value);
+            return Ok();
         }
     }
 }

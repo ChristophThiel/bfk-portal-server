@@ -3,7 +3,7 @@ using BfkPortal.Core.Models.Enums;
 
 namespace BfkPortal.Web.ViewModels
 {
-    public class OfferViewModel : BaseViewModel
+    public class OfferViewModel : EntityViewModel
     {
         [Required]
         [EnumDataType(typeof(OfferStatus), ErrorMessage = "This is not a valid type!")]
