@@ -101,6 +101,9 @@ namespace BfkPortal.Web
             }
 
             app.UseCors("Cors");
+            
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
 

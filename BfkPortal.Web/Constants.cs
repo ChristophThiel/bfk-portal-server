@@ -2,6 +2,10 @@
 {
     public static class Constants
     {
+        // Paths
+        public const string WwwRoot = "wwwroot";
+        public const string Dist = "dist";
+
         // Roles
         public const string Admin = "Admin";
         public const string AdminBfk = "AdminBfk";
