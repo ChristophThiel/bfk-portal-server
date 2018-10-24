@@ -10,3 +10,10 @@ script:
  - dotnet build
  - dotnet test ./BfkPortal.PersistenceTest/BfkPortal.PersistenceTest.csproj
  - dotnet test ./BfkPortal.WebTest/BfkPortal.WebTest.csproj
+ 
+deploy:
+    provider: heroku
+    api_key:
+        secure: "60c16ffd-502d-4945-8df4-127a752b3937"
+    app: bfk-portal
+    
