@@ -13,10 +13,7 @@ script:
  
 deploy:
     provider: heroku
-    api_key:
-        secure: "60c16ffd-502d-4945-8df4-127a752b3937"
+    api_key: 60c16ffd-502d-4945-8df4-127a752b3937
     app: bfk-portal
     run:
-     - "cd BfkPortal.Web"
-     - "dotnet run"
-    
+     - "dotnet run -p BfkPortal.Web/BfkPortal.Web.csproj"
