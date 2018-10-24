@@ -15,5 +15,3 @@ deploy:
     provider: heroku
     api_key: 60c16ffd-502d-4945-8df4-127a752b3937
     app: bfk-portal
-    run:
-     - "dotnet run -p BfkPortal.Web/BfkPortal.Web.csproj"

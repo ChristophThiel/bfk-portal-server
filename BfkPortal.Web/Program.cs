@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using System;
 using System.IO;
 
 namespace BfkPortal.Web
@@ -14,7 +15,10 @@ namespace BfkPortal.Web
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseWebRoot(Path.Combine(Directory.GetCurrentDirectory(), Constants.WwwRoot, Constants.Dist))
-                .UseKestrel()
+                .UseKestrel(options =>
+                {
+                    options.ListenAnyIP(int.Parse(Environment.GetEnvironmentVariable("PORT") ?? "4000"));
+                })
                 .UseUrls("http://localhost:4000")
                 .UseStartup<Startup>()
                 .Build();
