@@ -94,17 +94,11 @@ namespace BfkPortal.WebTest
             var appointments = JsonConvert.DeserializeObject<IEnumerable<AppointmentViewModel>>(appointmentJson, new IsoDateTimeConverter());
 
             var controller = CreateAppointmentController();
-            for (var i = 0; i < appointments.Count() - 1; i++)
+            for (var i = 0; i < appointments.Count(); i++)
             {
                 var appointment = appointments.ElementAt(i);
                 var result = controller.Add(appointment).Result;
                 Assert.IsType<OkObjectResult>(result);
-            }
-            for (var i = appointments.Count() - 1; i < appointments.Count(); i++)
-            {
-                var appointment = appointments.ElementAt(i);
-                var result = controller.Add(appointment).Result;
-                Assert.IsType<BadRequestResult>(result);
             }
 
             using (var unitOfWork = new UnitOfWork())
@@ -123,10 +117,7 @@ namespace BfkPortal.WebTest
             {
                 var offer = offers.ElementAt(i);
                 var result = controller.Add(offer).Result;
-                if (i == offers.Count() - 1)
-                    Assert.IsType<BadRequestResult>(result);
-                else
-                    Assert.IsType<OkObjectResult>(result);
+                Assert.IsType<OkObjectResult>(result);
             }
         }
 

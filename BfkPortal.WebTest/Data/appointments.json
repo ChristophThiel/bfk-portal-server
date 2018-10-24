@@ -143,23 +143,5 @@
       5, // Feuerwehr Marchtrenk
       6 // Feuerwehr Weiﬂkirchen
     ]
-  },
-  // Invalid
-  {
-    "title": "Vollversammlung",
-    "description": "Holzhausen",
-    "from": "2019-03-25T16:00:00",
-    "to": "2018-03-25T20:00:00",
-    "type": "Vollversammlung",
-    "areParticipantsOrganisations": false,
-    "maxParticipants": 20,
-    "showParticipants": false,
-    "deadline": "2018-05-01T23:59:00",
-    "isVisible": true,
-    "owner": 5, // Thomas Fraungruber
-    "participations": [
-      6, // Sieghard Bauer
-      7 // Roland Wasserbauer
-    ]
   }
 ]

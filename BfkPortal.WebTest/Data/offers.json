@@ -14,13 +14,5 @@
         "receiverAppointmentId": 2,
         "senderId": 3,
         "receiverId": 2
-    },
-    // Invalid
-    {
-        "status": "Accepted",
-        "senderAppointmentId": 99,
-        "receiverAppointmentId": 2,
-        "senderId": 1,
-        "receiverId": 2
     }
 ]
