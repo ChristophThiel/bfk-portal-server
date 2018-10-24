@@ -10,5 +10,6 @@ script:
 - dotnet test ./BfkPortal.WebTest/BfkPortal.WebTest.csproj
 deploy:
   provider: heroku
-  api_key: $API_KEY
+  api_key:
+    secure: ep8hnaI5Gc6FJ3kThj6ONZF28bgesYls0O0d4CJ5BnkDNXDLJgJ0w53pKftiziefX++81M7QB7Ks6iETPmqTixaL3z/1sYZj74vkvbLujwDUozqtLOoMKsLt+6BEzQtuRxArIwlCvMhXpIqGKx7f5U5E/vEatJaAMmm9Wi5yFCCzWGON5wMREpKCGQSE4IQAgoCJakYygT9qyfEY+XPll3iRrrKK0OxeIrQCcwo/2KAa7lDw11VkyQe5m+EL/8FhLRBzHaEKj1UubsmBQ59F19i/+CpyqFSDXvE5S30NETzB/7QTMR701zPIaRJqUwblbae7uR8FHUT+1RSo9+rfqA4mrmrx+igfOJ7MHNis6IWjl6JnvcUY9+FhfjYXr3G2/m/85v3htsMEbbELgixmINWbYTfMYwnsFuXBTNzLAquq6DcFLdg7oSnFhuPo5jx6bHvKqkYe3BdhiVqQ+DnaHzVA4GxKywjiHTGEh0u7ROInT/uxvN/gR8iQUxFtRXgPM7LJqow4xA850E6PPJIBUoyBcyOig1hOP/4/HQYpwQAgj7dGyGkTzDdVXBpPC6F85MkGmUjywoJUdnb2fUdBBcYD6+z+y9qnD3YU1VJTy/JM0H43RB5yw0UVLwRLwcu94xko6Y7Wb1x4h7E5RXarezWnFA7B63Yv2rXGVuyt4i4=
   app: bfk-portal
