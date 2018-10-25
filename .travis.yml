@@ -13,10 +13,14 @@ script:
 before_deploy:
 - git clone https://$ACCESS_TOKEN@github.com/MatthiasHerzog2000/bfk-portal-client.git
 - cd ./bfk-portal-client
-- npm install
+- npm install --save-dev @angular-devkit/build-angular
 - ng build --prod
 - cd ..
 - cp -R ./bfk-portal-client/dist ./BfkPortal.Web/wwwroot/
+- ls ./BfkPortal.Web
+- ls ./BfkPortal.Web/wwwroot/
+- ls ./BfkPortal.Web/wwwroot/dist
+- cat ./BfkPortal.Web/wwwroot/dist/index.html
 deploy:
   provider: heroku
   api_key: $API_KEY
