@@ -16,7 +16,7 @@ before_deploy:
 - npm install
 - ng build --prod
 - cd ..
-- cp -R ./dist ../BfkPortal.Web/wwwroot/
+- cp -R ./bfk-portal-client/dist ./BfkPortal.Web/wwwroot/
 deploy:
   provider: heroku
   api_key: $API_KEY
