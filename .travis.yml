@@ -4,12 +4,16 @@ mono: none
 dotnet: 2.1.403
 install:
 - dotnet restore
+- npm install -g @angular/cli
 script:
 - dotnet build
 - dotnet test ./BfkPortal.PersistenceTest/BfkPortal.PersistenceTest.csproj
 - dotnet test ./BfkPortal.WebTest/BfkPortal.WebTest.csproj
 before_deploy:
 - git clone https://$ACCESS_TOKEN@github.com/MatthiasHerzog2000/bfk-portal-client.git
+- ng build bfk-portal-client --prod
+- copy ./bfk-portal-client/dist ./bfk-portal-server/BfkPortal.Web/wwwroot
+- rm -r ./bfk-portal-client
 deploy:
   provider: heroku
   api_key: $API_KEY
