@@ -16,7 +16,7 @@ before_deploy:
 - npm install --save-dev @angular-devkit/build-angular
 - ng build --prod
 - cd ..
-- cp -R ./bfk-portal-client/dist/mdb-angular-pro ./BfkPortal.Web/wwwroot/
+- cp -R ./bfk-portal-client/dist/mdb-angular-pro ./BfkPortal.Web/wwwroot/dist/
 - ls ./BfkPortal.Web
 - ls ./BfkPortal.Web/wwwroot/
 - ls ./BfkPortal.Web/wwwroot/dist
