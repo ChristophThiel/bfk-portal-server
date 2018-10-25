@@ -13,6 +13,7 @@ script:
 before_deploy:
 - git clone https://$ACCESS_TOKEN@github.com/MatthiasHerzog2000/bfk-portal-client.git
 - cd ./bfk-portal-client
+- npm install
 - ng build --prod
 - copy ./dist ../bfk-portal-server/BfkPortal.Web/wwwroot
 - cd ..
