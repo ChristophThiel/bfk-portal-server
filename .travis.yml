@@ -8,6 +8,8 @@ script:
 - dotnet build
 - dotnet test ./BfkPortal.PersistenceTest/BfkPortal.PersistenceTest.csproj
 - dotnet test ./BfkPortal.WebTest/BfkPortal.WebTest.csproj
+before_deploy:
+- git clone https://$ACCESS_TOKEN@github.com/MatthiasHerzog2000/bfk-portal-client.git
 deploy:
   provider: heroku
   api_key: $API_KEY
