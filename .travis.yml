@@ -4,6 +4,7 @@ mono: none
 dotnet: 2.1.403
 install:
 - dotnet restore
+- nvm install node
 - npm install -g @angular/cli
 script:
 - dotnet build
