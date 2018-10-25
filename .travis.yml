@@ -15,7 +15,7 @@ before_deploy:
 - cd ./bfk-portal-client
 - npm install
 - ng build --prod
-- cp -r ./dist ../bfk-portal-server/BfkPortal.Web/wwwroot
+- cp -r ./dist ../BfkPortal.Web/wwwroot
 - cd ..
 - rm -r ./bfk-portal-client
 deploy:
