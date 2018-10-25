@@ -12,14 +12,13 @@ namespace BfkPortal.Web
             BuildWebHost(args).Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
+        public static IWebHost BuildWebHost(string[] args) => 
             WebHost.CreateDefaultBuilder(args)
                 .UseWebRoot(Path.Combine(Directory.GetCurrentDirectory(), Constants.WwwRoot, Constants.Dist))
                 .UseKestrel(options =>
                 {
                     options.ListenAnyIP(int.Parse(Environment.GetEnvironmentVariable("PORT") ?? "4000"));
                 })
-                .UseUrls("http://localhost:4000")
                 .UseStartup<Startup>()
                 .Build();
     }

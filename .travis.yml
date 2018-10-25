@@ -27,3 +27,4 @@ deploy:
   app: bfk-portal
   on:
     repo: ChristophThiel/bfk-portal-server
+  run: "dotnet ./BfkPortal.Web/bin/Debug/netcoreapp2.1/publish/BfkPortal.Web.dll"

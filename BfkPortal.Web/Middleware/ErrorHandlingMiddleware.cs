@@ -33,7 +33,7 @@ namespace BfkPortal.Web.Middleware
                 ? HttpStatusCode.InternalServerError
                 : HttpStatusCode.BadRequest;
 
-            var result = JsonConvert.SerializeObject(new { Error = exception.Message });
+            var result = JsonConvert.SerializeObject(new { Error = exception?.Message });
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)code;
             return context.Response.WriteAsync(result);
