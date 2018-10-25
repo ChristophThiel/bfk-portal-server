@@ -11,8 +11,10 @@ script:
 - dotnet test ./BfkPortal.WebTest/BfkPortal.WebTest.csproj
 before_deploy:
 - git clone https://$ACCESS_TOKEN@github.com/MatthiasHerzog2000/bfk-portal-client.git
-- ng build bfk-portal-client --prod
-- copy ./bfk-portal-client/dist ./bfk-portal-server/BfkPortal.Web/wwwroot
+- cd ./bfk-portal-client
+- ng build --prod
+- copy ./dist ../bfk-portal-server/BfkPortal.Web/wwwroot
+- cd ..
 - rm -r ./bfk-portal-client
 deploy:
   provider: heroku
