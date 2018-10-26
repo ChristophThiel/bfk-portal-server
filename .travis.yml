@@ -17,14 +17,10 @@ before_deploy:
 - ng build --prod
 - cd ..
 - cp -R ./bfk-portal-client/dist/mdb-angular-pro ./BfkPortal.Web/wwwroot/dist/
-- ls ./BfkPortal.Web
-- ls ./BfkPortal.Web/wwwroot/
-- ls ./BfkPortal.Web/wwwroot/dist
-- cat ./BfkPortal.Web/wwwroot/dist/index.html
+- cd ./BfkPortal.Web
 deploy:
   provider: heroku
   api_key: $API_KEY
   app: bfk-portal
   on:
     repo: ChristophThiel/bfk-portal-server
-  run: "dotnet ./BfkPortal.Web/bin/Debug/netcoreapp2.1/publish/BfkPortal.Web.dll"
