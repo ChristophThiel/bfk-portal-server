@@ -16,10 +16,11 @@ before_deploy:
 - npm install --save-dev @angular-devkit/build-angular
 - ng build --prod
 - cd ..
-- cp -R ./bfk-portal-client/dist/mdb-angular-pro ./BfkPortal.Web/wwwroot/dist/
 deploy:
   provider: heroku
   api_key: $API_KEY
   app: bfk-portal
   on:
     repo: ChristophThiel/bfk-portal-server
+after_deploy:
+- cp -R ./bfk-portal-client/dist/mdb-angular-pro ./BfkPortal.Web/bin/Release/netcoreapp2.1/linux-x64/wwwroot/dist/
