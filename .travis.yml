@@ -17,7 +17,10 @@ before_deploy:
 - ng build --prod
 - cd ..
 - cp -R ./bfk-portal-client/dist/mdb-angular-pro ./BfkPortal.Web/wwwroot/dist/
-- cd ./BfkPortal.Web
+- ls ./BfkPortal.Web/bin/Debug/netcoreapp2.1/publish
+- ls ./BfkPortal.Web/bin/Debug/netcoreapp2.1/publish/wwwroot
+- ls ./BfkPortal.Web/bin/Debug/netcoreapp2.1/publish/wwwroot/dist
+- cat ./BfkPortal.Web/bin/Debug/netcoreapp2.1/publish/wwwroot/dist/index.html
 deploy:
   provider: heroku
   api_key: $API_KEY
