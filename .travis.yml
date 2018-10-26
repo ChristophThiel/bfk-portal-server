@@ -23,4 +23,5 @@ deploy:
   on:
     repo: ChristophThiel/bfk-portal-server
 after_deploy:
-- cp -R ./bfk-portal-client/dist/mdb-angular-pro ./BfkPortal.Web/bin/Release/netcoreapp2.1/linux-x64/wwwroot/dist/
+- mkdir ./BfkPortal.Web/bin/Release/netcoreapp2.1/linux-x64/wwwroot/dist/
+- cp -R ./bfk-portal-client/dist/mdb-angular-pro/ ./BfkPortal.Web/bin/Release/netcoreapp2.1/linux-x64/wwwroot/dist/
