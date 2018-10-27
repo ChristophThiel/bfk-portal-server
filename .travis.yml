@@ -20,7 +20,7 @@ script:
  - cd BfkPortal.Web
  - dotnet publish -c Release
  - cp Dockerfile ./bin/Release/netcoreapp2.1/publish
- - docker build -t bfk-portal ./BfkPortal.Web
+ - docker build -t bfk-portal .
  - docker tag bfk-portal registry.heroku.com/bfk-portal/web
  - docker push registry.heroku.com/bfk-portal/web
 # - git clone https://$ACCESS_TOKEN@github.com/MatthiasHerzog2000/bfk-portal-client.git
