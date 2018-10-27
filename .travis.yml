@@ -14,9 +14,9 @@ before_deploy:
 - git clone https://$ACCESS_TOKEN@github.com/MatthiasHerzog2000/bfk-portal-client.git
 - cd ./bfk-portal-client
 - npm install --save-dev @angular-devkit/build-angular
-- ng build --prod
+- ng build --prod --source-map=false
 - cd ..
-- cp -R ./bfk-portal-client/dist/mdb-angular-pro ./BfkPortal.Web/wwwroot/dist/
+- cp -R ./bfk-portal-client/dist/mdb-angular-pro/ ./BfkPortal.Web/wwwroot/dist/
 - ls ./BfkPortal.Web
 - ls ./BfkPortal.Web/wwwroot/
 - ls ./BfkPortal.Web/wwwroot/dist
@@ -27,4 +27,3 @@ deploy:
   app: bfk-portal
   on:
     repo: ChristophThiel/bfk-portal-server
-  run: "dotnet ./BfkPortal.Web/bin/Debug/netcoreapp2.1/publish/BfkPortal.Web.dll"
