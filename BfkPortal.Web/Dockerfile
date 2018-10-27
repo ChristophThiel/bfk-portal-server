@@ -1,4 +1,4 @@
 FROM microsoft/dotnet:2.1-aspnetcore-runtime
 WORKDIR /app
-COPY ./bin/Release/netcoreapp2.1/publish/ .
-CMD dotnet BfkPortal.Web.dll
+COPY . .
+CMD ASPNETCORE_URLS=http://*:$PORT dotnet BfkPortal.Web.dll

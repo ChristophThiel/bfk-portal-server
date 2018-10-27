@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using System;
 using System.IO;
 
 namespace BfkPortal.Web
@@ -16,7 +15,6 @@ namespace BfkPortal.Web
             WebHost.CreateDefaultBuilder(args)
                 .UseWebRoot(Path.Combine(Directory.GetCurrentDirectory(), Constants.WwwRoot, Constants.Dist))
                 .UseUrls("http://*:4000")
-                .UseKestrel()
                 .UseStartup<Startup>()
                 .Build();
     }
