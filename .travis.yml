@@ -1,29 +1,43 @@
+sudo: required
+
 language: csharp
-dist: trusty
+
+services:
+ - docker
+
 mono: none
 dotnet: 2.1.403
+
 install:
-- dotnet restore
-- nvm install node
-- npm install -g @angular/cli
+ - dotnet restore
+ - nvm install node
+ - npm install -g @angular/cli
+ 
 script:
-- dotnet build
-- dotnet test ./BfkPortal.PersistenceTest/BfkPortal.PersistenceTest.csproj
-- dotnet test ./BfkPortal.WebTest/BfkPortal.WebTest.csproj
-before_deploy:
-- git clone https://$ACCESS_TOKEN@github.com/MatthiasHerzog2000/bfk-portal-client.git
-- cd ./bfk-portal-client
-- npm install --save-dev @angular-devkit/build-angular
-- ng build --prod --source-map=false
-- cd ..
-- cp -R ./bfk-portal-client/dist/mdb-angular-pro/ ./BfkPortal.Web/wwwroot/dist/
-- ls ./BfkPortal.Web
-- ls ./BfkPortal.Web/wwwroot/
-- ls ./BfkPortal.Web/wwwroot/dist
-- cat ./BfkPortal.Web/wwwroot/dist/index.html
-deploy:
-  provider: heroku
-  api_key: $API_KEY
-  app: bfk-portal
-  on:
-    repo: ChristophThiel/bfk-portal-server
+ - dotnet build
+ - dotnet test ./BfkPortal.PersistenceTest/BfkPortal.PersistenceTest.csproj
+ - dotnet test ./BfkPortal.WebTest/BfkPortal.WebTest.csproj
+ - git clone https://$ACCESS_TOKEN@github.com/MatthiasHerzog2000/bfk-portal-client.git
+ - cd ./bfk-portal-client
+ - npm install --save-dev @angular-devkit/build-angular
+ - ng build --prod --source-map=false
+ - cd ..
+ - cp -R ./bfk-portal-client/dist/mdb-angular-pro/ ./BfkPortal.Web/wwwroot/dist/
+ - docker build -t bfk-portal ./BfkPortal.Web
+ - docker tag bfk-portal registry.heroku.com/bfk-portal/web
+ - docker push registry.heroku.com/bfk-portal/web
+ 
+#before_deploy:
+# - git clone https://$ACCESS_TOKEN@github.com/MatthiasHerzog2000/bfk-portal-client.git
+# - cd ./bfk-portal-client
+# - npm install --save-dev @angular-devkit/build-angular
+# - ng build --prod --source-map=false
+# - cd ..
+# - cp -R ./bfk-portal-client/dist/mdb-angular-pro/ ./BfkPortal.Web/wwwroot/dist/
+ 
+#deploy:
+#  provider: heroku
+#  api_key: $API_KEY
+#  app: bfk-portal
+#  on:
+#    repo: ChristophThiel/bfk-portal-server
