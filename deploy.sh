@@ -1,3 +1,5 @@
 #!/bin/bash
-echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+sh login.sh
 docker push registry.heroku.com/bfk-portal/web
+heroku container:push web -a bfk-portal
+heroku container:release web -a bfk-portal
