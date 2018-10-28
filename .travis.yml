@@ -27,6 +27,7 @@ script:
  - docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
  - docker tag bfk-portal registry.heroku.com/bfk-portal/web
  - docker push registry.heroku.com/bfk-portal/web
+ - heroku container:release web --app bfk-portal
  
 # - git clone https://$ACCESS_TOKEN@github.com/MatthiasHerzog2000/bfk-portal-client.git
 # - cd ./bfk-portal-client
