@@ -19,7 +19,7 @@ script:
  - dotnet build
  - dotnet test ./BfkPortal.PersistenceTest/BfkPortal.PersistenceTest.csproj
  - dotnet test ./BfkPortal.WebTest/BfkPortal.WebTest.csproj
- - /usr/local/heroku/bin/heroku restart --app bfk-portal
+ - /usr/local/bin/heroku restart --app bfk-portal
  - cd BfkPortal.Web
  - dotnet publish -c Release
 # - cp Dockerfile ./bin/Release/netcoreapp2.1/publish
@@ -28,7 +28,6 @@ script:
  - docker tag bfk-portal registry.heroku.com/bfk-portal/web
  - docker push registry.heroku.com/bfk-portal/web
  - heroku container:release web --app bfk-portal
- 
 # - git clone https://$ACCESS_TOKEN@github.com/MatthiasHerzog2000/bfk-portal-client.git
 # - cd ./bfk-portal-client
 # - npm install --save-dev @angular-devkit/build-angular
