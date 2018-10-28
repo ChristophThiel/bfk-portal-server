@@ -10,8 +10,8 @@ dotnet: 2.1.403
 
 install:
  - dotnet restore
- - nvm install node
- - npm install -g @angular/cli
+# - nvm install node
+# - npm install -g @angular/cli
  
 script:
  - dotnet build
@@ -22,6 +22,7 @@ script:
  - cp Dockerfile ./bin/Release/netcoreapp2.1/publish
  - docker build -t bfk-portal .
  - docker tag bfk-portal registry.heroku.com/bfk-portal/web
+ - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
  - docker push registry.heroku.com/bfk-portal/web
 # - git clone https://$ACCESS_TOKEN@github.com/MatthiasHerzog2000/bfk-portal-client.git
 # - cd ./bfk-portal-client
