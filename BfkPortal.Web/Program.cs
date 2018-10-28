@@ -8,14 +8,12 @@ namespace BfkPortal.Web
     {
         public static void Main(string[] args)
         {
-            BuildWebHost(args).Run();
+            BuildWebHost(args).Build().Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) => 
+        public static IWebHostBuilder BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseWebRoot(Path.Combine(Directory.GetCurrentDirectory(), Constants.WwwRoot, Constants.Dist))
-                .UseUrls("http://*:4000")
-                .UseStartup<Startup>()
-                .Build();
+                .UseStartup<Startup>();
     }
 }
