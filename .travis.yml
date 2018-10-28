@@ -23,13 +23,10 @@ script:
 # - cp Dockerfile ./bin/Release/netcoreapp2.1/publish
  - docker build -t bfk-portal .
  - docker tag bfk-portal registry.heroku.com/bfk-portal/web
-
-deploy:
- provider: script
- skip_cleanup: true
- script: "./deploy.sh"
- on:
-  branch: master
+ - docker login --username=_ --password=$API_KEY
+ - docker push registry.heroku.com/bfk-portal/web
+ - heroku container:push web -a bfk-portal
+ - heroku container:release web -a bfk-portal
  
 # - git clone https://$ACCESS_TOKEN@github.com/MatthiasHerzog2000/bfk-portal-client.git
 # - cd ./bfk-portal-client
