@@ -109,6 +109,11 @@ namespace BfkPortal.Web
 
             app.UseAuthentication();
             app.UseMvc();
+
+            using (var context = new ApplicationDbContext())
+            {
+                context.Database.EnsureCreated();
+            }
         }
     }
 }

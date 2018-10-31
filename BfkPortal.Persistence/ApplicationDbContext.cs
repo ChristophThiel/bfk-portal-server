@@ -2,6 +2,7 @@
 using System.IO;
 using BfkPortal.Core.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace BfkPortal.Persistence
 {
@@ -30,7 +31,28 @@ namespace BfkPortal.Persistence
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var source = Path.Combine(Environment.CurrentDirectory, "bfkportal.db");
-            optionsBuilder.UseSqlite($"Data Source={source}");
+
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Environment.CurrentDirectory)
+                .AddJsonFile("appsettings.json")
+                .Build();
+            
+            switch (configuration["Provider"])
+            {
+                case "MariaDb":
+                    optionsBuilder.UseMySql(configuration.GetConnectionString(configuration["Provider"]));
+                    break;
+                case "PostgreSql":
+                    var url = Environment.GetEnvironmentVariable("DATABASE_URL");
+                    if (url == null)
+                        optionsBuilder.UseSqlite(configuration.GetConnectionString("Sqlite"));
+                    else
+                        optionsBuilder.UseNpgsql(url);
+                    break;
+                default:
+                    optionsBuilder.UseSqlite(configuration.GetConnectionString(configuration["Sqlite"]));
+                    break;
+            }
         }
     }
 }
