@@ -43,11 +43,16 @@ namespace BfkPortal.Persistence
                     optionsBuilder.UseMySql(configuration.GetConnectionString(configuration["Provider"]));
                     break;
                 case "PostgreSql":
-                    var url = Environment.GetEnvironmentVariable("DATABASE_URL");
-                    if (url == null)
+                    var postgreSql = Environment.GetEnvironmentVariable("DATABASE_URL");
+                    if (postgreSql == null)
                         optionsBuilder.UseSqlite(configuration.GetConnectionString("Sqlite"));
                     else
-                        optionsBuilder.UseNpgsql(url);
+                    {
+                        if (!Uri.TryCreate(postgreSql, UriKind.Absolute, out var url))
+                            optionsBuilder.UseSqlite(configuration.GetConnectionString("Sqlite"));
+                        else
+                            optionsBuilder.UseNpgsql($"Server={url.Host};Port={url.Port};User Id={url.UserInfo.Split(':')[0]};Password={url.UserInfo.Split(':')[1]};Database={url.LocalPath.Substring(1)}");
+                    }
                     break;
                 default:
                     optionsBuilder.UseSqlite(configuration.GetConnectionString(configuration["Sqlite"]));
