@@ -1,27 +1,51 @@
+sudo: required
+
 language: csharp
-dist: trusty
+
+services:
+ - docker
+
 mono: none
 dotnet: 2.1.403
+
 install:
-- dotnet restore
-- nvm install node
-- npm install -g @angular/cli
+ - dotnet restore
+ - wget -qO- https://toolbelt.heroku.com/install.sh | sh
+# - nvm install node
+# - npm install -g heroku
+# - npm install -g @angular/cli
+ 
 script:
-- dotnet build
-- dotnet test ./BfkPortal.PersistenceTest/BfkPortal.PersistenceTest.csproj
-- dotnet test ./BfkPortal.WebTest/BfkPortal.WebTest.csproj
-before_deploy:
-- git clone https://$ACCESS_TOKEN@github.com/MatthiasHerzog2000/bfk-portal-client.git
-- cd ./bfk-portal-client
-- npm install --save-dev @angular-devkit/build-angular
-- ng build --prod
-- cd ..
-deploy:
-  provider: heroku
-  api_key: $API_KEY
-  app: bfk-portal
-  on:
-    repo: ChristophThiel/bfk-portal-server
-after_deploy:
-- mkdir ./BfkPortal.Web/bin/Release/netcoreapp2.1/linux-x64/wwwroot/dist/
-- cp -R ./bfk-portal-client/dist/mdb-angular-pro/ ./BfkPortal.Web/bin/Release/netcoreapp2.1/linux-x64/wwwroot/dist/
+ - dotnet build
+ - dotnet test ./BfkPortal.PersistenceTest/BfkPortal.PersistenceTest.csproj
+ - dotnet test ./BfkPortal.WebTest/BfkPortal.WebTest.csproj
+ - /usr/local/bin/heroku restart --app bfk-portal
+ - cd BfkPortal.Web
+ - dotnet publish -c Release
+# - cp Dockerfile ./bin/Release/netcoreapp2.1/publish
+ - docker build -t bfk-portal .
+ - docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
+ - docker tag bfk-portal registry.heroku.com/bfk-portal/web
+ - docker push registry.heroku.com/bfk-portal/web
+ - heroku container:release web --app bfk-portal
+# - git clone https://$ACCESS_TOKEN@github.com/MatthiasHerzog2000/bfk-portal-client.git
+# - cd ./bfk-portal-client
+# - npm install --save-dev @angular-devkit/build-angular
+# - ng build --prod --source-map=false
+# - cd ..
+# - cp -R ./bfk-portal-client/dist/mdb-angular-pro/ ./BfkPortal.Web/wwwroot/dist/
+ 
+#before_deploy:
+# - git clone https://$ACCESS_TOKEN@github.com/MatthiasHerzog2000/bfk-portal-client.git
+# - cd ./bfk-portal-client
+# - npm install --save-dev @angular-devkit/build-angular
+# - ng build --prod --source-map=false
+# - cd ..
+# - cp -R ./bfk-portal-client/dist/mdb-angular-pro/ ./BfkPortal.Web/wwwroot/dist/
+ 
+#deploy:
+#  provider: heroku
+#  api_key: $API_KEY
+#  app: bfk-portal
+#  on:
+#    repo: ChristophThiel/bfk-portal-server
