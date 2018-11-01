@@ -41,7 +41,7 @@ namespace BfkPortal.Persistence
                     optionsBuilder.UseMySql(configuration.GetConnectionString(configuration["Provider"]));
                     break;
                 case "PostgreSql":
-                    var postgreSql = Environment.GetEnvironmentVariable("DATABASE_URL"); // configuration.GetConnectionString("PostgreSql");
+                    var postgreSql = configuration.GetConnectionString("PostgreSql");
                     if (postgreSql == null)
                         optionsBuilder.UseSqlite(configuration.GetConnectionString("Sqlite"));
                     else
