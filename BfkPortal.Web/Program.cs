@@ -14,7 +14,6 @@ namespace BfkPortal.Web
         public static IWebHostBuilder BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseWebRoot(Path.Combine(Directory.GetCurrentDirectory(), Constants.WwwRoot, Constants.Dist))
-                .UseKestrel(options => options.ListenAnyIP(4000))
                 .UseStartup<Startup>();
     }
 }

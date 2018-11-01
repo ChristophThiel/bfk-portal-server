@@ -114,7 +114,7 @@ namespace BfkPortal.Web
 
             using (var context = new ApplicationDbContext())
             {
-                context.Users.RemoveRange(context.Users);
+                context.Database.EnsureDeleted();
                 context.SaveChanges();
                 context.Database.EnsureCreated();
                 var testuser = new User

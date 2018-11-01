@@ -53,7 +53,7 @@ namespace BfkPortal.Persistence
                     }
                     break;
                 default:
-                    optionsBuilder.UseSqlite(configuration.GetConnectionString(configuration["Sqlite"]));
+                    optionsBuilder.UseSqlite(configuration.GetConnectionString("Sqlite"));
                     break;
             }
         }
