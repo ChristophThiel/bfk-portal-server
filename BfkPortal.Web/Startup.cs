@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
 using BfkPortal.Core.Models;
 using BfkPortal.Persistence;
 using BfkPortal.Persistence.Contracts;
@@ -6,6 +7,7 @@ using BfkPortal.Web.Authorization;
 using BfkPortal.Web.Authorization.Requirements;
 using BfkPortal.Web.Contracts;
 using BfkPortal.Web.Middleware;
+using BfkPortal.Web.Security;
 using BfkPortal.Web.Services;
 using BfkPortal.Web.Services.Converters;
 using BfkPortal.Web.ViewModels;
@@ -113,6 +115,20 @@ namespace BfkPortal.Web
             using (var context = new ApplicationDbContext())
             {
                 context.Database.EnsureCreated();
+                var testuser = new User
+                {
+                    Firstname = "Max",
+                    Lastname = "Mustermann",
+                    Email = "max.mustermann@gmail.com",
+                    Salt = new Pbkdf2PasswordHasher().GenerateSalt(),
+                    Entitlements = new List<Entitlement>(),
+                    IsDeleted = false,
+                    Memberships = new List<Membership>(),
+                    Participations = new List<Participation>()
+                };
+                testuser.Password = new Pbkdf2PasswordHasher().HashPassword(testuser, "max");
+                context.Users.Add(testuser);
+                context.SaveChanges();
             }
         }
     }
