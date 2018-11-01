@@ -35,7 +35,7 @@ namespace BfkPortal.Web.Services
         public async Task<UserDto> LogIn(CredentialsViewModel viewModel)
         {
             var user = _unitOfWork.Users.All(nameof(User.Entitlements), nameof(User.Memberships))
-                .SingleOrDefault(u => u.Email == viewModel.Email) ?? throw new Exception("Invalid email or password.");
+                .SingleOrDefault(u => u.Email == viewModel.Email) ?? throw new Exception(Constants.InvalidCredentialsExceptionMessage);
 
             var hasher = new Pbkdf2PasswordHasher();
             if (hasher.VerifyHashedPassword(user, user.Password, viewModel.Password) == PasswordVerificationResult.Failed)

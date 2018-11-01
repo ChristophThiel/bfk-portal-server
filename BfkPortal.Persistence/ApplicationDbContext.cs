@@ -30,8 +30,6 @@ namespace BfkPortal.Persistence
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var source = Path.Combine(Environment.CurrentDirectory, "bfkportal.db");
-
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Environment.CurrentDirectory)
                 .AddJsonFile("appsettings.json")
@@ -43,7 +41,7 @@ namespace BfkPortal.Persistence
                     optionsBuilder.UseMySql(configuration.GetConnectionString(configuration["Provider"]));
                     break;
                 case "PostgreSql":
-                    var postgreSql = Environment.GetEnvironmentVariable("DATABASE_URL");
+                    var postgreSql = Environment.GetEnvironmentVariable("DATABASE_URL"); // configuration.GetConnectionString("PostgreSql");
                     if (postgreSql == null)
                         optionsBuilder.UseSqlite(configuration.GetConnectionString("Sqlite"));
                     else
@@ -51,7 +49,7 @@ namespace BfkPortal.Persistence
                         if (!Uri.TryCreate(postgreSql, UriKind.Absolute, out var url))
                             optionsBuilder.UseSqlite(configuration.GetConnectionString("Sqlite"));
                         else
-                            optionsBuilder.UseNpgsql($"Server={url.Host};Port={url.Port};User Id={url.UserInfo.Split(':')[0]};Password={url.UserInfo.Split(':')[1]};Database={url.LocalPath.Substring(1)}");
+                            optionsBuilder.UseNpgsql($"Server={url.Host};Port={url.Port};User Id={url.UserInfo.Split(':')[0]};Password={url.UserInfo.Split(':')[1]};Database={url.LocalPath.Substring(1)};SSLMode=Require;TrustServerCertificate=True");
                     }
                     break;
                 default:
