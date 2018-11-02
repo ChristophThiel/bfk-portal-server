@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using BfkPortal.Core.Models;
 using System.IO;
 using System.Linq;
+using BfkPortal.Persistence.Contracts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Converters;
@@ -34,6 +35,11 @@ namespace BfkPortal.WebTest
             InitializeUsers();
             InitializeAppointments();
             InitializeOffers();
+
+            using (var unitOfWork = new UnitOfWork())
+            {
+                Assert.Equal("christoph.thiel@liwest.at", unitOfWork.Users.FindAsync(1).Result.Email);
+            }
         }
 
         #region Initialize data

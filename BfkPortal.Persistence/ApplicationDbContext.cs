@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using BfkPortal.Core.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -34,14 +33,15 @@ namespace BfkPortal.Persistence
                 .SetBasePath(Environment.CurrentDirectory)
                 .AddJsonFile("appsettings.json")
                 .Build();
-            
-            switch (configuration["Provider"])
+
+            optionsBuilder.UseSqlite(configuration.GetConnectionString("Sqlite"));
+            /*switch (configuration["Provider"])
             {
                 case "MariaDb":
                     optionsBuilder.UseMySql(configuration.GetConnectionString(configuration["Provider"]));
                     break;
                 case "PostgreSql":
-                    var postgreSql = Environment.GetEnvironmentVariable("DATABASE_URL"); // configuration.GetConnectionString("PostgreSql");
+                    var postgreSql = configuration.GetConnectionString("PostgreSql"); // Environment.GetEnvironmentVariable("DATABASE_URL");
                     if (postgreSql == null)
                         optionsBuilder.UseSqlite(configuration.GetConnectionString("Sqlite"));
                     else
@@ -55,7 +55,7 @@ namespace BfkPortal.Persistence
                 default:
                     optionsBuilder.UseSqlite(configuration.GetConnectionString("Sqlite"));
                     break;
-            }
+            }*/
         }
     }
 }
