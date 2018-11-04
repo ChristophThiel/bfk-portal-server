@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Text;
 using BfkPortal.Core.Models;
 using Microsoft.EntityFrameworkCore;
@@ -38,8 +37,7 @@ namespace BfkPortal.Persistence
 
             if (configuration["Provider"] == "PostgreSql")
             {
-                var connectionString =
-                    "postgres://dmwnwtiayodukp:f311d2f70381eb9f05ed2b075422d6779fcedf3277c5c62870a5277d4b0afbe9@ec2-54-247-86-89.eu-west-1.compute.amazonaws.com:5432/da5r783auf9l6i"; //Environment.GetEnvironmentVariable("DATABASE_URL") ?? configuration.GetConnectionString("Sqlite");
+                var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") ?? configuration.GetConnectionString("Sqlite");
                 if (Uri.TryCreate(connectionString, UriKind.Absolute, out var uri))
                 {
                     var userInfos = uri.UserInfo.Split(':');
@@ -55,28 +53,6 @@ namespace BfkPortal.Persistence
                 }
             }
             optionsBuilder.UseSqlite(configuration.GetConnectionString("Sqlite"));
-
-            /*switch (configuration["Provider"])
-            {
-                case "MariaDb":
-                    optionsBuilder.UseMySql(configuration.GetConnectionString(configuration["Provider"]));
-                    break;
-                case "PostgreSql":
-                    var postgreSql = configuration.GetConnectionString("PostgreSql"); // Environment.GetEnvironmentVariable("DATABASE_URL");
-                    if (postgreSql == null)
-                        optionsBuilder.UseSqlite(configuration.GetConnectionString("Sqlite"));
-                    else
-                    {
-                        if (!Uri.TryCreate(postgreSql, UriKind.Absolute, out var url))
-                            optionsBuilder.UseSqlite(configuration.GetConnectionString("Sqlite"));
-                        else
-                            optionsBuilder.UseNpgsql($"Server={url.Host};Port={url.Port};User Id={url.UserInfo.Split(':')[0]};Password={url.UserInfo.Split(':')[1]};Database={url.LocalPath.Substring(1)};SSLMode=Require;TrustServerCertificate=True");
-                    }
-                    break;
-                default:
-                    optionsBuilder.UseSqlite(configuration.GetConnectionString("Sqlite"));
-                    break;
-            }*/
         }
     }
 }
