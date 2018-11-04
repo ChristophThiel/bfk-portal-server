@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Text;
 using BfkPortal.Core.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -34,7 +36,26 @@ namespace BfkPortal.Persistence
                 .AddJsonFile("appsettings.json")
                 .Build();
 
+            if (configuration["Provider"] == "PostgreSql")
+            {
+                var connectionString =
+                    "postgres://dmwnwtiayodukp:f311d2f70381eb9f05ed2b075422d6779fcedf3277c5c62870a5277d4b0afbe9@ec2-54-247-86-89.eu-west-1.compute.amazonaws.com:5432/da5r783auf9l6i"; //Environment.GetEnvironmentVariable("DATABASE_URL") ?? configuration.GetConnectionString("Sqlite");
+                if (Uri.TryCreate(connectionString, UriKind.Absolute, out var uri))
+                {
+                    var userInfos = uri.UserInfo.Split(':');
+                    var builder = new StringBuilder();
+                    builder.Append("Server=").Append(uri.Host)
+                        .Append(";Port=").Append(uri.Port)
+                        .Append(";User Id=").Append(userInfos[0])
+                        .Append(";Password=").Append(userInfos[1])
+                        .Append(";Database=").Append(uri.LocalPath.Substring(1))
+                        .Append(";SSLMode=Require;TrustServerCertificate=True");
+                    optionsBuilder.UseNpgsql(builder.ToString());
+                    return;
+                }
+            }
             optionsBuilder.UseSqlite(configuration.GetConnectionString("Sqlite"));
+
             /*switch (configuration["Provider"])
             {
                 case "MariaDb":
