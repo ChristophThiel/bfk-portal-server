@@ -9,9 +9,13 @@ namespace BfkPortal.Web.Contracts
     {
         IEnumerable<UserDto> All();
 
+        IEnumerable<UserDto> AllUsersOfSameRoleGroup(params string[] roles);
+
         Task Remove(int id);
 
         IEnumerable<string> Roles();
+
+        IEnumerable<string> RolesOfRoleGroup(params string[] roles);
 
         Task Update(UserViewModel viewModel);
     }

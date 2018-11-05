@@ -25,7 +25,21 @@ namespace BfkPortal.Web.Services
 
         public IEnumerable<UserDto> All()
         {
-            return _unitOfWork.Users.All(nameof(User.Entitlements), nameof(User.Memberships)).Select(u => _modelToDtoConverter.Convert(u).Result);
+            return _unitOfWork.Users.All(nameof(User.Entitlements), nameof(User.Memberships))
+                .Select(u => _modelToDtoConverter.Convert(u).Result);
+        }
+
+        public IEnumerable<UserDto> AllUsersOfSameRoleGroup(params string[] roles)
+        {
+            var roleGroups = new List<string>(2);
+            if (roles.Any(r => r.EndsWith(Constants.Bfk)))
+                roleGroups.Add(Constants.Bfk);
+            if (roles.Any(r => r == Constants.AdminBwst))
+                roleGroups.Add(Constants.Bwst);
+
+            return _unitOfWork.Entitlements.All(nameof(Entitlement.User), nameof(Entitlement.Role))
+                .Where(e => roleGroups.Any(r => e.Role.Name.EndsWith(r)))
+                .Select(e => _modelToDtoConverter.Convert(e.User).Result);
         }
 
         public async Task Remove(int id)
@@ -40,6 +54,19 @@ namespace BfkPortal.Web.Services
         public IEnumerable<string> Roles()
         {
             return _unitOfWork.Roles.All().Select(r => r.Name);
+        }
+
+        public IEnumerable<string> RolesOfRoleGroup(params string[] roles)
+        {
+            var roleGroups = new List<string>();
+            if (roles.Any(r => r == Constants.AdminBfk))
+                roleGroups.Add(Constants.Bfk);
+            if (roles.Any(r => r == Constants.AdminBwst))
+                roleGroups.Add(Constants.Bwst);
+
+            return _unitOfWork.Roles.All()
+                .Where(r => roleGroups.Any(roleGroup => r.Name.EndsWith(roleGroup)))
+                .Select(r => r.Name);
         }
 
         public async Task Update(UserViewModel viewModel)

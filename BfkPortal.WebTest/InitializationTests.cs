@@ -23,11 +23,10 @@ namespace BfkPortal.WebTest
         [Fact]
         public void Initialize()
         {
-            /*using (var unitOfWork = new UnitOfWork())
+            using (var unitOfWork = new UnitOfWork())
             {
-                unitOfWork.DeleteDatabaseAsync().Wait();
                 unitOfWork.CreateDatabaseAsync().Wait();
-            }*/
+            }
 
             InitializeRoles();
             InitializeOrganisations();

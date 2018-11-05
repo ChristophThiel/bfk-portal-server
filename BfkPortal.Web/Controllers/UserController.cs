@@ -2,6 +2,8 @@
 using BfkPortal.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BfkPortal.Web.Controllers
@@ -22,7 +24,8 @@ namespace BfkPortal.Web.Controllers
         [HttpGet("[action]")]
         public IActionResult All()
         {
-            var result = _service.All();
+            var result = _service.AllUsersOfSameRoleGroup(User.Claims
+                .Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray());
             return Ok(result);
         }
 
@@ -44,11 +47,12 @@ namespace BfkPortal.Web.Controllers
             return Ok();
         }
 
-        [Authorize(Roles = "UserBfk, AdminBfk, AdminBwst")]
+        [Authorize(Roles = "AdminBfk, AdminBwst")]
         [HttpGet("[action]")]
         public IActionResult Roles()
         {
-            var result = _service.Roles();
+            var result = _service.RolesOfRoleGroup(User.Claims
+                .Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray());
             return Ok(result);
         }
     }

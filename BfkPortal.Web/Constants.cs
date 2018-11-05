@@ -7,7 +7,10 @@
         public const string Dist = "dist";
 
         // Roles
+        public const string Roles = "Roles";
         public const string Admin = "Admin";
+        public const string Bfk = "Bfk";
+        public const string Bwst = "Bwst";
         public const string AdminBfk = "AdminBfk";
         public const string AdminBwst = "AdminBwst";
 

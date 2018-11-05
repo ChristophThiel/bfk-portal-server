@@ -37,7 +37,7 @@ namespace BfkPortal.Persistence
 
             if (configuration["Provider"] == "PostgreSql")
             {
-                var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") ?? configuration.GetConnectionString("Sqlite");
+                var connectionString = "postgres://ropsfviivirsco:e5b3fe9942dd72a3e86cd93c007f497506859666f399c40853013ece62ceddf3@ec2-54-217-235-166.eu-west-1.compute.amazonaws.com:5432/d7sk2t2ssh54m0";// Environment.GetEnvironmentVariable("DATABASE_URL");
                 if (Uri.TryCreate(connectionString, UriKind.Absolute, out var uri))
                 {
                     var userInfos = uri.UserInfo.Split(':');
