@@ -2,6 +2,9 @@
 {
     public static class Constants
     {
+        // Environment Variables
+        public const string SendGridApiKey = "SENDGRID_API_KEY";
+
         // Paths
         public const string WwwRoot = "wwwroot";
         public const string Dist = "dist";

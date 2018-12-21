@@ -14,7 +14,7 @@ install:
 # - nvm install node
 # - npm install -g heroku
 # - npm install -g @angular/cli
- 
+
 script:
  - dotnet build
 # - dotnet test ./BfkPortal.PersistenceTest/BfkPortal.PersistenceTest.csproj
@@ -34,7 +34,7 @@ script:
 # - ng build --prod --source-map=false
 # - cd ..
 # - cp -R ./bfk-portal-client/dist/mdb-angular-pro/ ./BfkPortal.Web/wwwroot/dist/
- 
+
 #before_deploy:
 # - git clone https://$ACCESS_TOKEN@github.com/MatthiasHerzog2000/bfk-portal-client.git
 # - cd ./bfk-portal-client
@@ -42,7 +42,7 @@ script:
 # - ng build --prod --source-map=false
 # - cd ..
 # - cp -R ./bfk-portal-client/dist/mdb-angular-pro/ ./BfkPortal.Web/wwwroot/dist/
- 
+
 #deploy:
 #  provider: heroku
 #  api_key: $API_KEY

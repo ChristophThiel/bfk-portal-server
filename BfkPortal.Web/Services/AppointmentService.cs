@@ -17,7 +17,10 @@ namespace BfkPortal.Web.Services
         private readonly IConverter<AppointmentViewModel, Appointment> _viewModelToModelConverter;
         private readonly IConverter<Appointment, AppointmentDto> _modelToDtoConverter;
 
-        public AppointmentService(IUnitOfWork unitOfWork, IConverter<AppointmentViewModel, Appointment> viewModelToModelConverter, IConverter<Appointment, AppointmentDto> modelToDtoConverter)
+        public AppointmentService(IUnitOfWork unitOfWork,
+            IConverter<AppointmentViewModel, Appointment> viewModelToModelConverter,
+            IConverter<Appointment,
+            AppointmentDto> modelToDtoConverter)
         {
             _unitOfWork = unitOfWork;
             _viewModelToModelConverter = viewModelToModelConverter;
@@ -133,7 +136,6 @@ namespace BfkPortal.Web.Services
             _unitOfWork.Appointments.Update(model);
 
             await _unitOfWork.SaveChangesAsync();
-
             return model.Id;
         }
 

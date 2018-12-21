@@ -11,11 +11,15 @@ namespace BfkPortal.Web.Contracts
 
         IEnumerable<UserDto> AllUsersOfSameRoleGroup(params string[] roles);
 
+        Task<string> GetToken(int id);
+
         Task Remove(int id);
 
         IEnumerable<string> Roles();
 
         IEnumerable<string> RolesOfRoleGroup(params string[] roles);
+
+        Task SetToken(int id, string token);
 
         Task Update(UserViewModel viewModel);
     }

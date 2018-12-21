@@ -1,0 +1,83 @@
+{
+  "configVersion": 1,
+  "index": "/index.html",
+  "assetGroups": [
+    {
+      "name": "Bfk-Portal-Client",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "urls": [
+        "/10.4d9c7633a33ec6691235.js",
+        "/11.18709d9b0624ab99b887.js",
+        "/12.1a88095436ea2baa0707.js",
+        "/2.64b8b3b682d6027bed32.js",
+        "/6.e1d42d4cb8b0c6525094.js",
+        "/7.f7572962e855e45fd05d.js",
+        "/8.a28c0410da4433317674.js",
+        "/9.ca16d187b0e8fcb7a0a0.js",
+        "/common.90542bc200761138965a.js",
+        "/firebase-messaging-sw.js",
+        "/index.html",
+        "/main.9ed467be6cc67a122f12.js",
+        "/polyfills.1db45ed36e44fa5b28fa.js",
+        "/runtime.56329db011d481f3924c.js",
+        "/scripts.dd86f002a5aef1b13f0f.js",
+        "/styles.dd2aa0d74edccef954bf.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "urls": [
+        "/assets/AbzeichenPng.png",
+        "/assets/LoadingIcon.ico",
+        "/assets/Logo.png",
+        "/assets/favicon.ico"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "/10.4d9c7633a33ec6691235.js": "b1ae9c5fcca94f06c52151a7e1651370ffd018a7",
+    "/11.18709d9b0624ab99b887.js": "c5dfa09dfc914625ad12486abbe2bc8ecda39073",
+    "/12.1a88095436ea2baa0707.js": "8cdca656ee43b29577eea12f84c33141d998498c",
+    "/2.64b8b3b682d6027bed32.js": "130f327c7b934c2cf7b2b93f003718d5af433b68",
+    "/6.e1d42d4cb8b0c6525094.js": "d55a9f6e8965f5f5cff33c6f15fbdbc94130a4a8",
+    "/7.f7572962e855e45fd05d.js": "cc6bef577be00d380bf3639117f31d976deb9586",
+    "/8.a28c0410da4433317674.js": "b6b45de90c8762104e272a099a5ded1aef70eedc",
+    "/9.ca16d187b0e8fcb7a0a0.js": "64f875e49511f8c3a6969d938f197d8ac92a5566",
+    "/assets/AbzeichenPng.png": "b8b3506babc8ac42d51f4b709a68800e2d32efa2",
+    "/assets/LoadingIcon.ico": "d66b3dbd39e824286a6b3fe109ca1454a15f6233",
+    "/assets/Logo.png": "0fe4c6182faade69dc4e5bfe4dfbcf198e0a8062",
+    "/assets/favicon.ico": "fbbfe1fb210390f32d867a716010384ed2f309ee",
+    "/common.90542bc200761138965a.js": "5d71f496745404c3161c43b5c170a3f6b1d54650",
+    "/firebase-messaging-sw.js": "39cad5568eef8b8730a49959682c9c8e96bd0550",
+    "/index.html": "86a9fc9dcbe66a810935b986d012b9af9fcb328e",
+    "/main.9ed467be6cc67a122f12.js": "bc96fa339f925877c244bc675ac22299aa620e7c",
+    "/polyfills.1db45ed36e44fa5b28fa.js": "d02ba8506e22dd756ae377d2e9c5db97ff90eab5",
+    "/runtime.56329db011d481f3924c.js": "349607effafe3930aa67cc05587d8acd4a559baa",
+    "/scripts.dd86f002a5aef1b13f0f.js": "c26f6a0717da4ddf39dcf1b850dad079351c42ce",
+    "/styles.dd2aa0d74edccef954bf.css": "b31438a4b3f6ba4d1cd324ad4d1a30987c8ac3b1"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ]
+}

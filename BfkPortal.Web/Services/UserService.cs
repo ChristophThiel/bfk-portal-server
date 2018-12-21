@@ -42,6 +42,12 @@ namespace BfkPortal.Web.Services
                 .Select(e => _modelToDtoConverter.Convert(e.User).Result);
         }
 
+        public async Task<string> GetToken(int id)
+        {
+            var user = (await _unitOfWork.Users.FindAsync(id)) ?? throw new NullReferenceException();
+            return user.NotificationToken ?? throw new NullReferenceException();
+        }
+
         public async Task Remove(int id)
         {
             var entity = (await _unitOfWork.Users.FindAsync(id)) ?? throw new NullReferenceException();
@@ -67,6 +73,14 @@ namespace BfkPortal.Web.Services
             return _unitOfWork.Roles.All()
                 .Where(r => roleGroups.Any(roleGroup => r.Name.EndsWith(roleGroup)))
                 .Select(r => r.Name);
+        }
+
+        public async Task SetToken(int id, string token)
+        {
+            var user = (await _unitOfWork.Users.FindAsync(id)) ?? throw new NotImplementedException();
+            user.NotificationToken = token;
+
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task Update(UserViewModel viewModel)

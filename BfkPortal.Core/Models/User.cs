@@ -13,6 +13,9 @@ namespace BfkPortal.Core.Models
         public string Lastname { get; set; }
 
         [Required]
+        public string Telephone { get; set; }
+
+        [Required]
         public string Email { get; set; }
 
         [Required]
@@ -23,6 +26,8 @@ namespace BfkPortal.Core.Models
         
         [Required]
         public bool IsDeleted { get; set; }
+        
+        public string NotificationToken { get; set; }
 
         public ICollection<Membership> Memberships { get; set; }
 
@@ -40,29 +45,4 @@ namespace BfkPortal.Core.Models
             Possessions = new Collection<Possession>();
         }
     }
-
-    /* [Required]
-    public string Firstname { get; set; }
-
-    [Required]
-    public string Lastname { get; set; }
-
-    [Required]
-    public string Email { get; set; }
-
-    [Required]
-    public string Password { get; set; }
-
-    [Required]
-    public string Salt { get; set; }
-
-    [Required]
-    public bool IsDeleted { get; set; }
-
-    public ICollection<Entitlement> Entitlements { get; set; }
-
-    public ICollection<Membership> Memberships { get; set; }
-
-    public ICollection<Participation> Participations { get; set; } 
-}*/
 }

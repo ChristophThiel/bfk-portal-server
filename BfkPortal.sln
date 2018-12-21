@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BfkPortal.Persistence", "Bf
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BfkPortal.Web", "BfkPortal.Web\BfkPortal.Web.csproj", "{CE64BBB7-7587-4ABE-91CA-347E4025A148}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BfkPortal.WebTest", "BfkPortal.WebTest\BfkPortal.WebTest.csproj", "{0B5C2B06-EB35-4FFD-849A-4D002ECC8B64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BfkPortal.WebTest", "BfkPortal.WebTest\BfkPortal.WebTest.csproj", "{0B5C2B06-EB35-4FFD-849A-4D002ECC8B64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BfkPortal.PersistenceTest", "BfkPortal.PersistenceTest\BfkPortal.PersistenceTest.csproj", "{681EF20E-3157-40CA-AA32-7D38E657B6B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BfkPortal.PersistenceTest", "BfkPortal.PersistenceTest\BfkPortal.PersistenceTest.csproj", "{681EF20E-3157-40CA-AA32-7D38E657B6B8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HolidayApi", "HolidayApi\HolidayApi.csproj", "{5DB46305-2501-4AA5-AE0A-99D078663903}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{681EF20E-3157-40CA-AA32-7D38E657B6B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{681EF20E-3157-40CA-AA32-7D38E657B6B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{681EF20E-3157-40CA-AA32-7D38E657B6B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DB46305-2501-4AA5-AE0A-99D078663903}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DB46305-2501-4AA5-AE0A-99D078663903}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DB46305-2501-4AA5-AE0A-99D078663903}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DB46305-2501-4AA5-AE0A-99D078663903}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

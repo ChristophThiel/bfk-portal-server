@@ -3,6 +3,7 @@
     {
         "firstname": "Christoph",
         "lastname": "Thiel",
+        "telephone":  "+43 664 1234567",
         "email": "christoph.thiel@liwest.at",
         "password": "christoph",
         "isDeleted": false,
@@ -17,6 +18,7 @@
     {
         "firstname": "Alexander",
         "lastname": "Koblmüller",
+        "telephone": "+43 664 1234567",
         "email": "alexander.koblmueller@gmail.com",
         "password": "alexander",
         "isDeleted": false,
@@ -31,6 +33,7 @@
     {
         "firstname": "Christoph",
         "lastname": "Zimprich",
+        "telephone": "+43 664 1234567",
         "email": "christoph.zimprich@gmail.com",
         "password": "christoph",
         "isDeleted": false,
@@ -48,6 +51,7 @@
     {
         "firstname": "Christian",
         "lastname": "Eichinger",
+        "telephone": "+43 664 1234567",
         "email": "christian.eichinger@gmail.com",
         "password": "christian",
         "isDeleted": false,
@@ -64,6 +68,7 @@
     {
         "firstname": "Thomas",
         "lastname": "Fraungruber",
+        "telephone": "+43 664 1234567",
         "email": "thomas.fraungruber@gmail.com",
         "password": "thomas",
         "isDeleted": false,
@@ -78,6 +83,7 @@
     {
         "firstname": "Sieghard",
         "lastname": "Bauer",
+        "telephone": "+43 664 1234567",
         "email": "sieghard.bauer@gmail.com",
         "password": "sieghard",
         "isDeleted": false,
@@ -92,6 +98,7 @@
     {
         "firstname": "Roland",
         "lastname": "Wasserbauer",
+        "telephone": "+43 664 1234567",
         "email": "roland.wasserbauer@gmail.com",
         "password": "roland",
         "isDeleted": false,
@@ -108,6 +115,7 @@
     {
         "firstname": "Martin",
         "lastname": "Niederl",
+        "telephone": "+43 664 1234567",
         "email": "martin.niederl@gmail.com",
         "password": "---",
         "isDeleted": false,
@@ -122,6 +130,7 @@
     {
         "firstname": "Matthias",
         "lastname": "Herzog",
+        "telephone": "+43 664 1234567",
         "email": "@gmail.com",
         "password": "---",
         "isDeleted": true,
