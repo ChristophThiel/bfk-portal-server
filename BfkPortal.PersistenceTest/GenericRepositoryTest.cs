@@ -136,7 +136,7 @@ namespace BfkPortal.PersistenceTest
         {
             using (var unitOfWork = new UnitOfWork())
             {
-                unitOfWork.DeleteDatabaseAsync().Wait();
+                //unitOfWork.DeleteDatabaseAsync().Wait();
                 unitOfWork.CreateDatabaseAsync().Wait();
             }
         }

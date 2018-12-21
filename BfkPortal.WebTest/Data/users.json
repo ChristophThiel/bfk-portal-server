@@ -3,7 +3,7 @@
     {
         "firstname": "Christoph",
         "lastname": "Thiel",
-        "telephone":  "+43 664 1234567",
+        "telephone": "+43 664 1234567",
         "email": "christoph.thiel@liwest.at",
         "password": "christoph",
         "isDeleted": false,

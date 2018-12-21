@@ -8,6 +8,8 @@ namespace BfkPortal.Web.ViewModels.DataTransferObjects
 
         public string Lastname { get; set; }
 
+        public string Telephone { get; set; }
+
         public string Email { get; set; }
 
         public bool IsDeleted { get; set; }

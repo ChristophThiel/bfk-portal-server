@@ -37,7 +37,7 @@ namespace BfkPortal.Persistence
 
             if (configuration["Provider"] == "PostgreSql")
             {
-                var connectionString = "postgres://ropsfviivirsco:e5b3fe9942dd72a3e86cd93c007f497506859666f399c40853013ece62ceddf3@ec2-54-217-235-166.eu-west-1.compute.amazonaws.com:5432/d7sk2t2ssh54m0";// Environment.GetEnvironmentVariable("DATABASE_URL");
+                var connectionString = "postgres://dvzigbtyhpryno:3f37dfb72775ecdf42ded6c92d78a75c1d4ae301b3f2a661dc814c6fe9b90d45@ec2-54-247-74-131.eu-west-1.compute.amazonaws.com:5432/d4vt87fi3h9jgk";
                 if (Uri.TryCreate(connectionString, UriKind.Absolute, out var uri))
                 {
                     var userInfos = uri.UserInfo.Split(':');
@@ -49,10 +49,10 @@ namespace BfkPortal.Persistence
                         .Append(";Database=").Append(uri.LocalPath.Substring(1))
                         .Append(";SSLMode=Require;TrustServerCertificate=True");
                     optionsBuilder.UseNpgsql(builder.ToString());
-                    return;
                 }
             }
-            optionsBuilder.UseSqlite(configuration.GetConnectionString("Sqlite"));
+            else
+                optionsBuilder.UseSqlite(configuration.GetConnectionString("Sqlite"));
         }
     }
 }

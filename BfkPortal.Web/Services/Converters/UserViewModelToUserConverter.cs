@@ -26,6 +26,7 @@ namespace BfkPortal.Web.Services.Converters
 
             destination.Firstname = source.Firstname;
             destination.Lastname = source.Lastname;
+            destination.Telephone = source.Telephone;
             destination.Email = source.Email;
 
             // Password not needed

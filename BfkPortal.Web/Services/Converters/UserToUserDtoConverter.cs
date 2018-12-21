@@ -26,6 +26,7 @@ namespace BfkPortal.Web.Services.Converters
                 Id = source.Id,
                 Firstname = source.Firstname,
                 Lastname = source.Lastname,
+                Telephone = source.Telephone,
                 Email = source.Email,
                 IsDeleted = source.IsDeleted
             };
