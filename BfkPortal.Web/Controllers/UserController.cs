@@ -38,6 +38,19 @@ namespace BfkPortal.Web.Controllers
             return Ok();
         }
 
+        [HttpGet("[action]/{userId:int}")]
+        public async Task<IActionResult> GetToken(int userId)
+        {
+            return Ok(new { Token = await _service.GetToken(userId) });
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> SetToken(NotificationTokenViewModel viewModel)
+        {
+            await _service.SetToken(viewModel.UserId, viewModel.Token);
+            return Ok();
+        }
+
         [Authorize(Roles = "AdminBfk, AdminBwst")]
         [Authorize(Policy = Constants.UserOfSameRoleGroupPolicy)]
         [HttpPost("[action]")]
