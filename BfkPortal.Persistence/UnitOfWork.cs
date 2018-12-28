@@ -9,7 +9,7 @@ namespace BfkPortal.Persistence
     public class UnitOfWork : IUnitOfWork
     {
         private ApplicationDbContext _context;
-        
+
         public IGenericRepository<Appointment> Appointments { get; }
 
         public IGenericRepository<Offer> Offers { get; }

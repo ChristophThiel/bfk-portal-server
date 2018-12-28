@@ -9,14 +9,12 @@ namespace BfkPortal.Web.Services.Converters
     {
         public async Task<OrganisationDto> Convert(Organisation source)
         {
-            var destination = new OrganisationDto
+            return await Task.Factory.StartNew(() => new OrganisationDto
             {
                 Id = source.Id,
                 Name = source.Name,
                 IsDeleted = source.IsDeleted
-            };
-
-            return destination;
+            });
         }
     }
 }

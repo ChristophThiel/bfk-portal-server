@@ -32,17 +32,10 @@ namespace BfkPortal.Web
             Configuration = configuration;
             Hosting = hosting;
         }
-        
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>();
-
-            services.AddCors(o => o.AddPolicy("Cors", builder =>
-            {
-                builder.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader();
-            }));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -63,7 +56,7 @@ namespace BfkPortal.Web
                 options.AddPolicy(Constants.FreeAppointmentPolicy, policy => policy.Requirements.Add(new FreeAppointmentRequirement()));
                 options.AddPolicy(Constants.UserOfSameRoleGroupPolicy, policy => policy.Requirements.Add(new UserOfSameRoleGroupRequirement()));
             });
-            
+
             services.AddScoped<IUnitOfWork, UnitOfWork>(serviceProvider => new UnitOfWork());
 
             // Converters
@@ -75,7 +68,7 @@ namespace BfkPortal.Web
             services.AddScoped<IConverter<Appointment, AppointmentDto>, AppointmentToAppointmentDtoConverter>();
             services.AddScoped<IConverter<OfferViewModel, Offer>, OfferViewModelToOfferConverter>();
             services.AddScoped<IConverter<Offer, OfferDto>, OfferToOfferDtoConverter>();
-            
+
             // Services
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IAppointmentService, AppointmentService>();
@@ -84,7 +77,7 @@ namespace BfkPortal.Web
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IEmailService, EmailService>();
-            
+
             // Policy Handlers
             services.AddTransient<IAuthorizationHandler, OwnerOfAppointmentHandler>();
             services.AddTransient<IAuthorizationHandler, FreeAppointmentHandler>();
@@ -101,7 +94,7 @@ namespace BfkPortal.Web
             }
 
             app.UseCors("Cors");
-            
+
             app.UseDefaultFiles();
             app.UseStaticFiles();
 

@@ -11,7 +11,7 @@ namespace BfkPortal.Web.Controllers
     public class HolidaysController : ControllerBase
     {
         [HttpGet("{year:int}")]
-        public async Task<IActionResult> All(int year)
+        public IActionResult All(int year)
         {
             var calculator = new HolidayCalculator(year);
             return Ok(calculator.ExportHolidays());

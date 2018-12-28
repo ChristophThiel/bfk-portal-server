@@ -32,6 +32,8 @@ namespace HolidayApi
 
         public DateTime MaryConception { get; set; }
 
+        public DateTime ChristmasEve { get; set; }
+
         public DateTime ChristmasDay { get; set; }
 
         public DateTime BoxingDay { get; set; }
@@ -51,13 +53,14 @@ namespace HolidayApi
             NationalHoliday = new DateTime(Year, 10, 26);
             AllSaintsDay = new DateTime(Year, 11, 1);
             MaryConception = new DateTime(Year, 12, 8);
+            ChristmasEve = new DateTime(Year, 12, 24);
             ChristmasDay = new DateTime(Year, 12, 25);
             BoxingDay = new DateTime(Year, 12, 26);
         }
 
         public IEnumerable<Holiday> ExportHolidays()
         {
-            return new []
+            return new[]
                 {
                     new Holiday
                     {
@@ -121,7 +124,12 @@ namespace HolidayApi
                     },
                     new Holiday
                     {
-                        Name = "Christtag",
+                        Name = "Heilig Abend",
+                        Date = ChristmasEve
+                    },
+                    new Holiday
+                    {
+                        Name = "Weihnachten",
                         Date = ChristmasDay
                     },
                     new Holiday
