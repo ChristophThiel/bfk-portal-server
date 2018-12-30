@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[0],{NlNA:function(t,i,n){"use strict";n.d(i,"a",function(){return e});var e=function(){function t(){this.id=0,this.firstname="",this.lastname="",this.email="",this.entitlements=[],this.memberships=[],this.isDeleted=!1,this.telephone=""}return t.checkparticipations=function(t){return!!t.email},t}()}}]);

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using BfkPortal.Core.Models;
 using BfkPortal.Persistence.Contracts;
 using BfkPortal.Web.Contracts;
+using BfkPortal.Web.ViewModels.DataTransferObjects;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
@@ -15,17 +16,19 @@ namespace BfkPortal.Web.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IConverter<Core.Models.File, FileDto> _modelToDtoConverter;
 
-        public FileService(IUnitOfWork unitOfWork, IHostingEnvironment hostingEnvironment)
+        public FileService(IUnitOfWork unitOfWork, IHostingEnvironment hostingEnvironment, IConverter<Core.Models.File, FileDto> modelToDtoConverter)
         {
             _unitOfWork = unitOfWork;
             _hostingEnvironment = hostingEnvironment;
+            _modelToDtoConverter = modelToDtoConverter;
         }
 
-        public IEnumerable<string> All()
+        public IEnumerable<FileDto> All()
         {
             return _unitOfWork.Files.All()
-                .Select(f => f.FileName);
+                .Select(f => _modelToDtoConverter.Convert(f).Result);
         }
 
         public async Task Remove(int fileId, string email)
@@ -44,7 +47,7 @@ namespace BfkPortal.Web.Services
                     user.Entitlements.Any(e =>
                         _unitOfWork.Roles.FindAsync(e.RoleId).Result.Name.StartsWith(Constants.Admin)))
                 {
-                    System.IO.File.Delete(file.Path);
+                    System.IO.File.Delete(Path.Combine(file.Path, file.FileName));
                     _unitOfWork.Files.Remove(file);
                     await _unitOfWork.SaveChangesAsync();
                 }

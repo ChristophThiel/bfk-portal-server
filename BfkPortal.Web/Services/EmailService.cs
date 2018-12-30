@@ -11,7 +11,6 @@ namespace BfkPortal.Web.Services
 {
     public class EmailService : IEmailService
     {
-        // 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
         private readonly SmtpClient client;
 
         public EmailService()
@@ -27,14 +26,6 @@ namespace BfkPortal.Web.Services
 
         public async Task Send(string to, string from, string subject, string content)
         {
-            /*var mail = new MailMessage(from, to)
-            {
-                Subject = subject,
-                Body = content,
-                IsBodyHtml = true
-            };
-
-            await client.SendMailAsync(mail);*/
             var client = new SendGridClient(Environment.GetEnvironmentVariable(Constants.SendGridApiKey));
             var email = MailHelper.CreateSingleEmail(new EmailAddress(from), new EmailAddress(to), subject, "", content);
 
@@ -45,17 +36,6 @@ namespace BfkPortal.Web.Services
 
         public async Task Send(string[] to, string from, string subject, string content)
         {
-            /*var mail = new MailMessage()
-            {
-                From = new MailAddress(from),
-                Subject = subject,
-                Body = content,
-                IsBodyHtml = true
-            };
-            foreach (var email in to)
-                mail.To.Add(email);
-
-            await client.SendMailAsync(mail);*/
             var client = new SendGridClient(Environment.GetEnvironmentVariable(Constants.SendGridApiKey));
             var email = MailHelper.CreateSingleEmailToMultipleRecipients(new EmailAddress(from),
                 to.Select(e => new EmailAddress(e)).ToList(), subject, "", content);

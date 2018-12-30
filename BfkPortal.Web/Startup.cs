@@ -68,6 +68,7 @@ namespace BfkPortal.Web
             services.AddScoped<IConverter<Appointment, AppointmentDto>, AppointmentToAppointmentDtoConverter>();
             services.AddScoped<IConverter<OfferViewModel, Offer>, OfferViewModelToOfferConverter>();
             services.AddScoped<IConverter<Offer, OfferDto>, OfferToOfferDtoConverter>();
+            services.AddScoped<IConverter<File, FileDto>, FileToFileDtoConverter>();
 
             // Services
             services.AddScoped<IAuthenticationService, AuthenticationService>();
@@ -77,6 +78,7 @@ namespace BfkPortal.Web
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IHolidaysService, HolidaysService>();
 
             // Policy Handlers
             services.AddTransient<IAuthorizationHandler, OwnerOfAppointmentHandler>();

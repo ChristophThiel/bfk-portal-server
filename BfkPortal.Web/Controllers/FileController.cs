@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using BfkPortal.Web.Contracts;
@@ -23,8 +24,9 @@ namespace BfkPortal.Web.Controllers
         [HttpGet("[action]")]
         public IActionResult All()
         {
-            var files = _service.All();
-            return Ok(files);
+            var fileDtos = _service.All().ToList();
+            var help = fileDtos.Count();
+            return Ok(fileDtos);
         }
 
         [Authorize(Roles = "AdminBfk, AdminBwst")]
@@ -38,8 +40,12 @@ namespace BfkPortal.Web.Controllers
 
         [Authorize(Roles = "AdminBfk, AdminBwst")]
         [HttpPost("[action]")]
-        public async Task<IActionResult> Upload(IFormFile file)
+        public async Task<IActionResult> Upload()
         {
+            var file = Request.Form.Files.FirstOrDefault();
+            if (file == null)
+                throw new NullReferenceException();
+
             var email = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email).Value;
             await _service.Upload(file, email);
             return Ok();

@@ -17,8 +17,36 @@ messaging.setBackgroundMessageHandler(function(payload) {
     console.log('Received background message ', payload);
     // here you can override some options describing what's in the message; 
     // however, the actual content will come from the Webtask
+    const notificationTitle= payload.notification.title;
     const notificationOptions = {
-      icon: '/assets/images/logo-128.png'
+      body: payload.notification.body,
+      icon: payload.notification.icon
     };
     return self.registration.showNotification(notificationTitle, notificationOptions);
   });
+  self.addEventListener("notificationclick", function(event) {
+    const clickedNotification = event.notification;
+  clickedNotification.close();
+  const promiseChain = clients
+      .matchAll({
+          type: 'window',
+          includeUncontrolled: true
+       })
+      .then(windowClients => {
+          let matchingClient = null;
+          for (let i = 0; i < windowClients.length; i++) {
+              const windowClient = windowClients[i];
+              if (windowClient.url === feClickAction) {
+                  matchingClient = windowClient;
+                  break;
+              }
+          }
+          if (matchingClient) {
+              return matchingClient.focus();
+          } else {
+              return clients.openWindow(feClickAction);
+          }
+      });
+      event.waitUntil(promiseChain);
+
+});
