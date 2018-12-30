@@ -37,7 +37,7 @@ namespace BfkPortal.Persistence
 
             if (configuration["Provider"] == "PostgreSql")
             {
-                var connectionString = "postgres://dvzigbtyhpryno:3f37dfb72775ecdf42ded6c92d78a75c1d4ae301b3f2a661dc814c6fe9b90d45@ec2-54-247-74-131.eu-west-1.compute.amazonaws.com:5432/d4vt87fi3h9jgk";//System.Environment.GetEnvironmentVariable("DATABASE_URL");
+                var connectionString = System.Environment.GetEnvironmentVariable("DATABASE_URL");
                 if (Uri.TryCreate(connectionString, UriKind.Absolute, out var uri))
                 {
                     var userInfos = uri.UserInfo.Split(':');
