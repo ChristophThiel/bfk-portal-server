@@ -43,9 +43,7 @@ namespace BfkPortal.Web.Services
             {
                 var possession = user.Possessions.ElementAt(i);
                 var file = await _unitOfWork.Files.FindAsync(possession.FileId);
-                if (file.Id == fileId && file.OwnerId == user.Id ||
-                    user.Entitlements.Any(e =>
-                        _unitOfWork.Roles.FindAsync(e.RoleId).Result.Name.StartsWith(Constants.Admin)))
+                if (file.Id == fileId && (file.OwnerId == user.Id || user.Entitlements.Any(e => _unitOfWork.Roles.FindAsync(e.RoleId).Result.Name.StartsWith(Constants.Admin))))
                 {
                     System.IO.File.Delete(Path.Combine(file.Path, file.FileName));
                     _unitOfWork.Files.Remove(file);
