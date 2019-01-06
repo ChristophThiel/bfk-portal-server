@@ -57,6 +57,12 @@ namespace BfkPortal.Web
                 options.AddPolicy(Constants.UserOfSameRoleGroupPolicy, policy => policy.Requirements.Add(new UserOfSameRoleGroupRequirement()));
             });
 
+            services.AddCors(o => o.AddPolicy("Cors", builder =>
+                builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+            ));
+
             services.AddScoped<IUnitOfWork, UnitOfWork>(serviceProvider => new UnitOfWork());
 
             // Converters
