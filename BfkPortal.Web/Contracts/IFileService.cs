@@ -9,6 +9,8 @@ namespace BfkPortal.Web.Contracts
     {
         IEnumerable<FileDto> All();
 
+        Task<string> Download(int fileId);
+
         Task Remove(int fileId, string email);
 
         Task Upload(IFormFile file, string email);

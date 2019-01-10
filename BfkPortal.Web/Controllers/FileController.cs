@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using BfkPortal.Web.Contracts;
 using Microsoft.AspNetCore.Authorization;
@@ -36,6 +37,13 @@ namespace BfkPortal.Web.Controllers
             var email = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email).Value;
             await _service.Remove(fileId, email);
             return Ok();
+        }
+
+        [HttpGet("[action]/{fileId:int}")]
+        public async Task<IActionResult> Download(int fileId)
+        {
+            var file = await _service.Download(fileId);
+            return File(file, Constants.FileContentType);
         }
 
         [Authorize(Roles = "AdminBfk, AdminBwst")]

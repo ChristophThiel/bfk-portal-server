@@ -21,7 +21,6 @@
   <ItemGroup>
     <ProjectReference Include="..\BfkPortal.Core\BfkPortal.Core.csproj" />
     <ProjectReference Include="..\BfkPortal.Persistence\BfkPortal.Persistence.csproj" />
-    <ProjectReference Include="..\HolidayApi\HolidayApi.csproj" />
   </ItemGroup>
 
   <ItemGroup>

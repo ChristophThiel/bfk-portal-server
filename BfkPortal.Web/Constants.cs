@@ -32,6 +32,7 @@
 
         // File System
         public const string FileStorageFolderName = "Files";
+        public const string FileContentType = "application/octet-stream";
 
         // Exceptions
         public const string AlreadyParticipantExceptionMessage = "User or organisation already participant.";
@@ -41,5 +42,6 @@
         public const string InvalidCredentialsExceptionMessage = "Invalid email or password.";
         public const string EmailAlreadyUsedExceptionMessage = "This email is already in use.";
         public const string InvalidTimeLineExceptionMessage = "From is bigger than To.";
+        public const string EntityNotFoundExceptionMessage = "An entity with this key does not exist";
     }
 }
