@@ -42,8 +42,8 @@ namespace BfkPortal.Web.Controllers
         [HttpGet("[action]/{fileId:int}")]
         public async Task<IActionResult> Download(int fileId)
         {
-            var file = await _service.Download(fileId);
-            return File(file, Constants.FileContentType);
+            var result = await _service.Download(fileId);
+            return File(result.Item2, Constants.FileContentType, result.Item1);
         }
 
         [Authorize(Roles = "AdminBfk, AdminBwst")]

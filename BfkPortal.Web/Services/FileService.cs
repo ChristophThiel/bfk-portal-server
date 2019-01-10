@@ -31,13 +31,13 @@ namespace BfkPortal.Web.Services
                 .Select(f => _modelToDtoConverter.Convert(f).Result);
         }
 
-        public async Task<string> Download(int fileId)
+        public async Task<(string, byte[])> Download(int fileId)
         {
             var file = await _unitOfWork.Files.FindAsync(fileId);
             if (file == null)
                 throw new Exception(Constants.EntityNotFoundExceptionMessage);
 
-            return System.IO.File.ReadAllText(Path.Combine(file.Path, file.FileName));
+            return (file.FileName, await System.IO.File.ReadAllBytesAsync(Path.Combine(file.Path, file.FileName)));
         }
 
         public async Task Remove(int fileId, string email)

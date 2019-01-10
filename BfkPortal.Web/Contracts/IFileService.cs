@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BfkPortal.Web.ViewModels.DataTransferObjects;
 using Microsoft.AspNetCore.Http;
@@ -9,7 +10,7 @@ namespace BfkPortal.Web.Contracts
     {
         IEnumerable<FileDto> All();
 
-        Task<string> Download(int fileId);
+        Task<(string, byte[])> Download(int fileId);
 
         Task Remove(int fileId, string email);
 
