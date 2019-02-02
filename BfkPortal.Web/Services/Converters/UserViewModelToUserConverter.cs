@@ -31,6 +31,7 @@ namespace BfkPortal.Web.Services.Converters
 
             // Password not needed
 
+            destination.IsActivated = source.IsActivated ?? false;
             destination.IsDeleted = source.IsDeleted ?? false;
 
             var roles = source.Entitlements

@@ -2,10 +2,11 @@
 {
     public enum AppointmentTypes
     {
-        Dienst = 0,
+        VormittagsDienst = 0,
+        NachmittagsDienst,
+        NachtDienst,
         FreierDienst,
         MarktplatzDienst,
-        Bewerb,
         Vollversammlung
     }
 }

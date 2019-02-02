@@ -16,6 +16,7 @@
         public const string Bwst = "Bwst";
         public const string AdminBfk = "AdminBfk";
         public const string AdminBwst = "AdminBwst";
+        public const string UserBwst = "UserBwst";
 
         // HTTP Request Methods
         public const string Get = "GET";
@@ -33,15 +34,18 @@
         // File System
         public const string FileStorageFolderName = "Files";
         public const string FileContentType = "application/octet-stream";
+        public const int FileContentLength = 1600000000;
 
         // Exceptions
         public const string AlreadyParticipantExceptionMessage = "User or organisation already participant.";
         public const string MaxPaticipantsExceptionMessage = "Maximum of participants reached.";
         public const string ExceededDeadlineExcpetionMessage = "Deadline exceeded.";
-        public const string UnableToParticipateExceptionMessage = "Unable to participate at this appointment";
+        public const string UnableToParticipateExceptionMessage = "Unable to participate at this appointment.";
         public const string InvalidCredentialsExceptionMessage = "Invalid email or password.";
         public const string EmailAlreadyUsedExceptionMessage = "This email is already in use.";
         public const string InvalidTimeLineExceptionMessage = "From is bigger than To.";
-        public const string EntityNotFoundExceptionMessage = "An entity with this key does not exist";
+        public const string EntityNotFoundExceptionMessage = "An entity with this key does not exist.";
+        public const string InvalidMonthExceptionMessage = "Month must be between 1 and 12.";
+        public const string ImpossibleDistributionExceptionMessage = "Not enough servants for shifts.";
     }
 }

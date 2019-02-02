@@ -1,5 +1,4 @@
-﻿using BfkPortal.Core.Contracts;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BfkPortal.Core.Contracts

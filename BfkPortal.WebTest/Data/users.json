@@ -131,7 +131,7 @@
         "firstname": "Matthias",
         "lastname": "Herzog",
         "telephone": "+43 664 1234567",
-        "email": "@gmail.com",
+        "email": "matthias.herzog@gmail.com",
         "password": "---",
         "isDeleted": true,
         "entitlements": [

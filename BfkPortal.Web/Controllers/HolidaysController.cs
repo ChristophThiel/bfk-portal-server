@@ -1,7 +1,6 @@
 ﻿using BfkPortal.Web.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace BfkPortal.Web.Controllers
 {

@@ -1,0 +1,10 @@
+Lanturn (Konfustrahl, Donner, Regentanz, Ladevorgang)
+Krawums (Surfer, Erholung, Schlafrede, ...),
+Iksbat (Fliege, Giftzahn, ...)
+Ninjask (Zornklinge, Schwerttanz, Silberhauch?, Schlitzer, Doppelteam),
+Zwirklop (Finsterfaust/Nachtnebel, Konfustrahl, Eishieb, Erdbeben), 
+Wielie (Verwurzler, Antik-Kraft, Amnesie, ...)
+
+Wasser, Elektro, Normal, Gift, Flug, Käfer, Geist, Gestein, Pflanze 
+
+Eis, Feuer, Psycho, Kampf, Stahl, Unlicht

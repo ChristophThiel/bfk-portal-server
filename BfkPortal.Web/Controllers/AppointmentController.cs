@@ -49,6 +49,15 @@ namespace BfkPortal.Web.Controllers
             return Ok();
         }
 
+        //[Authorize(Roles = "AdminBwst")]
+        [AllowAnonymous]
+        [HttpGet("[action]/{month:int}")]
+        public async Task<IActionResult> Distribute(int month)
+        {
+            var shifts = await _service.Distribute(month);
+            return Ok(shifts.Select(s => s.Value).ToList());
+        }
+
         [HttpGet("[action]/{appointmentId:int}")]
         public async Task<IActionResult> Find(int appointmentId)
         {
