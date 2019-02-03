@@ -7,26 +7,70 @@
         "email": "christoph.thiel@liwest.at",
         "password": "christoph",
         "isDeleted": false,
+        "isActivated": "true",
+        "shiftCount": 1,
+        "avoidHolidays": false,
+        "fixShift": {
+            "key": 1,
+            "value": "Monday"
+        },
         "entitlements": [
             "UserBwst"
         ],
         "memberships": [
             1 // Feuerwehr Marchtrenk
+        ],
+        "avoidFirstDays": [
+            {
+                "key": 2,
+                "value": "Monday"
+            }
+        ],
+        "avoidShiftTypes": [
+            "VormittagsDienst"
+        ],
+        "avoidDays": [
+            "Mittwoch"
+        ],
+        "avoidMonths": [
+            6
         ]
     },
     // Valid
     {
         "firstname": "Alexander",
-        "lastname": "Koblmüller",
+        "lastname": "Koblmï¿½ller",
         "telephone": "+43 664 1234567",
         "email": "alexander.koblmueller@gmail.com",
         "password": "alexander",
         "isDeleted": false,
+        "isActivated": "true",
+        "shiftCount": 1,
+        "avoidHolidays": false,
+        "fixShift": {
+            "key": 1,
+            "value": "Monday"
+        },
         "entitlements": [
             "UserBwst"
         ],
         "memberships": [
             1 // Feuerwehr Marchtrenk
+        ],
+        "avoidFirstDays": [
+            {
+                "key": 2,
+                "value": "Monday"
+            }
+        ],
+        "avoidShiftTypes": [
+            "VormittagsDienst"
+        ],
+        "avoidDays": [
+            "Mittwoch"
+        ],
+        "avoidMonths": [
+            6
         ]
     },
     // Valid
@@ -37,6 +81,13 @@
         "email": "christoph.zimprich@gmail.com",
         "password": "christoph",
         "isDeleted": false,
+        "isActivated": "true",
+        "shiftCount": 1,
+        "avoidHolidays": false,
+        "fixShift": {
+            "key": 1,
+            "value": "Monday"
+        },
         "entitlements": [
             "UserBwst",
             "AdminBfk",
@@ -45,6 +96,21 @@
         "memberships": [
             1, // Feuerwehr Marchtrenk
             2 // AFK
+        ],
+        "avoidFirstDays": [
+            {
+                "key": 2,
+                "value": "Monday"
+            }
+        ],
+        "avoidShiftTypes": [
+            "VormittagsDienst"
+        ],
+        "avoidDays": [
+            "Mittwoch"
+        ],
+        "avoidMonths": [
+            6
         ]
     },
     // Valid
@@ -107,7 +173,7 @@
             "AdminBfk"
         ],
         "memberships": [
-            6, // Feuerwehr Weißkirchen an der Traun
+            6, // Feuerwehr Weiï¿½kirchen an der Traun
             3 // AFK
         ]
     },

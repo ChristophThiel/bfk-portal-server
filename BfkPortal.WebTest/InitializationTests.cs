@@ -54,7 +54,7 @@ namespace BfkPortal.WebTest
                 Assert.Equal(5, unitOfWork.Roles.All().Count());
             }
         }
-        
+
         private void InitializeOrganisations()
         {
             var organisationJson = System.IO.File.ReadAllText(Path.Combine(Current, "Data", "organisations.json"));
@@ -72,7 +72,7 @@ namespace BfkPortal.WebTest
                 Assert.Equal(6, unitOfWork.Organisations.All().Count());
             }
         }
-        
+
         private void InitializeUsers()
         {
             var userJson = System.IO.File.ReadAllText(Path.Combine(Current, "Data", "users.json"));
@@ -91,7 +91,7 @@ namespace BfkPortal.WebTest
                 Assert.Equal(9, unitOfWork.Users.All().Count());
             }
         }
-        
+
         private void InitializeAppointments()
         {
             var appointmentJson = System.IO.File.ReadAllText(Path.Combine(Current, "Data", "appointments.json"));
@@ -150,8 +150,11 @@ namespace BfkPortal.WebTest
 
         public static AppointmentController CreateAppointmentController()
         {
+            var configuration = new ConfigurationBuilder();
+            configuration.AddJsonFile("appsettings.json");
             var unitOfWork = new UnitOfWork();
             var service = new AppointmentService(unitOfWork,
+                new HolidaysService(configuration.Build()),
                 new AppointmentViewModelToAppointmentConverter(unitOfWork),
                 new AppointmentToAppointmentDtoConverter(unitOfWork,
                     new UserToUserDtoConverter(unitOfWork, new OrganisationToOrganisationDtoConverter()),
@@ -164,9 +167,9 @@ namespace BfkPortal.WebTest
             var unitOfWork = new UnitOfWork();
             var service = new OfferService(unitOfWork,
                 new OfferViewModelToOfferConverter(unitOfWork),
-                new OfferToOfferDtoConverter(unitOfWork, new UserToUserDtoConverter(unitOfWork, 
+                new OfferToOfferDtoConverter(unitOfWork, new UserToUserDtoConverter(unitOfWork,
                     new OrganisationToOrganisationDtoConverter()),
-                    new AppointmentToAppointmentDtoConverter(unitOfWork, new UserToUserDtoConverter(unitOfWork, 
+                    new AppointmentToAppointmentDtoConverter(unitOfWork, new UserToUserDtoConverter(unitOfWork,
                         new OrganisationToOrganisationDtoConverter()), new OrganisationToOrganisationDtoConverter())));
             return new OfferController(service);
         }
