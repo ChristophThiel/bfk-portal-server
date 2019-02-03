@@ -5,7 +5,7 @@
     "description": "",
     "from": "2018-10-15T18:00:00",
     "to": "2018-10-16T06:00:00",
-    "type": "Dienst",
+    "type": "NachtDienst",
     "areParticipantsOrganisations": false,
     "maxParticipants": 0,
     "showParticipants": false,
@@ -20,13 +20,13 @@
     "description": "",
     "from": "2018-10-16T18:00:00",
     "to": "2018-10-17T06:00:00",
-    "type": "Dienst",
+    "type": "NachtDienst",
     "areParticipantsOrganisations": false,
     "maxParticipants": 0,
     "showParticipants": false,
     "deadline": null,
     "isVisible": true,
-    "owner": 2, // Alexander Koblmüller
+    "owner": 2, // Alexander Koblmï¿½ller
     "participations": []
   },
   // Valid
@@ -35,7 +35,7 @@
     "description": "",
     "from": "2018-10-17T18:00:00",
     "to": "2018-10-18T06:00:00",
-    "type": "Dienst",
+    "type": "NachtDienst",
     "areParticipantsOrganisations": false,
     "maxParticipants": 0,
     "showParticipants": false,
@@ -91,25 +91,6 @@
   },
   // Valid
   {
-    "title": "Nassbewerb",
-    "description": "Holzhausen",
-    "from": "2019-05-13T08:00:00",
-    "to": "2019-05-13T19:00:00",
-    "type": "Bewerb",
-    "areParticipantsOrganisations": true,
-    "maxParticipants": 40,
-    "showParticipants": false,
-    "deadline": "2018-05-01T23:59:00",
-    "isVisible": true,
-    "owner": 4, // Christian Eichinger
-    "participations": [
-      1, // Feuerwehr Marchtrenk
-      5, // Feuerwehr Kappern
-      6 // Feuerwehr Weißkirchen an der Traun
-    ]
-  },
-  // Valid
-  {
     "title": "Vollversammlung",
     "description": "Marchtrenk",
     "from": "2019-03-25T16:00:00",
@@ -123,7 +104,7 @@
     "owner": 5, // Thomas Fraungruber
     "participations": [
       5, // Feuerwehr Kappern
-      6 // Feuerwehr Weißkirchen an der Traun
+      6 // Feuerwehr Weiï¿½kirchen an der Traun
     ]
   },
   // Valid
@@ -141,7 +122,7 @@
     "owner": 6, // Sieghard Bauer
     "participations": [
       5, // Feuerwehr Marchtrenk
-      6 // Feuerwehr Weißkirchen
+      6 // Feuerwehr Weiï¿½kirchen
     ]
   }
 ]
