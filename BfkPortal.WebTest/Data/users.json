@@ -56,7 +56,6 @@
         "isActivated": "true",
         "shiftCount": 1,
         "entitlements": [
-            "UserBwst",
             "AdminBfk",
             "AdminBwst"
         ],

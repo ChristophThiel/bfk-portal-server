@@ -17,5 +17,7 @@ namespace BfkPortal.Web.ViewModels.DataTransferObjects
         public IEnumerable<string> Entitlements { get; set; }
 
         public IEnumerable<OrganisationDto> Memberships { get; set; }
+        
+        public IEnumerable<PreferenceDto> Preferences { get; set; }
     }
 }

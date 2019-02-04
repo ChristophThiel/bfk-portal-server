@@ -25,21 +25,26 @@ namespace BfkPortal.Web.Services
 
         public IEnumerable<UserDto> All()
         {
-            return _unitOfWork.Users.All(nameof(User.Entitlements), nameof(User.Memberships))
+            return _unitOfWork.Users.All(nameof(User.Entitlements), nameof(User.Memberships), nameof(User.Preferences))
                 .Select(u => _modelToDtoConverter.Convert(u).Result);
         }
 
         public IEnumerable<UserDto> AllUsersOfSameRoleGroup(params string[] roles)
         {
-            var roleGroups = new List<string>(2);
-            if (roles.Any(r => r.EndsWith(Constants.Bfk)))
-                roleGroups.Add(Constants.Bfk);
+            var roleGroups = new List<string>();
+            if (roles.Any(r => r == Constants.UserBfk || r == Constants.AdminBfk))
+                roleGroups.AddRange(new[] { Constants.UserBfk, Constants.AdminBfk });
             if (roles.Any(r => r == Constants.AdminBwst))
-                roleGroups.Add(Constants.Bwst);
+                roleGroups.AddRange(new[] { Constants.ObserverBwst, Constants.UserBwst, Constants.AdminBwst });
 
             return _unitOfWork.Entitlements.All(nameof(Entitlement.User), nameof(Entitlement.Role))
+                .GroupBy(e => e.UserId)
+                .Where(grouped => roleGroups.Any(r => grouped.Any(g => g.Role.Name == r)))
+                .Select(grouped => _modelToDtoConverter.Convert(grouped.First().User).Result);
+            
+            /* return _unitOfWork.Entitlements.All(nameof(Entitlement.User), nameof(Entitlement.Role))
                 .Where(e => roleGroups.Any(r => e.Role.Name.EndsWith(r)))
-                .Select(e => _modelToDtoConverter.Convert(e.User).Result);
+                .Select(e => _modelToDtoConverter.Convert(e.User).Result); */
         }
 
         public async Task<string> GetToken(int id)

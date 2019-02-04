@@ -30,9 +30,9 @@
         Freitag4,
         Samstag4,
         Sonntag4,
-        Januar,
+        Jänner,
         Februar,
-        Maerz,
+        März,
         April,
         Mai,
         Juni,
@@ -43,6 +43,6 @@
         November,
         Dezember,
         Holiday,
-        Wochenende
+        Weekend
     }
 }

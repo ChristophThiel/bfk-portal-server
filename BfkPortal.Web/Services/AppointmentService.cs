@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using BfkPortal.Core.Models;
@@ -261,16 +262,34 @@ namespace BfkPortal.Web.Services
             users = _unitOfWork.Users.All(nameof(User.Preferences))
                 .ToList();
 
+            //var year = month < DateTime.Today.Month ? DateTime.Today.Year + 1 : DateTime.Today.Year;
             var year = DateTime.Today.Year;
             var amountOfDays = DateTime.DaysInMonth(year, month);
             var amountOfShifts = amountOfDays + _holidaysService.All()
                 .Where(h => DateTime.Parse(h.Date).Month == month)
-                .Count() * 2;
+                .Count() * 2 + CountDays(DayOfWeek.Saturday, year, month, amountOfDays) * 2 + 
+                CountDays(DayOfWeek.Sunday, year, month, amountOfDays) * 2;
 
-            if (users.Sum(u => u.ShiftCount) < amountOfShifts)
-                throw new Exception(Constants.ImpossibleDistributionExceptionMessage);
+            /* if (users.Sum(u => u.ShiftCount) < amountOfShifts)
+                throw new Exception(Constants.ImpossibleDistributionExceptionMessage); */
             
-            var shifts = new List<Tuple<ShiftTypes, DateTime, int>>();
+            var shifts = new List<KeyValuePair<DateTime, int>>();
+            for (var i = 1; i <= amountOfDays; i++)
+            {
+                var date = new DateTime(year, month, i, 18, 0, 0);
+                var iterations = IsWeekend(date) || IsHoliday(date) ? 3 : 1;
+                for (var j = 0; j  < iterations; j++)
+                {
+                    date = new DateTime(year, month, i, 18, 0, 0).AddHours(-6 * j);
+                    var validUsers = users.Where(u => u.ShiftCount > shifts.Count(s => s.Value == u.Id))
+                        .Where(u => PreferencesInvalid(u.Preferences, date));
+                            //.Where(u => IsValid(u.Preferences, date));
+
+                    var random = new Random();
+                    var position = random.Next(0, validUsers.Count() - 1);
+                    shifts.Add(new KeyValuePair<DateTime, int>(date, validUsers.ElementAt(position).Id));
+                }
+            }
 
             /*var userWithFixShifts = users.Where(u => u.Preferences.Any(p => !p.Avoid));
 
@@ -462,15 +481,27 @@ namespace BfkPortal.Web.Services
             return model.Id;
         }
 
+        private int CountDays(DayOfWeek day, int year, int month, int days)
+        {
+            var start = new DateTime(year, month, 1);
+            var end = new DateTime(year, month, days);
+            var ts = end - start;
+            var count = (int)Math.Floor(ts.TotalDays / 7);
+            var remainder = (int)(ts.TotalDays % 7);
+            var sinceLastDay = end.DayOfWeek - day;
+
+            if (sinceLastDay < 0)
+                sinceLastDay += 7;
+            if (remainder >= sinceLastDay)
+                count++;
+
+            return count;
+        }
+
         private bool IsHoliday(DateTime date)
         {
             return _holidaysService.All(DateTime.Today.Year)
-                .Any(h => DateTime.Parse(h.Date) == date);
-        }
-
-        private bool IsWeekend(DateTime date)
-        {
-            return date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday;
+                .Any(h => DateTime.Parse(h.Date).Date == date.Date);
         }
 
         private bool IsParticipant(Appointment appointment, int participantId)
@@ -491,6 +522,90 @@ namespace BfkPortal.Web.Services
                 }
             }
             return false;
+        }
+
+        private bool IsWeekend(DateTime date)
+        {
+            return date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday;
+        }
+
+        private bool PreferencesInvalid(IEnumerable<Preference> preferences, DateTime date)
+        {
+            var culture = new CultureInfo("de-DE");
+            if (preferences.Count() == 0)
+                return true;
+
+            var days = Enum.GetValues(typeof(DayOfWeek))
+                .Cast<DayOfWeek>()
+                .Select(d => culture.DateTimeFormat.GetDayName(d));
+            var months = new List<string>();
+            for (var i = 1; i <= 12; i++)
+                months.Add(new DateTime(date.Year, i, 1).ToString("MMMM"));
+
+            foreach (var preference in preferences)
+            {
+                // (user.FixShift.Key == 1 && date.Day <= 7)
+
+                if (IsHoliday(date) && preference.Type == PreferenceType.Holiday)
+                    return preference.Avoid;
+
+                if (IsWeekend(date) && preference.Type == PreferenceType.Weekend)
+                    return preference.Avoid;
+
+                var type = preference.Type.ToString("G");
+
+                foreach (var month in months)
+                {
+
+                }
+
+                foreach (var day in days)
+                {
+                    if (type.StartsWith(day))
+                    {
+                        if (int.TryParse(type.Last().ToString(), out var count))
+                        {
+                            if (count != 4 && culture.DateTimeFormat.GetDayName(date.DayOfWeek) == day && date.Day <= 7 * count)
+                                return preference.Avoid;
+                            else if (count == 4 && culture.DateTimeFormat.GetDayName(date.DayOfWeek) == day && date.Day > 21)
+                                return preference.Avoid;
+                        }
+                        break;
+                    }
+                }
+
+                /*if (preference.Avoid)
+                {
+                    if (type.EndsWith("1") && date.Day <= 7 &&
+                        type.StartsWith(culture.DateTimeFormat.GetDayName(date.DayOfWeek)))
+                        return false;
+                    else if (type.EndsWith("2") && date.Day <= 14 &&
+                        type.StartsWith(culture.DateTimeFormat.GetDayName(date.DayOfWeek)))
+                        return false;
+                    else if (type.EndsWith("3") && date.Day <= 21 &&
+                        type.StartsWith(culture.DateTimeFormat.GetDayName(date.DayOfWeek)))
+                        return false;
+                    else if (type.EndsWith("4") && date.Day > 21 &&
+                        type.StartsWith(culture.DateTimeFormat.GetDayName(date.DayOfWeek)))
+                        return false;
+                }
+                else
+                {
+                    if (type.EndsWith("1") && date.Day <= 7 &&
+                        type.StartsWith(culture.DateTimeFormat.GetDayName(date.DayOfWeek)))
+                        return true;
+                    else if (type.EndsWith("2") && date.Day <= 14 &&
+                        type.StartsWith(culture.DateTimeFormat.GetDayName(date.DayOfWeek)))
+                        return true;
+                    else if (type.EndsWith("3") && date.Day <= 21 &&
+                        type.StartsWith(culture.DateTimeFormat.GetDayName(date.DayOfWeek)))
+                        return true;
+                    else if (type.EndsWith("4") && date.Day > 21 &&
+                        type.StartsWith(culture.DateTimeFormat.GetDayName(date.DayOfWeek)))
+                        return true;
+                }*/
+            }
+            return true;
         }
     }
 }

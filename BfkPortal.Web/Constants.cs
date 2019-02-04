@@ -15,8 +15,10 @@
         public const string Bfk = "Bfk";
         public const string Bwst = "Bwst";
         public const string AdminBfk = "AdminBfk";
+        public const string UserBfk = "UserBfk";
         public const string AdminBwst = "AdminBwst";
         public const string UserBwst = "UserBwst";
+        public const string ObserverBwst = "ObserverBwst";
 
         // HTTP Request Methods
         public const string Get = "GET";

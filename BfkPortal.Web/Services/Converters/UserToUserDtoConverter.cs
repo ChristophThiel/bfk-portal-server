@@ -37,6 +37,11 @@ namespace BfkPortal.Web.Services.Converters
                 destination.Memberships = source.Memberships
                     .Select(m => _organisationToOrganisationDtoConverter
                         .Convert(_unitOfWork.Organisations.FindAsync(m.OrganisationId).Result).Result);
+                destination.Preferences = source.Preferences.Select(p => new PreferenceDto
+                {
+                    Avoid = p.Avoid,
+                    Type = p.Type.ToString("G")
+                });
 
                 return destination;
             });

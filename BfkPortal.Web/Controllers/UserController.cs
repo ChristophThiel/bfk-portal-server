@@ -20,7 +20,7 @@ namespace BfkPortal.Web.Controllers
             _service = service;
         }
 
-        [Authorize(Roles = "UserBfk, AdminBfk, AdminBwst")]
+        [AllowAnonymous]
         [HttpGet("[action]")]
         public IActionResult All()
         {

@@ -32,7 +32,6 @@ namespace BfkPortal.Web.Controllers
             return Ok(new { id });
         }
 
-
         [HttpGet("[action]")]
         public IActionResult All()
         {
