@@ -9,7 +9,6 @@
         "isDeleted": false,
         "isActivated": "true",
         "shiftCount": 1,
-        "avoidHolidays": false,
         "fixShift": {
             "key": 1,
             "value": "Monday"
@@ -20,20 +19,11 @@
         "memberships": [
             1 // Feuerwehr Marchtrenk
         ],
-        "avoidFirstDays": [
+        "preferences": [
             {
-                "key": 2,
-                "value": "Monday"
+                "avoid": true,
+                "type":  "Holiday"
             }
-        ],
-        "avoidShiftTypes": [
-            "VormittagsDienst"
-        ],
-        "avoidDays": [
-            "Mittwoch"
-        ],
-        "avoidMonths": [
-            6
         ]
     },
     // Valid
@@ -46,31 +36,17 @@
         "isDeleted": false,
         "isActivated": "true",
         "shiftCount": 1,
-        "avoidHolidays": false,
-        "fixShift": {
-            "key": 1,
-            "value": "Monday"
-        },
         "entitlements": [
             "UserBwst"
         ],
         "memberships": [
             1 // Feuerwehr Marchtrenk
         ],
-        "avoidFirstDays": [
+        "preferences": [
             {
-                "key": 2,
-                "value": "Monday"
+                "avoid": true,
+                "type": "Wednesday"
             }
-        ],
-        "avoidShiftTypes": [
-            "VormittagsDienst"
-        ],
-        "avoidDays": [
-            "Mittwoch"
-        ],
-        "avoidMonths": [
-            6
         ]
     },
     // Valid
@@ -83,11 +59,6 @@
         "isDeleted": false,
         "isActivated": "true",
         "shiftCount": 1,
-        "avoidHolidays": false,
-        "fixShift": {
-            "key": 1,
-            "value": "Monday"
-        },
         "entitlements": [
             "UserBwst",
             "AdminBfk",
@@ -97,20 +68,11 @@
             1, // Feuerwehr Marchtrenk
             2 // AFK
         ],
-        "avoidFirstDays": [
+        "preferences": [
             {
-                "key": 2,
-                "value": "Monday"
+                "avoid": true,
+                "type": "FirstMonday"
             }
-        ],
-        "avoidShiftTypes": [
-            "VormittagsDienst"
-        ],
-        "avoidDays": [
-            "Mittwoch"
-        ],
-        "avoidMonths": [
-            6
         ]
     },
     // Valid

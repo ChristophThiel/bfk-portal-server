@@ -1,6 +1,4 @@
-﻿using BfkPortal.Core.Models.Enums;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace BfkPortal.Web.ViewModels
@@ -28,20 +26,15 @@ namespace BfkPortal.Web.ViewModels
 
         public int? ShiftCount { get; set; }
 
-        public bool? AvoidHolidays { get; set; }
-
-        public KeyValuePair<int, DayOfWeek>? FixShift { get; set; }
-
-        public ICollection<KeyValuePair<int, DayOfWeek>> AvoidFirstDays { get; set; }
-
-        public ICollection<ShiftTypes> AvoidShiftTypes { get; set; }
-
-        public ICollection<DayOfWeek> AvoidDays { get; set; }
-
-        public ICollection<int> AvoidMonths { get; set; }
-
         public IEnumerable<string> Entitlements { get; set; }
         
         public IEnumerable<int> Memberships { get; set; }
+
+        public IEnumerable<PreferenceViewModel> Preferences { get; set; }
+
+        public UserViewModel()
+        {
+            Preferences = new List<PreferenceViewModel>();
+        }
     }
 }

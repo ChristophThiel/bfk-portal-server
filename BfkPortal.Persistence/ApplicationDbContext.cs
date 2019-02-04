@@ -10,6 +10,8 @@ namespace BfkPortal.Persistence
     {
         public DbSet<User> Users { get; set; }
 
+        public DbSet<Preference> Preferences { get; set; }
+
         public DbSet<Role> Roles { get; set; }
 
         public DbSet<Appointment> Appointments { get; set; }
@@ -37,7 +39,7 @@ namespace BfkPortal.Persistence
 
             if (configuration["Provider"] == "PostgreSql")
             {
-                var connectionString = "postgres://dlznnudngryejq:5395fe8a8be78e348af4c11a9f32135b525d352da138f06f7394b317f70d0838@ec2-54-247-82-210.eu-west-1.compute.amazonaws.com:5432/d7kbh3c9uudosu"; //System.Environment.GetEnvironmentVariable("DATABASE_URL");
+                var connectionString = "postgres://vjxbjytwvvcngo:e97f16afdfc862a5b1eebcb0767d578bee970b6ecaa386d775d98d9fb83e1955@ec2-79-125-6-250.eu-west-1.compute.amazonaws.com:5432/darg2shjgsm2t6"; //System.Environment.GetEnvironmentVariable("DATABASE_URL");
                 if (Uri.TryCreate(connectionString, UriKind.Absolute, out var uri))
                 {
                     var userInfos = uri.UserInfo.Split(':');

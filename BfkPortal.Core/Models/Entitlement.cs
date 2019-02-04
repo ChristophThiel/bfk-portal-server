@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BfkPortal.Core.Models
+﻿namespace BfkPortal.Core.Models
 {
     public class Entitlement : EntityObject
     {

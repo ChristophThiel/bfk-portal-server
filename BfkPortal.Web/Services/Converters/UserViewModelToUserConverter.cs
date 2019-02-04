@@ -1,6 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using BfkPortal.Core.Models;
+using BfkPortal.Core.Models.Enums;
 using BfkPortal.Persistence.Contracts;
 using BfkPortal.Web.Contracts;
 using BfkPortal.Web.ViewModels;
@@ -33,6 +36,7 @@ namespace BfkPortal.Web.Services.Converters
 
             destination.IsActivated = source.IsActivated ?? false;
             destination.IsDeleted = source.IsDeleted ?? false;
+            destination.ShiftCount = source.ShiftCount;
 
             var roles = source.Entitlements
                 .Select(e => _unitOfWork.Roles.All().SingleOrDefault(r => r.Name == e))
@@ -55,6 +59,17 @@ namespace BfkPortal.Web.Services.Converters
                 {
                     User = destination,
                     Organisation = organisation
+                });
+            }
+            
+            foreach (var preference in source.Preferences)
+            {
+                if (!Enum.TryParse<PreferenceType>(preference.Type, out var type))
+                    continue;
+                destination.Preferences.Add(new Preference
+                {
+                    Avoid = preference.Avoid,
+                    Type = type
                 });
             }
 

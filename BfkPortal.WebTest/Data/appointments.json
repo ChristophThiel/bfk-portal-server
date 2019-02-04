@@ -106,23 +106,5 @@
       5, // Feuerwehr Kappern
       6 // Feuerwehr Wei�kirchen an der Traun
     ]
-  },
-  // Valid
-  {
-    "title": "Vollversammlung",
-    "description": "Kappern",
-    "from": "2019-04-25T16:00:00",
-    "to": "2019-04-25T20:00:00",
-    "type": "Bewerb",
-    "areParticipantsOrganisations": false,
-    "maxParticipants": 20,
-    "showParticipants": false,
-    "deadline": "2018-05-01T23:59:00",
-    "isVisible": true,
-    "owner": 6, // Sieghard Bauer
-    "participations": [
-      5, // Feuerwehr Marchtrenk
-      6 // Feuerwehr Wei�kirchen
-    ]
   }
 ]

@@ -16,9 +16,9 @@ namespace BfkPortal.Web.Services
             _configuration = configuration;
         }
 
-        public IEnumerable<Holiday> All(int? year)
+        public IEnumerable<Holiday> All(int? year = null)
         {
-            var calculationYear = year.HasValue ? year.Value : DateTime.Now.Year;
+            var calculationYear = year ?? DateTime.Now.Year;
 
             var easter = CalculateEaster(calculationYear);
 
@@ -38,6 +38,12 @@ namespace BfkPortal.Web.Services
                         Date = easter.AddDays(days).ToString("s")
                     };
             }
+        }
+
+        public bool IsHoliday(DateTime date)
+        {
+            var holidays = All();
+            return holidays.Any(h => DateTime.Parse(h.Date).Month == date.Month);
         }
 
         private DateTime CalculateEaster(int year)

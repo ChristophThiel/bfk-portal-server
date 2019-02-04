@@ -107,7 +107,7 @@ namespace BfkPortal.WebTest
 
             using (var unitOfWork = new UnitOfWork())
             {
-                Assert.Equal(9, unitOfWork.Appointments.All().Count());
+                Assert.Equal(7, unitOfWork.Appointments.All().Count());
             }
         }
 
