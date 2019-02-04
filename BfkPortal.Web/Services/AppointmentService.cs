@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -270,12 +269,8 @@ namespace BfkPortal.Web.Services
 
             if (users.Sum(u => u.ShiftCount) < amountOfShifts)
                 throw new Exception(Constants.ImpossibleDistributionExceptionMessage);
-
-            var shifts = new List<KeyValuePair<DateTime, int>>();
-            for (var i = 1; i <= amountOfDays; i++)
-            {
-                var date = new DateTime(year, month, i);
-            }
+            
+            var shifts = new List<Tuple<ShiftTypes, DateTime, int>>();
 
             /*var userWithFixShifts = users.Where(u => u.Preferences.Any(p => !p.Avoid));
 

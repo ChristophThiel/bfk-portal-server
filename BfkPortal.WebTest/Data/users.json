@@ -9,10 +9,6 @@
         "isDeleted": false,
         "isActivated": "true",
         "shiftCount": 1,
-        "fixShift": {
-            "key": 1,
-            "value": "Monday"
-        },
         "entitlements": [
             "UserBwst"
         ],
@@ -45,7 +41,7 @@
         "preferences": [
             {
                 "avoid": true,
-                "type": "Wednesday"
+                "type": "Mittwoch"
             }
         ]
     },
@@ -71,7 +67,7 @@
         "preferences": [
             {
                 "avoid": true,
-                "type": "FirstMonday"
+                "type": "Montag1"
             }
         ]
     },

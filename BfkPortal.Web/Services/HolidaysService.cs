@@ -40,12 +40,6 @@ namespace BfkPortal.Web.Services
             }
         }
 
-        public bool IsHoliday(DateTime date)
-        {
-            var holidays = All();
-            return holidays.Any(h => DateTime.Parse(h.Date).Month == date.Month);
-        }
-
         private DateTime CalculateEaster(int year)
         {
             var a = year % 19;
