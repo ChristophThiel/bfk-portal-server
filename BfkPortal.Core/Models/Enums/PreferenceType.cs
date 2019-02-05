@@ -2,7 +2,14 @@
 {
     public enum PreferenceType
     {
-        Montag1 = 0,
+        Montag = 0,
+        Dienstag,
+        Mittwoch,
+        Donnerstag,
+        Freitag,
+        Samstag,
+        Sonntag,
+        Montag1,
         Dienstag1,
         Wednesday1,
         Donnerstag1,
@@ -42,6 +49,9 @@
         Oktober,
         November,
         Dezember,
+        Vormittag,
+        Nachmittag,
+        Nacht,
         Holiday,
         Weekend
     }

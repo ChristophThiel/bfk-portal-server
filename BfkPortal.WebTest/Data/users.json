@@ -79,7 +79,6 @@
         "password": "christian",
         "isDeleted": false,
         "entitlements": [
-            "UserBfk",
             "AdminBfk"
         ],
         "memberships": [
@@ -126,7 +125,6 @@
         "password": "roland",
         "isDeleted": false,
         "entitlements": [
-            "UserBfk",
             "AdminBfk"
         ],
         "memberships": [

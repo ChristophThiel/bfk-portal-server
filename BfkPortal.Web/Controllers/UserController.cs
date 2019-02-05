@@ -19,8 +19,7 @@ namespace BfkPortal.Web.Controllers
         {
             _service = service;
         }
-
-        [AllowAnonymous]
+        
         [HttpGet("[action]")]
         public IActionResult All()
         {

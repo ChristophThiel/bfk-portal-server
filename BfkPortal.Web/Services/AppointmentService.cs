@@ -281,98 +281,15 @@ namespace BfkPortal.Web.Services
                 for (var j = 0; j  < iterations; j++)
                 {
                     date = new DateTime(year, month, i, 18, 0, 0).AddHours(-6 * j);
+                    var help = users.Where(u => u.ShiftCount > shifts.Count(s => s.Value == u.Id));
                     var validUsers = users.Where(u => u.ShiftCount > shifts.Count(s => s.Value == u.Id))
-                        .Where(u => PreferencesInvalid(u.Preferences, date));
-                            //.Where(u => IsValid(u.Preferences, date));
+                        .Where(u => !PreferencesInvalid(u.Preferences, date));
 
                     var random = new Random();
                     var position = random.Next(0, validUsers.Count() - 1);
                     shifts.Add(new KeyValuePair<DateTime, int>(date, validUsers.ElementAt(position).Id));
                 }
             }
-
-            /*var userWithFixShifts = users.Where(u => u.Preferences.Any(p => !p.Avoid));
-
-            foreach (var user in userWithFixShifts)
-            {
-                for (var i = 1; i <= amountOfDays; i++)
-                {
-                    var date = new DateTime(year, month, i, 0, 0, 0);
-                    if (date.DayOfWeek == user.FixShift.Value &&
-                        ((user.FixShift.Key == 1 && date.Day <= 7) || 
-                        (user.FixShift.Key == 2 && date.Day <= 14) || 
-                        (user.FixShift.Key == 3 && date.Day <= 21) || 
-                        (user.FixShift.Key == 4 && date.Day > 21)))
-                    {
-                        shifts.Add(new KeyValuePair<DateTime, int>(date, user.Id));
-                        break;
-                    }
-                }
-            }
-
-            var random = new Random();
-            for (var i = 1; i <= amountOfDays; i++)
-            {
-                var date = new DateTime(year, month, i);
-                var iterations = IsWeekend(date) || IsHoliday(date) ? 3 : 1;
-
-                for (var j = 0; j < iterations; j++)
-                {
-                    date = new DateTime(year, month, i, j, 0, 0);
-                    if (shifts.Any(s => s.Key == date))
-                        continue;
-
-                    var validUsers = users.Where(u => u.ShiftCount > shifts.Count(s => s.Value == u.Id))
-                        .Where(u => !shifts.Any(s => s.Value == u.Id && s.Key <= date.AddDays(-7)))
-                        .Where(u => u.FixShift.Key == 0)
-                        .ToArray();
-                    var currentUser = validUsers[random.Next(0, validUsers.Length)];
-
-                    var shiftValidForUser = true;
-                    if (currentUser.AvoidHolidays.HasValue && IsHoliday(date))
-                        shiftValidForUser = false;
-                    else if (currentUser.AvoidFirstDays.Count != 0)
-                    {
-                        foreach (var avoid in currentUser.AvoidFirstDays)
-                        {
-                            if (date.DayOfWeek == avoid.Value &&
-                                ((avoid.Key == 1 && date.Day <= 7) || (avoid.Key == 2 && date.Day <= 14) || (avoid.Key == 3 && date.Day <= 21) || (avoid.Key == 4 && date.Day > 21)))
-                                shiftValidForUser = false;
-                        }
-                    }
-                    else if (currentUser.AvoidShiftTypes.Count != 0)
-                    {
-                        foreach (var avoid in currentUser.AvoidShiftTypes)
-                        {
-                            if (avoid == 0 && avoid == 1 && (IsWeekend(date) || IsHoliday(date)))
-                                shiftValidForUser = false;
-                            else if (avoid == 2 && (!IsWeekend(date) || !IsHoliday(date)))
-                                shiftValidForUser = false;
-                        }
-                    }
-                    else if (currentUser.AvoidDays.Count != 0)
-                    {
-                        foreach (var avoid in currentUser.AvoidDays)
-                        {
-                            if (date.DayOfWeek == avoid)
-                                shiftValidForUser = false;
-                        }
-                    }
-                    else if (currentUser.AvoidMonths.Count != 0)
-                    {
-                        foreach (var avoid in currentUser.AvoidMonths)
-                        {
-                            if (date.Month == avoid)
-                                shiftValidForUser = false;
-                        }
-                    }
-
-                    if (shiftValidForUser)
-                        shifts.Add(new KeyValuePair<DateTime, int>(date, currentUser.Id));
-                    else
-                        i--;
-                }
-            }*/
 
             return shifts;
         }
@@ -544,26 +461,37 @@ namespace BfkPortal.Web.Services
 
             foreach (var preference in preferences)
             {
-                // (user.FixShift.Key == 1 && date.Day <= 7)
-
                 if (IsHoliday(date) && preference.Type == PreferenceType.Holiday)
                     return preference.Avoid;
 
                 if (IsWeekend(date) && preference.Type == PreferenceType.Weekend)
                     return preference.Avoid;
 
+                if (preference.Type == PreferenceType.Vormittag && date.Hour == 6)
+                    return preference.Avoid;
+                else if (preference.Type == PreferenceType.Nachmittag && date.Hour == 12)
+                    return preference.Avoid;
+                else if (preference.Type == PreferenceType.Nacht && date.Hour == 18)
+                    return preference.Avoid;
+
                 var type = preference.Type.ToString("G");
 
                 foreach (var month in months)
                 {
-
+                    if (type == month)
+                        return preference.Avoid;
                 }
 
                 foreach (var day in days)
                 {
                     if (type.StartsWith(day))
                     {
-                        if (int.TryParse(type.Last().ToString(), out var count))
+                        if (!type.Any(c => char.IsDigit(c)))
+                        {
+                            if (culture.DateTimeFormat.GetDayName(date.DayOfWeek) == day)
+                                return preference.Avoid;
+                        }
+                        else if (int.TryParse(type.Last().ToString(), out var count))
                         {
                             if (count != 4 && culture.DateTimeFormat.GetDayName(date.DayOfWeek) == day && date.Day <= 7 * count)
                                 return preference.Avoid;
@@ -573,39 +501,8 @@ namespace BfkPortal.Web.Services
                         break;
                     }
                 }
-
-                /*if (preference.Avoid)
-                {
-                    if (type.EndsWith("1") && date.Day <= 7 &&
-                        type.StartsWith(culture.DateTimeFormat.GetDayName(date.DayOfWeek)))
-                        return false;
-                    else if (type.EndsWith("2") && date.Day <= 14 &&
-                        type.StartsWith(culture.DateTimeFormat.GetDayName(date.DayOfWeek)))
-                        return false;
-                    else if (type.EndsWith("3") && date.Day <= 21 &&
-                        type.StartsWith(culture.DateTimeFormat.GetDayName(date.DayOfWeek)))
-                        return false;
-                    else if (type.EndsWith("4") && date.Day > 21 &&
-                        type.StartsWith(culture.DateTimeFormat.GetDayName(date.DayOfWeek)))
-                        return false;
-                }
-                else
-                {
-                    if (type.EndsWith("1") && date.Day <= 7 &&
-                        type.StartsWith(culture.DateTimeFormat.GetDayName(date.DayOfWeek)))
-                        return true;
-                    else if (type.EndsWith("2") && date.Day <= 14 &&
-                        type.StartsWith(culture.DateTimeFormat.GetDayName(date.DayOfWeek)))
-                        return true;
-                    else if (type.EndsWith("3") && date.Day <= 21 &&
-                        type.StartsWith(culture.DateTimeFormat.GetDayName(date.DayOfWeek)))
-                        return true;
-                    else if (type.EndsWith("4") && date.Day > 21 &&
-                        type.StartsWith(culture.DateTimeFormat.GetDayName(date.DayOfWeek)))
-                        return true;
-                }*/
             }
-            return true;
+            return false;
         }
     }
 }

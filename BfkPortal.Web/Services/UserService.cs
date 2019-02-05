@@ -37,14 +37,12 @@ namespace BfkPortal.Web.Services
             if (roles.Any(r => r == Constants.AdminBwst))
                 roleGroups.AddRange(new[] { Constants.ObserverBwst, Constants.UserBwst, Constants.AdminBwst });
 
-            return _unitOfWork.Entitlements.All(nameof(Entitlement.User), nameof(Entitlement.Role))
+            var userIds = _unitOfWork.Entitlements.All(nameof(Entitlement.User), nameof(Entitlement.Role))
                 .GroupBy(e => e.UserId)
                 .Where(grouped => roleGroups.Any(r => grouped.Any(g => g.Role.Name == r)))
-                .Select(grouped => _modelToDtoConverter.Convert(grouped.First().User).Result);
-            
-            /* return _unitOfWork.Entitlements.All(nameof(Entitlement.User), nameof(Entitlement.Role))
-                .Where(e => roleGroups.Any(r => e.Role.Name.EndsWith(r)))
-                .Select(e => _modelToDtoConverter.Convert(e.User).Result); */
+                .Select(grouped => grouped.Key);
+
+            return userIds.Select(id => _modelToDtoConverter.Convert(_unitOfWork.Users.FindAsync(id, nameof(User.Entitlements), nameof(User.Memberships), nameof(User.Preferences)).Result).Result);
         }
 
         public async Task<string> GetToken(int id)

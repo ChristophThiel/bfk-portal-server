@@ -1,7 +1,7 @@
 {
   "name": "Bfk-Portal",
   "short_name": "Bfk-Portal",
-  "theme_color": "#e9241d",
+  "theme_color": "#CE2029",
   "background_color": "#fafafa",
   "display": "standalone",
   "scope": "/",
