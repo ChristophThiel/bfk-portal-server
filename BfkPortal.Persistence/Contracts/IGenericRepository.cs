@@ -9,6 +9,10 @@ namespace BfkPortal.Persistence.Contracts
 
         void AddRange(IEnumerable<T> entities);
 
+        IEnumerable<T> All(params string[] includes);
+
+        Task<T> FindAsync(int id, params string[] includes);
+
         void Remove(T entity);
 
         void RemoveRange(IEnumerable<T> entities);
@@ -17,8 +21,5 @@ namespace BfkPortal.Persistence.Contracts
 
         void UpdateRange(IEnumerable<T> entities);
 
-        Task<T> FindAsync(int id, params string[] includes);
-
-        IEnumerable<T> All(params string[] includes);
     }
 }

@@ -3,10 +3,10 @@ using Xunit;
 
 namespace BfkPortal.CoreTest
 {
-    public class ModelTest
+    public class AppointmentTest
     {
         [Fact]
-        public void Create_Appointment_()
+        public void CreateAppointment_()
         {
 
         }

@@ -1,7 +1,7 @@
 using BfkPortal.Core.Models;
 using BfkPortal.Persistence;
-using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace BfkPortal.PersistenceTest
@@ -9,135 +9,151 @@ namespace BfkPortal.PersistenceTest
     public class GenericRepositoryTest
     {
         [Fact]
-        public void Add_ValidRole_Added()
+        public async Task Add_ValidRole_Added()
         {
-            ClearDatabase();
-
             using (var unitOfWork = new UnitOfWork())
             {
-                unitOfWork.Roles.Add(new Role
-                {
-                    Name = "AdminBfk",
-                    Entitlements = new List<Entitlement>()
-                });
+                var role = new Role { Name = "AdminTest" };
+                unitOfWork.Roles.Add(role);
+                await unitOfWork.SaveChangesAsync();
 
-                unitOfWork.SaveChangesAsync().Wait();
-
-                var result = unitOfWork.Roles.All();
-                Assert.Single(result);
-                Assert.Equal("AdminBfk", result.First().Name);
+                // Check if role is saved in database
+                var roles = unitOfWork.Roles.All();
+                Assert.Equal(role.Name, roles.FirstOrDefault(r => r.Name == role.Name).Name);
             }
         }
 
         [Fact]
-        public void AddRange_ValidRoles_Added()
+        public async Task AddRange_ValidRoles_Added()
         {
-            ClearDatabase();
-
             using (var unitOfWork = new UnitOfWork())
             {
-                var roles = new[]
+                var roles = new []
                 {
-                    new Role
-                    {
-                        Name = "UserBwst",
-                        Entitlements = new List<Entitlement>()
-                    },
-                    new Role
-                    {
-                        Name = "AdminBwst",
-                        Entitlements = new List<Entitlement>()
-                    }
+                    new Role {Name = "UserTest"},
+                    new Role {Name = "ObserverTest"}
                 };
                 unitOfWork.Roles.AddRange(roles);
-                unitOfWork.SaveChangesAsync().Wait();
+                await unitOfWork.SaveChangesAsync();
 
-                var result = unitOfWork.Roles.All();
-                Assert.Equal(2, result.Count());
-                Assert.Equal("UserBwst", result.First().Name);
+                var check = unitOfWork.Roles.All();
+                Assert.True(roles.All(r => check.Contains(r)));
             }
         }
 
         [Fact]
-        public void Remove_ValidRole_Removed()
+        public async Task All_GetAll()
         {
-            ClearDatabase();
-
             using (var unitOfWork = new UnitOfWork())
             {
-                var role = new Role
-                {
-                    Name = "ObserverBwst",
-                    Entitlements = new List<Entitlement>()
-                };
+                var rolesAmount = unitOfWork.Roles.All().Count();
+                await Add_ValidRole_Added();
+                var newRolesAmount = unitOfWork.Roles.All().Count();
+
+                Assert.Equal(rolesAmount + 1, newRolesAmount);
+            }
+        }
+
+        [Fact]
+        public async Task Find_Role_NotNull()
+        {
+            using (var unitOfWork = new UnitOfWork())
+            {
+                var role = new Role { Name = "FindTest" };
                 unitOfWork.Roles.Add(role);
-                unitOfWork.SaveChangesAsync().Wait();
+                await unitOfWork.SaveChangesAsync();
+
+                var findRole = await unitOfWork.Roles.FindAsync(role.Id);
+                Assert.NotNull(findRole);
+                Assert.Equal(role.Id, findRole.Id);
+            }
+        }
+
+        [Fact]
+        public async Task Find_Role_Null()
+        {
+            using (var unitOfWork = new UnitOfWork())
+            {
+                var findRole = await unitOfWork.Roles.FindAsync(int.MaxValue);
+                Assert.Null(findRole);
+            }
+        }
+
+        [Fact]
+        public async Task Remove_ValidRole_Removed()
+        {
+            using (var unitOfWork = new UnitOfWork())
+            {
+                var role = new Role { Name = "RemoveTest" };
+                unitOfWork.Roles.Add(role);
+                await unitOfWork.SaveChangesAsync();
 
                 unitOfWork.Roles.Remove(role);
-                unitOfWork.SaveChangesAsync().Wait();
+                await unitOfWork.SaveChangesAsync();
 
-                Assert.Empty(unitOfWork.Roles.All());
+                Assert.Null((await unitOfWork.Roles.FindAsync(role.Id)));
             }
         }
 
         [Fact]
-        public void RemoveRange_ValidRoles_Removed()
+        public async Task RemoveRange_ValidRoles_Removed()
         {
             using (var unitOfWork = new UnitOfWork())
             {
-                ClearDatabase();
-
                 var roles = new[]
-                {
-                    new Role
-                    {
-                        Name = "UserBwst",
-                        Entitlements = new List<Entitlement>()
-                    },
-                    new Role
-                    {
-                        Name = "AdminBwst",
-                        Entitlements = new List<Entitlement>()
-                    }
+{
+                    new Role {Name = "RemoveRangeTest"},
+                    new Role {Name = "RemoveRangeTest2"}
                 };
                 unitOfWork.Roles.AddRange(roles);
-                unitOfWork.SaveChangesAsync().Wait();
+                await unitOfWork.SaveChangesAsync();
 
                 unitOfWork.Roles.RemoveRange(roles);
-                unitOfWork.SaveChangesAsync().Wait();
+                await unitOfWork.SaveChangesAsync();
 
-                Assert.Empty(unitOfWork.Roles.All());
+                Assert.DoesNotContain(unitOfWork.Roles.All(), r => roles.Contains(r));
             }
         }
 
         [Fact]
-        public void Find_FindUserBwst_Found()
+        public async Task Update_Role_Updated()
         {
-            ClearDatabase();
-
             using (var unitOfWork = new UnitOfWork())
             {
-                var role = new Role
-                {
-                    Name = "AdminBfk",
-                    Entitlements = new List<Entitlement>()
-                };
+                var role = new Role { Name = "UpdateTest" };
                 unitOfWork.Roles.Add(role);
+                await unitOfWork.SaveChangesAsync();
 
-                unitOfWork.SaveChangesAsync().Wait();
+                role = await unitOfWork.Roles.FindAsync(role.Id);
+                role.Name = "UpdatedTest";
+                unitOfWork.Roles.Update(role);
+                await unitOfWork.SaveChangesAsync();
 
-                var result = unitOfWork.Roles.FindAsync(role.Id).Result;
-
-                Assert.Equal("AdminBfk", result.Name);
+                var roles = unitOfWork.Roles.All();
+                Assert.Contains(roles, r => r.Name == role.Name);
             }
         }
 
-        private void ClearDatabase()
+        [Fact]
+        public async Task UpdateRange_Roles_Updated()
         {
             using (var unitOfWork = new UnitOfWork())
             {
-                //unitOfWork.DeleteDatabaseAsync().Wait();
-                unitOfWork.CreateDatabaseAsync().Wait();
+                var roles = new[]
+{
+                    new Role {Name = "UpdateRangeTest"},
+                    new Role {Name = "UpdateRangeTest2"}
+                };
+                unitOfWork.Roles.AddRange(roles);
+                await unitOfWork.SaveChangesAsync();
+                
+                foreach (var role in roles)
+                    role.Name.Replace("Update", "Updated");
+
+                unitOfWork.Roles.UpdateRange(roles);
+                await unitOfWork.SaveChangesAsync();
+
+                Assert.Contains(unitOfWork.Roles.All(), r => roles.Contains(r));
             }
         }
     }
