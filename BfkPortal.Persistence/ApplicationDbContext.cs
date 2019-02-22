@@ -52,7 +52,7 @@ namespace BfkPortal.Persistence
               .Append(";SSLMode=Require;TrustServerCertificate=True");
           optionsBuilder.UseNpgsql(builder.ToString());
         }*/
-        optionsBuilder.UseNpgsql("User ID=server;Password=server;Host=localhost;Port=5432;Database=bfkportal;Pooling=true;");
+        optionsBuilder.UseNpgsql("User ID=service;Password=asdf;Host=localhost;Port=5432;Database=bfkportal;Pooling=true;");
       }
       else
         optionsBuilder.UseSqlite(configuration.GetConnectionString("Sqlite"));
