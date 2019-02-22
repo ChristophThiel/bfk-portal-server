@@ -8,23 +8,35 @@ services:
 mono: none
 dotnet: 2.1.403
 
+before_install:
+ - sudo apt-get update
+
 install:
+ - sudo apt-get install sshpass
  - dotnet restore
- - wget -qO- https://toolbelt.heroku.com/install.sh | sh
-# - nvm install node
-# - npm install -g heroku
-# - npm install -g @angular/cli
+# - wget -qO- https://toolbelt.heroku.com/install.sh | sh
 
 script:
  - dotnet build
 # - dotnet test ./BfkPortal.PersistenceTest/BfkPortal.PersistenceTest.csproj
 # - dotnet test ./BfkPortal.WebTest/BfkPortal.WebTest.csproj
- - /usr/local/bin/heroku restart --app bfk-portal
+# - /usr/local/bin/heroku restart --app bfk-portal
  - cd BfkPortal.Web
  - dotnet publish -c Release
 # - cp Dockerfile ./bin/Release/netcoreapp2.1/publish
- - docker build -t bfk-portal .
- - docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
- - docker tag bfk-portal registry.heroku.com/bfk-portal/web
- - docker push registry.heroku.com/bfk-portal/web
- - heroku container:release web --app bfk-portal
+ - docker build -t bfk-portal-service .
+ - docker login --username=$DOCKER_USERNAME --password=$DOCKER_PASSWORD_REGISTRY
+ - docker tag bfk-portal-service christophthiel/bfk-portal-service
+ - docker push christophthiel/bfk-portal-service
+# - docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
+# - docker tag bfk-portal registry.heroku.com/bfk-portal/web
+# - docker push registry.heroku.com/bfk-portal/web
+# - heroku container:release web --app bfk-portal
+
+after_script:
+ - sshpass -p '$DROPLET_PASSWORD' root@207.154.201.108
+ - docker stop bfk-portal-service
+ - docker rm bfk-portal-service
+ - docker image rm bfk-portal-service
+ - docker pull christophthiel/bfk-portal-service
+ - docker run --name bfk-portal-service -p 80:80 -d bfk-portal-service
