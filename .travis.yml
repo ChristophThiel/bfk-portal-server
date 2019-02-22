@@ -34,8 +34,4 @@ script:
 # - heroku container:release web --app bfk-portal
 
 after_script:
- - sshpass -p "$DROPLET_PASSWORD" ssh root@207.154.201.108
- - docker stop bfk-portal-service
- - docker rm bfk-portal-service
- - docker pull christophthiel/bfk-portal-service
- - docker run --name bfk-portal-service -p 80:80 -d bfk-portal-service
+ - sshpass -p "$DROPLET_PASSWORD" ssh root@207.154.201.108 'bash deploy.sh'
