@@ -11,5 +11,7 @@ namespace BfkPortal.Web.Contracts
         Task<UserDto> LogIn(CredentialsViewModel viewModel);
 
         Task Register(UserViewModel viewModel);
+
+        void ResetPassword(EmailViewModel viewModel);
     }
 }

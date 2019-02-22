@@ -11,19 +11,6 @@ namespace BfkPortal.Web.Services
 {
     public class EmailService : IEmailService
     {
-        private readonly SmtpClient client;
-
-        public EmailService()
-        {
-            client = new SmtpClient()
-            {
-                Port = 25,
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                UseDefaultCredentials = false,
-                Host = "smtp.gmail.com"
-            };
-        }
-
         public async Task Send(string to, string from, string subject, string content)
         {
             var client = new SendGridClient(Environment.GetEnvironmentVariable(Constants.SendGridApiKey));

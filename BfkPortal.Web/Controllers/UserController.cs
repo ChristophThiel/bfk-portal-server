@@ -2,6 +2,9 @@
 using BfkPortal.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SendGrid;
+using SendGrid.Helpers.Mail;
+using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -19,7 +22,7 @@ namespace BfkPortal.Web.Controllers
         {
             _service = service;
         }
-        
+
         [HttpGet("[action]")]
         public IActionResult All()
         {

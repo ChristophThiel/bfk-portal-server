@@ -34,7 +34,7 @@ namespace BfkPortal.Web.Services.Converters
 
             // Password not needed
 
-            destination.IsActivated = source.IsActivated ?? false;
+            destination.IsEnabled = source.IsEnabled ?? false;
             destination.IsDeleted = source.IsDeleted ?? false;
             destination.ShiftCount = source.ShiftCount;
 
@@ -61,7 +61,7 @@ namespace BfkPortal.Web.Services.Converters
                     Organisation = organisation
                 });
             }
-            
+
             foreach (var preference in source.Preferences)
             {
                 if (!Enum.TryParse<PreferenceType>(preference.Type, out var type))

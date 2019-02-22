@@ -44,6 +44,7 @@
         public const string ExceededDeadlineExcpetionMessage = "Deadline exceeded.";
         public const string UnableToParticipateExceptionMessage = "Unable to participate at this appointment.";
         public const string InvalidCredentialsExceptionMessage = "Invalid email or password.";
+        public const string InvalidEmailExceptionMessage = "This email is unknown.";
         public const string EmailAlreadyUsedExceptionMessage = "This email is already in use.";
         public const string InvalidTimeLineExceptionMessage = "From is bigger than To.";
         public const string EntityNotFoundExceptionMessage = "An entity with this key does not exist.";

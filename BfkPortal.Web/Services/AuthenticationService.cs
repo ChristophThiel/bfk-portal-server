@@ -74,8 +74,35 @@ namespace BfkPortal.Web.Services
             user.Salt = hasher.GenerateSalt();
             user.Password = hasher.HashPassword(user, viewModel.Password);
 
+            user.IsEnabled = false;
+
             _unitOfWork.Users.Add(user);
             await _unitOfWork.SaveChangesAsync();
+        }
+
+        public void ResetPassword(EmailViewModel viewModel)
+        {
+            var user = _unitOfWork.Users.All().FirstOrDefault(u => u.Email == viewModel.Email);
+            if (user == null)
+                throw new Exception(Constants.InvalidEmailExceptionMessage);
+
+            user.IsEnabled = false;
+            user.Password = GeneratePassword();
+            _unitOfWork.Users.Update(user);
+        }
+
+        private string GeneratePassword()
+        {
+            var random = new Random();
+            var builder = new StringBuilder();
+            while (builder.Length != 8)
+            {
+                var current = (char)random.Next(0, 127);
+                if (char.IsDigit(current) || char.IsNumber(current))
+                    builder.Append(current);
+            }
+
+            return builder.ToString();
         }
     }
 }

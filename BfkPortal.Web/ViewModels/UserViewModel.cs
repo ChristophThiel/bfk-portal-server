@@ -19,15 +19,15 @@ namespace BfkPortal.Web.ViewModels
 
         [Required]
         public string Password { get; set; }
-        
-        public bool? IsActivated { get; set; }
+
+        public bool? IsEnabled { get; set; }
 
         public bool? IsDeleted { get; set; }
 
         public int? ShiftCount { get; set; }
 
         public IEnumerable<string> Entitlements { get; set; }
-        
+
         public IEnumerable<int> Memberships { get; set; }
 
         public IEnumerable<PreferenceViewModel> Preferences { get; set; }

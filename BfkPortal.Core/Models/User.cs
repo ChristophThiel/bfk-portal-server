@@ -23,12 +23,12 @@ namespace BfkPortal.Core.Models
 
         [Required]
         public string Salt { get; set; }
-        
-        public bool IsActivated { get; set; }
+
+        public bool IsEnabled { get; set; }
 
         [Required]
         public bool IsDeleted { get; set; }
-        
+
         public string NotificationToken { get; set; }
 
         public int? ShiftCount { get; set; }

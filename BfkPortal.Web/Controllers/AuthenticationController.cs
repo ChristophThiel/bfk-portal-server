@@ -38,5 +38,13 @@ namespace BfkPortal.Web.Controllers
             await _service.Register(model);
             return Ok();
         }
+
+        [AllowAnonymous]
+        [HttpPost("[action]")]
+        public IActionResult Reset([FromBody] EmailViewModel model)
+        {
+            _service.ResetPassword(model);
+            return Ok();
+        }
     }
 }
