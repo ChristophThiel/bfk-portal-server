@@ -25,7 +25,7 @@ script:
  - dotnet publish -c Release
 # - cp Dockerfile ./bin/Release/netcoreapp2.1/publish
  - docker build -t bfk-portal-service .
- - docker login --username=$DOCKER_USERNAME --password=$DOCKER_PASSWORD_REGISTRY
+ - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD_REGISTRY
  - docker tag bfk-portal-service christophthiel/bfk-portal-service
  - docker push christophthiel/bfk-portal-service
 # - docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
