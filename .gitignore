@@ -462,3 +462,5 @@ ASALocalRun/
 
 
 # End of https://www.gitignore.io/api/aspnetcore,visualstudio
+
+BfkPortal.Web/Files

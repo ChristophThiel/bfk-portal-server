@@ -31,6 +31,14 @@ namespace BfkPortal.Web.Controllers
             });
         }
 
+        [AllowAnonymous]
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Send([FromBody] EmailViewModel model)
+        {
+            await _service.SendResetPasswordLink(model);
+            return Ok();
+        }
+
         [Authorize(Roles = "AdminBfk, AdminBwst")]
         [HttpPost("[action]")]
         public async Task<IActionResult> Register([FromBody] UserViewModel model)
@@ -41,7 +49,7 @@ namespace BfkPortal.Web.Controllers
 
         [AllowAnonymous]
         [HttpPost("[action]")]
-        public IActionResult Reset([FromBody] EmailViewModel model)
+        public IActionResult Reset([FromBody] CredentialsViewModel model)
         {
             _service.ResetPassword(model);
             return Ok();

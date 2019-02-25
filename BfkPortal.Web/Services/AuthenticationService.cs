@@ -21,13 +21,15 @@ namespace BfkPortal.Web.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IConfiguration _configuration;
+        private readonly IEmailService _emailService;
         private readonly IConverter<UserViewModel, User> _userViewModelToUserConverter;
         private readonly IConverter<User, UserDto> _userToUserDtoConverter;
 
-        public AuthenticationService(IUnitOfWork unitOfWork, IConfiguration configuration, IConverter<UserViewModel, User> userViewModelToUserConverter, IConverter<User, UserDto> userToUserDtoConverter)
+        public AuthenticationService(IUnitOfWork unitOfWork, IConfiguration configuration, IEmailService emailService, IConverter<UserViewModel, User> userViewModelToUserConverter, IConverter<User, UserDto> userToUserDtoConverter)
         {
             _unitOfWork = unitOfWork;
             _configuration = configuration;
+            _emailService = emailService;
             _userViewModelToUserConverter = userViewModelToUserConverter;
             _userToUserDtoConverter = userToUserDtoConverter;
         }
@@ -64,6 +66,20 @@ namespace BfkPortal.Web.Services
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+        public async Task SendResetPasswordLink(EmailViewModel viewModel)
+        {
+            var user = _unitOfWork.Users.All()
+                .FirstOrDefault(u => u.Email == viewModel.Email);
+            if (user == null)
+                throw new Exception(Constants.InvalidEmailExceptionMessage);
+
+            user.IsEnabled = false;
+            _unitOfWork.Users.Update(user);
+            await _unitOfWork.SaveChangesAsync();
+
+            await _emailService.Send(user.Email, "", "", "");
+        }
+
         public async Task Register(UserViewModel viewModel)
         {
             var user = await _userViewModelToUserConverter.Convert(viewModel);
@@ -80,15 +96,19 @@ namespace BfkPortal.Web.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public void ResetPassword(EmailViewModel viewModel)
+        public async Task ResetPassword(CredentialsViewModel viewModel)
         {
             var user = _unitOfWork.Users.All().FirstOrDefault(u => u.Email == viewModel.Email);
             if (user == null)
                 throw new Exception(Constants.InvalidEmailExceptionMessage);
 
-            user.IsEnabled = false;
-            user.Password = GeneratePassword();
+            user.IsEnabled = true;
+
+            var hasher = new Pbkdf2PasswordHasher();
+            user.Password = hasher.HashPassword(user, viewModel.Password);
+
             _unitOfWork.Users.Update(user);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         private string GeneratePassword()

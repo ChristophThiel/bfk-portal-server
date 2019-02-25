@@ -1,7 +1,4 @@
-﻿// Appointment Update (all participants), Offer (all UserBwst), Register(new User), ResetPassword,
-// Offer Add (Receiver), Update (Receiver), (Reply)
-
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace BfkPortal.Web.Contracts
 {

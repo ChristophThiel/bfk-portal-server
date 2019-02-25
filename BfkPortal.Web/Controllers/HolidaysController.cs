@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BfkPortal.Web.Controllers
 {
-    [Authorize]
+    [AllowAnonymous]
     [ApiController]
     [Route("api/[controller]")]
     public class HolidaysController : ControllerBase

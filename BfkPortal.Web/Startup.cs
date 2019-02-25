@@ -83,7 +83,7 @@ namespace BfkPortal.Web
             services.AddScoped<IOrganisationService, OrganisationService>();
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IUserService, UserService>();
-            // services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IHolidaysService, HolidaysService>();
 
             // Policy Handlers

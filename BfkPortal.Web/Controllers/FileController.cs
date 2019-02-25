@@ -26,7 +26,6 @@ namespace BfkPortal.Web.Controllers
         public IActionResult All()
         {
             var fileDtos = _service.All().ToList();
-            var help = fileDtos.Count();
             return Ok(fileDtos);
         }
 
@@ -38,7 +37,7 @@ namespace BfkPortal.Web.Controllers
             await _service.Remove(fileId, email);
             return Ok();
         }
-
+        
         [HttpGet("[action]/{fileId:int}")]
         public async Task<IActionResult> Download(int fileId)
         {
@@ -48,17 +47,13 @@ namespace BfkPortal.Web.Controllers
 
         [Authorize(Roles = "AdminBfk, AdminBwst")]
         [HttpPost("[action]")]
-        public async Task<IActionResult> Upload([FromBody] FileViewModel model)
+        public async Task<IActionResult> Upload(IFormFile model)
         {
-            var file = Request.Form.Files.FirstOrDefault();
-            if (file == null)
-                throw new NullReferenceException();
-
-            if (file.Length > Constants.FileContentLength)
+            if (model.Length > Constants.FileContentLength)
                 throw new Exception("File is to big for uploading.");
 
             var email = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email).Value;
-            await _service.Upload(file, email);
+            await _service.Upload(model, email);
             return Ok();
         }
     }
