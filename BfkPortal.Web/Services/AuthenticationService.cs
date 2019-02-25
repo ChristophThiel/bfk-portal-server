@@ -77,7 +77,7 @@ namespace BfkPortal.Web.Services
             _unitOfWork.Users.Update(user);
             await _unitOfWork.SaveChangesAsync();
 
-            await _emailService.Send(user.Email, "", "", "");
+            // await _emailService.Send(user.Email, "", "", "");
         }
 
         public async Task Register(UserViewModel viewModel)

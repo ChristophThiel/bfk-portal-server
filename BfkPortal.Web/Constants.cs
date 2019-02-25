@@ -38,6 +38,9 @@
         public const string FileContentType = "application/octet-stream";
         public const int FileContentLength = 1600000000;
 
+        // Email
+        public const string SendGridMail = "mail@bfk-portal.at";
+
         // Exceptions
         public const string AlreadyParticipantExceptionMessage = "User or organisation already participant.";
         public const string MaxPaticipantsExceptionMessage = "Maximum of participants reached.";
