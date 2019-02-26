@@ -9,10 +9,9 @@ mono: none
 dotnet: 2.1.403
 
 before_install:
- - sudo apt-get update
+ - sudo apt-get install sshpass
 
 install:
- - sudo apt-get install sshpass
  - dotnet restore
 # - wget -qO- https://toolbelt.heroku.com/install.sh | sh
 
