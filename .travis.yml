@@ -33,4 +33,4 @@ script:
 # - heroku container:release web --app bfk-portal
 
 after_success:
- - sshpass -p "$DROPLET_PASSWORD" ssh root@207.154.201.108 bash deploy.sh
+ - sshpass -p "$DROPLET_PASSWORD" ssh root@207.154.201.108 'bash deploy.sh'
