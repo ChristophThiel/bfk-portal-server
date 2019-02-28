@@ -31,6 +31,6 @@ script:
 # - docker tag bfk-portal-service registry.heroku.com/bfk-portal/web
 # - docker push registry.heroku.com/bfk-portal/web
 # - heroku container:release web --app bfk-portal
- - sshpass -p "$DROPLET_PASSWORD" ssh root@207.154.201.108 'bash deploy.sh'
+ - sshpass -p "$DROPLET_PASSWORD" ssh -t -o StrictHostKeyChecking=no  root@207.154.201.108 "bash deploy.sh"
 
 #after_success:
