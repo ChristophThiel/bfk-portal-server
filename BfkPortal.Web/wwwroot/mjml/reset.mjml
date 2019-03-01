@@ -19,7 +19,7 @@
     <mj-section>
       <mj-column width="400px">
         <mj-text font-style="bold" font-size="24px" font-family="Roboto">
-          Hallo Christoph,
+          Hallo @NAME@,
         </mj-text>
         <mj-text font-size="18px" font-family="Roboto">
           Das <b>Passwort</b> für deinen Account wurde zurückgesetzt.

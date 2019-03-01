@@ -19,10 +19,10 @@
     <mj-section>
       <mj-column width="400px">
         <mj-text font-style="bold" font-size="24px" font-family="Roboto">
-          Hallo Christoph,
+          Hallo @NAME@,
         </mj-text>
         <mj-text font-size="18px" font-family="Roboto">
-          Beim Termin, <b>Vollversammlung Marchtrenk</b>, wurde folgendes geändert:
+          Beim Termin, <b>@APPOINTMENT_TITLE@</b>, wurde folgendes geändert:
         </mj-text>
 
         <mj-text font-size="18px" font-family="Roboto">

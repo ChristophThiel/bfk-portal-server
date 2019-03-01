@@ -19,14 +19,14 @@
     <mj-section>
       <mj-column width="400px">
         <mj-text font-style="bold" font-size="24px" font-family="Roboto">
-          Hallo Christoph,
+          Hallo @NAME@,
         </mj-text>
         <mj-text font-size="18px" font-family="Roboto">
-          <b>Christoph Zimprich</b> möchte seinen Termin vom <b>22. Oktober 2018</b> gerne tauschen.
+          <b>@APPOINTMENT_USER_NAME@</b> möchte seinen Termin vom <b>@APPOINTMENT_DATE@</b> gerne tauschen.
         </mj-text>
 
         <mj-text font-size="18px" font-family="Roboto" align="center">
-          Sein <a href="#" style="color: #e9241d; text-decoration: none; font-weight: bold">Angebot</a> ist nun am Marktplatz erhältlich.
+          Sein <a href="http://www.bfk-portal.at/marketplace" style="color: #e9241d; text-decoration: none; font-weight: bold">Angebot</a> ist nun am Marktplatz erhältlich.
         </mj-text>
       </mj-column>
     </mj-section>
