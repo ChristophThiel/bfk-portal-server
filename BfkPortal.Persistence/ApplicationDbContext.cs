@@ -54,7 +54,7 @@ namespace BfkPortal.Persistence
                     optionsBuilder.UseNpgsql(builder.ToString());
                 } */
                 // DROPLET
-                var builder = new StringBuilder();
+                /* var builder = new StringBuilder();
                 builder.Append("User ID=")
                     .Append(Environment.GetEnvironmentVariable("POSTGRES_USER", EnvironmentVariableTarget.Machine))
                     .Append(";Password=")
@@ -64,8 +64,8 @@ namespace BfkPortal.Persistence
                     .Append(";Port=5432;Database=")
                     .Append(Environment.GetEnvironmentVariable("POSTGRES_DATABASE", EnvironmentVariableTarget.Machine))
                     .Append(";Pooling=true;");
-                optionsBuilder.UseNpgsql(builder.ToString());
-                // optionsBuilder.UseNpgsql("User ID=root;Password=S6qNqxjQJLE2HzWvfojriEtD4CjLMzgU;Host=207.154.201.108;Port=5432;Database=bfkportal;Pooling=true;");
+                optionsBuilder.UseNpgsql(builder.ToString()); */
+                optionsBuilder.UseNpgsql("User ID=root;Password=S6qNqxjQJLE2HzWvfojriEtD4CjLMzgU;Host=207.154.201.108;Port=5432;Database=bfkportal;Pooling=true;");
             }
             else
                 optionsBuilder.UseSqlite(configuration.GetConnectionString("Sqlite"));
