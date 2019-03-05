@@ -29,9 +29,11 @@ namespace BfkPortal.Web.Middleware
 
         private static Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            var code = exception == null 
+            var code = exception == null
                 ? HttpStatusCode.InternalServerError
                 : HttpStatusCode.BadRequest;
+
+            Console.WriteLine(exception.Message);
 
             var result = JsonConvert.SerializeObject(new { Error = $"{exception?.Message}" });
             context.Response.ContentType = "application/json";
