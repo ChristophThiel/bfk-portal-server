@@ -63,7 +63,7 @@ namespace BfkPortal.Persistence
                 .Append(Environment.GetEnvironmentVariable("POSTGRES_DATABASE", EnvironmentVariableTarget.Machine))
                 .Append(";Pooling=true;");
             optionsBuilder.UseNpgsql(builder.ToString()); */
-            optionsBuilder.UseNpgsql("User ID=root;Password=S6qNqxjQJLE2HzWvfojriEtD4CjLMzgU;Host=207.154.201.108;Port=5432;Database=bfkportal;Pooling=true;Command Timeout=0;Timeout=30");
+            optionsBuilder.UseNpgsql("User ID=root;Password=S6qNqxjQJLE2HzWvfojriEtD4CjLMzgU;Host=localhost;Port=5432;Database=bfkportal;Pooling=true;Command Timeout=0;Timeout=30");
         }
     }
 }
