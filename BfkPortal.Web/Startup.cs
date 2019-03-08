@@ -95,10 +95,8 @@ namespace BfkPortal.Web
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            // TODO 
+            app.UseDeveloperExceptionPage();
 
             app.UseCors("Cors");
 
