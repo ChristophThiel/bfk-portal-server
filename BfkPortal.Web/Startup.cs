@@ -40,7 +40,6 @@ namespace BfkPortal.Web
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
             {
-                // TODO Remove this
                 options.RequireHttpsMetadata = false;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
@@ -106,7 +105,7 @@ namespace BfkPortal.Web
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
-            app.UseMiddleware<ErrorHandlingMiddleware>();
+            // app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseAuthentication();
             app.UseMvc();
