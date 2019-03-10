@@ -52,18 +52,16 @@ namespace BfkPortal.Persistence
                 optionsBuilder.UseNpgsql(builder.ToString());
             } */
             // DROPLET
-            /* var builder = new StringBuilder();
+            var builder = new StringBuilder();
             builder.Append("User ID=")
                 .Append(Environment.GetEnvironmentVariable("POSTGRES_USER", EnvironmentVariableTarget.Machine))
                 .Append(";Password=")
                 .Append(Environment.GetEnvironmentVariable("POSTGRES_PASSWORD", EnvironmentVariableTarget.Machine))
-                .Append(";Host=")
-                .Append(Environment.GetEnvironmentVariable("POSTGRES_URL", EnvironmentVariableTarget.Machine))
-                .Append(";Port=5432;Database=")
+                .Append(";Server=bfk-portal-postgres;Port=5432;Database=")
                 .Append(Environment.GetEnvironmentVariable("POSTGRES_DATABASE", EnvironmentVariableTarget.Machine))
                 .Append(";Pooling=true;");
-            optionsBuilder.UseNpgsql(builder.ToString()); */
-            optionsBuilder.UseNpgsql("User ID=root;Password=S6qNqxjQJLE2HzWvfojriEtD4CjLMzgU;Server=bfk-portal-postgres;Port=5432;Database=bfkportal;Pooling=true;");
+            optionsBuilder.UseNpgsql(builder.ToString());
+            // optionsBuilder.UseNpgsql("User ID=root;Password=S6qNqxjQJLE2HzWvfojriEtD4CjLMzgU;Server=bfk-portal-postgres;Port=5432;Database=bfkportal;Pooling=true;");
         }
     }
 }
