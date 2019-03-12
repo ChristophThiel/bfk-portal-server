@@ -62,7 +62,7 @@ namespace BfkPortal.Persistence
                 .Append(";Pooling=true;");
             Console.WriteLine(builder.ToString());
             optionsBuilder.UseNpgsql(builder.ToString());  */
-            optionsBuilder.UseNpgsql("Server=bfk-portal-server;Port=5432;Database=bfk-portal;User Id=root;Password=S6qNqxjQJLE2HzWvfojriEtD4CjLMzgU;Pooling=true;");
+            optionsBuilder.UseNpgsql("Server=bfk-portal-server;Port=5432;Database=bfkportal;User Id=root;Password=S6qNqxjQJLE2HzWvfojriEtD4CjLMzgU;Pooling=true;");
         }
     }
 }
