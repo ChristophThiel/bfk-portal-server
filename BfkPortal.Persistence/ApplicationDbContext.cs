@@ -52,7 +52,7 @@ namespace BfkPortal.Persistence
                 optionsBuilder.UseNpgsql(builder.ToString());
             } */
             // DROPLET
-            var builder = new StringBuilder();
+            /* var builder = new StringBuilder();
             builder.Append("Server=bfk-portal-postgres;Port=5432;Database=")
                 .Append(Environment.GetEnvironmentVariable("POSTGRES_DATABASE"))
                 .Append(";User Id=")
@@ -61,8 +61,8 @@ namespace BfkPortal.Persistence
                 .Append(Environment.GetEnvironmentVariable("POSTGRES_PASSWORD"))
                 .Append(";Pooling=true;");
             Console.WriteLine(builder.ToString());
-            optionsBuilder.UseNpgsql(builder.ToString());
-            // optionsBuilder.UseNpgsql("User ID=root;Password=S6qNqxjQJLE2HzWvfojriEtD4CjLMzgU;Host=207.154.201.108;Port=5432;Database=bfkportal;Pooling=true;");
+            optionsBuilder.UseNpgsql(builder.ToString());  */
+            optionsBuilder.UseNpgsql("Server=bfk-portal-server;Port=5432;Database=bfk-portal;User Id=root;Password=S6qNqxjQJLE2HzWvfojriEtD4CjLMzgU;Pooling=true;");
         }
     }
 }
