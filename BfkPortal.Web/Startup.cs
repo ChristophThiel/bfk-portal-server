@@ -56,7 +56,12 @@ namespace BfkPortal.Web
                 options.AddPolicy(Constants.UserOfSameRoleGroupPolicy, policy => policy.Requirements.Add(new UserOfSameRoleGroupRequirement()));
             });
 
-            services.AddCors();
+            services.AddCors(options => options.AddPolicy("Cors", builder =>
+            {
+                builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            }));
 
             services.AddScoped<IUnitOfWork, UnitOfWork>(serviceProvider => new UnitOfWork());
 
@@ -94,9 +99,7 @@ namespace BfkPortal.Web
             // TODO 
             app.UseDeveloperExceptionPage();
 
-            app.UseCors(
-                options => options.WithOrigins("http://www.bfk-portal.at").AllowAnyMethod()
-            );
+            app.UseCors("Cors");
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
