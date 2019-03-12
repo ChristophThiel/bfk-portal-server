@@ -58,7 +58,7 @@ namespace BfkPortal.Web
 
             services.AddCors(options => options.AddPolicy("Cors", builder =>
             {
-                builder.WithOrigins("http://www.bfk-portal.at")
+                builder.AllowAnyOrigin()
                     .AllowAnyMethod()
                     .AllowAnyHeader();
             }));
