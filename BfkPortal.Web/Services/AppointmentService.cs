@@ -36,7 +36,7 @@ namespace BfkPortal.Web.Services
         {
             var model = await _viewModelToModelConverter.Convert(viewModel);
             _unitOfWork.Appointments.Add(model);
-            
+
             await _unitOfWork.SaveChangesAsync();
             return model.Id;
         }
@@ -267,18 +267,18 @@ namespace BfkPortal.Web.Services
             var amountOfDays = DateTime.DaysInMonth(year, month);
             var amountOfShifts = amountOfDays + _holidaysService.All()
                 .Where(h => DateTime.Parse(h.Date).Month == month)
-                .Count() * 2 + CountDays(DayOfWeek.Saturday, year, month, amountOfDays) * 2 + 
+                .Count() * 2 + CountDays(DayOfWeek.Saturday, year, month, amountOfDays) * 2 +
                 CountDays(DayOfWeek.Sunday, year, month, amountOfDays) * 2;
 
             /* if (users.Sum(u => u.ShiftCount) < amountOfShifts)
                 throw new Exception(Constants.ImpossibleDistributionExceptionMessage); */
-            
+
             var shifts = new List<KeyValuePair<DateTime, int>>();
             for (var i = 1; i <= amountOfDays; i++)
             {
                 var date = new DateTime(year, month, i, 18, 0, 0);
                 var iterations = IsWeekend(date) || IsHoliday(date) ? 3 : 1;
-                for (var j = 0; j  < iterations; j++)
+                for (var j = 0; j < iterations; j++)
                 {
                     date = new DateTime(year, month, i, 18, 0, 0).AddHours(-6 * j);
                     var help = users.Where(u => u.ShiftCount > shifts.Count(s => s.Value == u.Id));
@@ -467,11 +467,11 @@ namespace BfkPortal.Web.Services
                 if (IsWeekend(date) && preference.Type == PreferenceType.Weekend)
                     return preference.Avoid;
 
-                if (preference.Type == PreferenceType.Vormittag && date.Hour == 6)
+                if (preference.Type == PreferenceType.VormittagDienst && date.Hour == 6)
                     return preference.Avoid;
-                else if (preference.Type == PreferenceType.Nachmittag && date.Hour == 12)
+                else if (preference.Type == PreferenceType.NachmittagDienst && date.Hour == 12)
                     return preference.Avoid;
-                else if (preference.Type == PreferenceType.Nacht && date.Hour == 18)
+                else if (preference.Type == PreferenceType.NachtDienst && date.Hour == 18)
                     return preference.Avoid;
 
                 var type = preference.Type.ToString("G");

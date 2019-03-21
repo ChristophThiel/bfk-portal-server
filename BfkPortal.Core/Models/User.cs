@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BfkPortal.Core.Models
 {
@@ -11,6 +12,9 @@ namespace BfkPortal.Core.Models
 
         [Required]
         public string Lastname { get; set; }
+
+        [NotMapped]
+        public string Name { get => $"{Firstname} {Lastname}"; }
 
         [Required]
         public string Telephone { get; set; }

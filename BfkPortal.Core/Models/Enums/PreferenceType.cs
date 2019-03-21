@@ -49,9 +49,9 @@
         Oktober,
         November,
         Dezember,
-        Vormittag,
-        Nachmittag,
-        Nacht,
+        VormittagDienst,
+        NachmittagDienst,
+        NachtDienst,
         Holiday,
         Weekend
     }

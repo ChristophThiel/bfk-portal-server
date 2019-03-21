@@ -41,6 +41,12 @@
         // Email
         public const string SendGridMail = "mail@bfk-portal.at";
 
+        public const string EmailTemplateFoldername = "html";
+
+        public const string RegistrationEmailFilename = "confirmation.html";
+
+        public const string RegistrationEmailSubject = "Neuer Account";
+
         // Exceptions
         public const string AlreadyParticipantExceptionMessage = "User or organisation already participant.";
         public const string MaxPaticipantsExceptionMessage = "Maximum of participants reached.";

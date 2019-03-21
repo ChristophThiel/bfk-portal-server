@@ -11,6 +11,7 @@ using BfkPortal.Web.Contracts;
 using BfkPortal.Web.Security;
 using BfkPortal.Web.ViewModels;
 using BfkPortal.Web.ViewModels.DataTransferObjects;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -21,14 +22,16 @@ namespace BfkPortal.Web.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IConfiguration _configuration;
+        private readonly IHostingEnvironment _environment;
         private readonly IEmailService _emailService;
         private readonly IConverter<UserViewModel, User> _userViewModelToUserConverter;
         private readonly IConverter<User, UserDto> _userToUserDtoConverter;
 
-        public AuthenticationService(IUnitOfWork unitOfWork, IConfiguration configuration, IEmailService emailService, IConverter<UserViewModel, User> userViewModelToUserConverter, IConverter<User, UserDto> userToUserDtoConverter)
+        public AuthenticationService(IUnitOfWork unitOfWork, IConfiguration configuration, IHostingEnvironment environment, IEmailService emailService, IConverter<UserViewModel, User> userViewModelToUserConverter, IConverter<User, UserDto> userToUserDtoConverter)
         {
             _unitOfWork = unitOfWork;
             _configuration = configuration;
+            _environment = environment;
             _emailService = emailService;
             _userViewModelToUserConverter = userViewModelToUserConverter;
             _userToUserDtoConverter = userToUserDtoConverter;
@@ -94,6 +97,11 @@ namespace BfkPortal.Web.Services
 
             _unitOfWork.Users.Add(user);
             await _unitOfWork.SaveChangesAsync();
+
+            var content = System.IO.File.ReadAllText(System.IO.Path.Combine(_environment.ContentRootPath, Constants.WwwRoot, Constants.EmailTemplateFoldername, Constants.RegistrationEmailFilename))
+                .Replace("@NAME@", user.Name);
+
+            await _emailService.Send(user.Email, Constants.RegistrationEmailSubject, content);
         }
 
         public async Task ResetPassword(CredentialsViewModel viewModel)
