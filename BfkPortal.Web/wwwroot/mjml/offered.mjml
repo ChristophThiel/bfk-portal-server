@@ -23,7 +23,7 @@
         </mj-text>
 
         <mj-text font-size="18px" font-family="Roboto">
-          <b>@OFFER_SENDER_USER_NAME@</b> möchte deinen Dienst am
+          <b>@OFFER_SENDER_NAME@</b> möchte deinen Dienst am
         </mj-text>
 
         <mj-text font-size="22px" font-family="Roboto" align="center">

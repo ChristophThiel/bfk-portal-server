@@ -18,119 +18,119 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace BfkPortal.Web.Services
 {
-    public class AuthenticationService : IAuthenticationService
+  public class AuthenticationService : IAuthenticationService
+  {
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IConfiguration _configuration;
+    private readonly IHostingEnvironment _environment;
+    private readonly IEmailService _emailService;
+    private readonly IConverter<UserViewModel, User> _userViewModelToUserConverter;
+    private readonly IConverter<User, UserDto> _userToUserDtoConverter;
+
+    public AuthenticationService(IUnitOfWork unitOfWork, IConfiguration configuration, IHostingEnvironment environment, IEmailService emailService, IConverter<UserViewModel, User> userViewModelToUserConverter, IConverter<User, UserDto> userToUserDtoConverter)
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IConfiguration _configuration;
-        private readonly IHostingEnvironment _environment;
-        private readonly IEmailService _emailService;
-        private readonly IConverter<UserViewModel, User> _userViewModelToUserConverter;
-        private readonly IConverter<User, UserDto> _userToUserDtoConverter;
+      _unitOfWork = unitOfWork;
+      _configuration = configuration;
+      _environment = environment;
+      _emailService = emailService;
+      _userViewModelToUserConverter = userViewModelToUserConverter;
+      _userToUserDtoConverter = userToUserDtoConverter;
+    }
 
-        public AuthenticationService(IUnitOfWork unitOfWork, IConfiguration configuration, IHostingEnvironment environment, IEmailService emailService, IConverter<UserViewModel, User> userViewModelToUserConverter, IConverter<User, UserDto> userToUserDtoConverter)
-        {
-            _unitOfWork = unitOfWork;
-            _configuration = configuration;
-            _environment = environment;
-            _emailService = emailService;
-            _userViewModelToUserConverter = userViewModelToUserConverter;
-            _userToUserDtoConverter = userToUserDtoConverter;
-        }
+    public async Task<UserDto> LogIn(CredentialsViewModel viewModel)
+    {
+      var user = _unitOfWork.Users.All(nameof(User.Entitlements), nameof(User.Memberships), nameof(User.Preferences))
+          .SingleOrDefault(u => u.Email == viewModel.Email) ?? throw new Exception(Constants.InvalidCredentialsExceptionMessage);
 
-        public async Task<UserDto> LogIn(CredentialsViewModel viewModel)
-        {
-            var user = _unitOfWork.Users.All(nameof(User.Entitlements), nameof(User.Memberships), nameof(User.Preferences))
-                .SingleOrDefault(u => u.Email == viewModel.Email) ?? throw new Exception(Constants.InvalidCredentialsExceptionMessage);
+      var hasher = new Pbkdf2PasswordHasher();
+      if (hasher.VerifyHashedPassword(user, user.Password, viewModel.Password) == PasswordVerificationResult.Failed)
+        throw new Exception(Constants.InvalidCredentialsExceptionMessage);
+      return await _userToUserDtoConverter.Convert(user);
+    }
 
-            var hasher = new Pbkdf2PasswordHasher();
-            if (hasher.VerifyHashedPassword(user, user.Password, viewModel.Password) == PasswordVerificationResult.Failed)
-                throw new Exception(Constants.InvalidCredentialsExceptionMessage);
-            return await _userToUserDtoConverter.Convert(user);
-        }
-
-        public object GenerateJsonWebToken(UserDto user)
-        {
-            var claims = new List<Claim>
+    public object GenerateJsonWebToken(UserDto user)
+    {
+      var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.GivenName, user.Firstname),
                 new Claim(JwtRegisteredClaimNames.FamilyName, user.Lastname),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email)
             };
 
-            var roleClaims = user.Entitlements
-                .Select(e => new Claim(ClaimTypes.Role, e));
-            claims.AddRange(roleClaims);
+      var roleClaims = user.Entitlements
+          .Select(e => new Claim(ClaimTypes.Role, e));
+      claims.AddRange(roleClaims);
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Key"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+      var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Key"]));
+      var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var token = new JwtSecurityToken(_configuration["Issuer"], _configuration["Issuer"], claims,
-                signingCredentials: creds);
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
-        public async Task SendResetPasswordLink(EmailViewModel viewModel)
-        {
-            var user = _unitOfWork.Users.All()
-                .FirstOrDefault(u => u.Email == viewModel.Email);
-            if (user == null)
-                throw new Exception(Constants.InvalidEmailExceptionMessage);
-
-            user.IsEnabled = false;
-            _unitOfWork.Users.Update(user);
-            await _unitOfWork.SaveChangesAsync();
-
-            // await _emailService.Send(user.Email, "", "", "");
-        }
-
-        public async Task Register(UserViewModel viewModel)
-        {
-            var user = await _userViewModelToUserConverter.Convert(viewModel);
-            if (_unitOfWork.Users.All().Any(u => u.Email == user.Email))
-                throw new Exception(Constants.EmailAlreadyUsedExceptionMessage);
-
-            var hasher = new Pbkdf2PasswordHasher();
-            user.Salt = hasher.GenerateSalt();
-            user.Password = hasher.HashPassword(user, viewModel.Password);
-
-            user.IsEnabled = false;
-
-            _unitOfWork.Users.Add(user);
-            await _unitOfWork.SaveChangesAsync();
-
-            var content = System.IO.File.ReadAllText(System.IO.Path.Combine(_environment.ContentRootPath, Constants.WwwRoot, Constants.EmailTemplateFoldername, Constants.RegistrationEmailFilename))
-                .Replace("@NAME@", user.Name);
-
-            await _emailService.Send(user.Email, Constants.RegistrationEmailSubject, content);
-        }
-
-        public async Task ResetPassword(CredentialsViewModel viewModel)
-        {
-            var user = _unitOfWork.Users.All().FirstOrDefault(u => u.Email == viewModel.Email);
-            if (user == null)
-                throw new Exception(Constants.InvalidEmailExceptionMessage);
-
-            user.IsEnabled = true;
-
-            var hasher = new Pbkdf2PasswordHasher();
-            user.Password = hasher.HashPassword(user, viewModel.Password);
-
-            _unitOfWork.Users.Update(user);
-            await _unitOfWork.SaveChangesAsync();
-        }
-
-        private string GeneratePassword()
-        {
-            var random = new Random();
-            var builder = new StringBuilder();
-            while (builder.Length != 8)
-            {
-                var current = (char)random.Next(0, 127);
-                if (char.IsDigit(current) || char.IsNumber(current))
-                    builder.Append(current);
-            }
-
-            return builder.ToString();
-        }
+      var token = new JwtSecurityToken(_configuration["Issuer"], _configuration["Issuer"], claims,
+          signingCredentials: creds);
+      return new JwtSecurityTokenHandler().WriteToken(token);
     }
+
+    public async Task SendResetPasswordLink(EmailViewModel viewModel)
+    {
+      var user = _unitOfWork.Users.All()
+          .FirstOrDefault(u => u.Email == viewModel.Email);
+      if (user == null)
+        throw new Exception(Constants.InvalidEmailExceptionMessage);
+
+      user.IsEnabled = false;
+      _unitOfWork.Users.Update(user);
+      await _unitOfWork.SaveChangesAsync();
+
+      // await _emailService.Send(user.Email, "", "", "");
+    }
+
+    public async Task Register(UserViewModel viewModel)
+    {
+      var user = await _userViewModelToUserConverter.Convert(viewModel);
+      if (_unitOfWork.Users.All().Any(u => u.Email == user.Email))
+        throw new Exception(Constants.EmailAlreadyUsedExceptionMessage);
+
+      var hasher = new Pbkdf2PasswordHasher();
+      user.Salt = hasher.GenerateSalt();
+      user.Password = hasher.HashPassword(user, viewModel.Password);
+
+      user.IsEnabled = false;
+
+      _unitOfWork.Users.Add(user);
+      await _unitOfWork.SaveChangesAsync();
+
+      var content = System.IO.File.ReadAllText(System.IO.Path.Combine(_environment.ContentRootPath, Constants.WwwRoot, Constants.EmailTemplateFoldername, Constants.RegistrationEmailFilename))
+          .Replace("@NAME@", user.Name);
+
+      await _emailService.Send(user.Email, Constants.RegistrationEmailSubject, content);
+    }
+
+    public async Task ResetPassword(CredentialsViewModel viewModel)
+    {
+      var user = _unitOfWork.Users.All().FirstOrDefault(u => u.Email == viewModel.Email);
+      if (user == null)
+        throw new Exception(Constants.InvalidEmailExceptionMessage);
+
+      user.IsEnabled = true;
+
+      var hasher = new Pbkdf2PasswordHasher();
+      user.Password = hasher.HashPassword(user, viewModel.Password);
+
+      _unitOfWork.Users.Update(user);
+      await _unitOfWork.SaveChangesAsync();
+    }
+
+    private string GeneratePassword()
+    {
+      var random = new Random();
+      var builder = new StringBuilder();
+      while (builder.Length != 8)
+      {
+        var current = (char)random.Next(0, 127);
+        if (char.IsDigit(current) || char.IsNumber(current))
+          builder.Append(current);
+      }
+
+      return builder.ToString();
+    }
+  }
 }

@@ -26,20 +26,16 @@
         </mj-text>
 
         <mj-text font-size="18px" font-family="Roboto">
-          Dein neues Passwort lautet:
+          Bei deiner nächsten Anmeldung wirst du aufgefordert, ein neues Passwort einzugeben.
         </mj-text>
 
-        <mj-text font-style="bold" font-size="22px" font-family="Roboto" align="center">
-          ELEMENOP
-        </mj-text>
-
-        <mj-text font-size="18px" align="center" font-family="Roboto">
+        <mj-text font-size="18px" font-family="Roboto">
           Falls du diese Zurücksetzung nicht beantragt hast, melde dies unverzüglich einem Administrator!
         </mj-text>
 
         <mj-text></mj-text>
 
-        <mj-button background-color="#e9241d" href="#" font-size="18px">
+        <mj-button background-color="#e9241d" href="http://www.bfk-portal.at/" font-size="18px">
           Zum Portal
         </mj-button>
 
