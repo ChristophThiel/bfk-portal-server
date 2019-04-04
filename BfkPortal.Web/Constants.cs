@@ -54,6 +54,9 @@
     public const string OfferedEmailFilename = "offered.html";
     public const string OfferedEmailSubject = "Dienst tauschen";
 
+    public const string ResetPasswordFilename = "reset.html";
+    public const string ResetPasswordSubject = "Passwort zurücksetzen";
+
     // Exceptions
     public const string AlreadyParticipantExceptionMessage = "User or organisation already participant.";
     public const string MaxPaticipantsExceptionMessage = "Maximum of participants reached.";

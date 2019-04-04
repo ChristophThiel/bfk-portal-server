@@ -26,17 +26,13 @@
         </mj-text>
 
         <mj-text font-size="18px" font-family="Roboto">
-          Bei deiner nächsten Anmeldung wirst du aufgefordert, ein neues Passwort einzugeben.
-        </mj-text>
-
-        <mj-text font-size="18px" font-family="Roboto">
           Falls du diese Zurücksetzung nicht beantragt hast, melde dies unverzüglich einem Administrator!
         </mj-text>
 
         <mj-text></mj-text>
 
-        <mj-button background-color="#e9241d" href="http://www.bfk-portal.at/" font-size="18px">
-          Zum Portal
+        <mj-button background-color="#e9241d" href="http://www.bfk-portal.at/forgotpassword/resetpassword/@EMAIL@" font-size="18px">
+          Passwort eingeben
         </mj-button>
 
         <mj-text></mj-text>

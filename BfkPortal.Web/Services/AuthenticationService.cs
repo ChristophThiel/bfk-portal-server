@@ -80,7 +80,11 @@ namespace BfkPortal.Web.Services
       _unitOfWork.Users.Update(user);
       await _unitOfWork.SaveChangesAsync();
 
-      // await _emailService.Send(user.Email, "", "", "");
+      var content = System.IO.File.ReadAllText(System.IO.Path.Combine(_environment.ContentRootPath, Constants.WwwRoot, Constants.EmailTemplateFoldername, Constants.ResetPasswordFilename))
+          .Replace("@NAME@", user.Name)
+          .Replace("@EMAIL@", user.Email);
+
+      await _emailService.Send(user.Email, Constants.ResetPasswordFilename, content);
     }
 
     public async Task Register(UserViewModel viewModel)
