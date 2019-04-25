@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Cryptography;
+using System.Text;
 using BfkPortal.Core.Models;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Identity;
@@ -37,6 +38,20 @@ namespace BfkPortal.Web.Security
             byte[] salt;
             new RNGCryptoServiceProvider().GetBytes(salt = new byte[SaltLength]);
             return Convert.ToBase64String(salt);
+        }
+
+        public string GeneratePassword()
+        {
+            var builder = new StringBuilder(); 
+            var random = new Random();
+            while (builder.Length < 16)
+            {
+                var letter = (char)random.Next(0, 127);
+                if (char.IsLetterOrDigit(letter))
+                    builder.Append(letter);
+            }
+
+            return builder.ToString();
         }
     }
 }

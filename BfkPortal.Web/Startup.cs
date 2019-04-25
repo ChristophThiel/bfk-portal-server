@@ -104,7 +104,7 @@ namespace BfkPortal.Web
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
-            // app.UseMiddleware<ErrorHandlingMiddleware>();
+            app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseAuthentication();
             app.UseMvc();

@@ -48,8 +48,7 @@ namespace BfkPortal.Web.Controllers
             return Ok();
         }
 
-        //[Authorize(Roles = "AdminBwst")]
-        [AllowAnonymous]
+        [Authorize(Roles = "AdminBwst")]
         [HttpGet("[action]/{month:int}")]
         public async Task<IActionResult> Distribute(int month)
         {
